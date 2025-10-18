@@ -49,7 +49,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import com.google.android.material.color.MaterialColors
 import com.brycewg.asrkb.LocaleHelper
-import kotlinx.coroutines.withContext
+import com.brycewg.asrkb.clipboard.SyncClipboardManager
 
 class AsrKeyboardService : InputMethodService(), StreamingAsrEngine.Listener, com.brycewg.asrkb.asr.SenseVoiceFileAsrEngine.LocalModelLoadUi {
     companion object {
@@ -125,6 +125,7 @@ class AsrKeyboardService : InputMethodService(), StreamingAsrEngine.Listener, co
     private var currentSessionKind: SessionKind? = null
     private var aiEditState: AiEditState? = null
     private var prefsReceiver: BroadcastReceiver? = null
+    private var syncClipboardManager: SyncClipboardManager? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -228,6 +229,40 @@ class AsrKeyboardService : InputMethodService(), StreamingAsrEngine.Listener, co
                 } catch (_: Throwable) { }
             }
         }
+
+        // SyncClipboard：仅在 IME 面板可见期间启用
+        try {
+            if (prefs.syncClipboardEnabled) {
+                if (syncClipboardManager == null) {
+                    syncClipboardManager = SyncClipboardManager(
+                        this,
+                        prefs,
+                        serviceScope,
+                        object : SyncClipboardManager.Listener {
+                            override fun onPulledNewContent(text: String) {
+                                try { rootView?.post { txtStatus?.text = getString(R.string.sc_status_pulled_new) } } catch (_: Throwable) { }
+                            }
+                            override fun onUploadSuccess() {
+                                try { rootView?.post { txtStatus?.text = getString(R.string.sc_status_uploaded) } } catch (_: Throwable) { }
+                            }
+                        }
+                    )
+                }
+                syncClipboardManager?.start()
+                // 键盘刚展开时：若剪贴板在隐藏期间发生变更，则主动补一次上传
+                serviceScope.launch(Dispatchers.IO) {
+                    try { syncClipboardManager?.proactiveUploadIfChanged() } catch (_: Throwable) { }
+                    try { syncClipboardManager?.pullNow(true) } catch (_: Throwable) { }
+                }
+            } else {
+                syncClipboardManager?.stop()
+            }
+        } catch (_: Throwable) { }
+    }
+
+    override fun onFinishInputView(finishingInput: Boolean) {
+        super.onFinishInputView(finishingInput)
+        try { syncClipboardManager?.stop() } catch (_: Throwable) { }
     }
 
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
@@ -266,6 +301,7 @@ class AsrKeyboardService : InputMethodService(), StreamingAsrEngine.Listener, co
         super.onDestroy()
         asrEngine?.stop()
         serviceScope.cancel()
+        try { syncClipboardManager?.stop() } catch (_: Throwable) { }
         try { prefsReceiver?.let { unregisterReceiver(it) } } catch (_: Throwable) { }
         prefsReceiver = null
     }

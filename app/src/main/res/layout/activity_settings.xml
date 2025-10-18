@@ -64,90 +64,19 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="16dp" />
 
-        <com.google.android.material.materialswitch.MaterialSwitch
-          android:id="@+id/switchTrimTrailingPunct"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="12dp"
-          android:text="@string/label_trim_trailing_punct" />
-
-        
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-          android:id="@+id/switchAutoSwitchPassword"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:text="@string/label_auto_switch_password" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-          android:id="@+id/switchMicHaptic"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:text="@string/label_mic_haptic" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-          android:id="@+id/switchMicTapToggle"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:text="@string/label_mic_tap_toggle" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-          android:id="@+id/switchSwapAiEditWithSwitcher"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:text="@string/label_swap_ai_edit_switcher" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-          android:id="@+id/switchHideRecentTasks"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:text="@string/label_hide_recent_task_card" />
-
-        <!-- 键盘高度 -->
-        <TextView
-          android:id="@+id/labelKeyboardHeight"
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/btnOpenInputSettings"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="16dp"
-          android:textColor="?attr/colorOnSurface"
-          android:textStyle="bold"
-          android:text="@string/label_keyboard_height" />
-
-        <Spinner
-          android:id="@+id/spKeyboardHeight"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
-
-
-        <!-- App language selection -->
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="16dp"
-          android:textColor="?attr/colorOnSurface"
-          android:textStyle="bold"
-          android:text="@string/label_language" />
-
-        <Spinner
-          android:id="@+id/spLanguage"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content" />
-
-        <com.google.android.material.divider.MaterialDivider
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="16dp" />
+          style="@style/Widget.Material3.Button"
+          android:text="@string/title_input_settings" />
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/btnOpenAsrSettings"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="16dp"
+          android:layout_marginTop="8dp"
           style="@style/Widget.Material3.Button"
           android:text="@string/title_asr_settings" />
 
@@ -168,33 +97,17 @@
           android:text="@string/title_floating_settings" />
 
         <com.google.android.material.button.MaterialButton
-          android:id="@+id/btnOpenPunctSettings"
+          android:id="@+id/btnOpenOtherSettings"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
           style="@style/Widget.Material3.Button.OutlinedButton"
-          android:text="@string/title_punct_settings" />
+          android:text="@string/title_other_settings" />
 
         <com.google.android.material.divider.MaterialDivider
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="16dp" />
-
-        <com.google.android.material.button.MaterialButton
-          android:id="@+id/btnShowGuide"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          style="@style/Widget.Material3.Button.OutlinedButton"
-          android:text="@string/btn_show_guide" />
-
-        <com.google.android.material.button.MaterialButton
-          android:id="@+id/btnCheckUpdate"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          style="@style/Widget.Material3.Button.OutlinedButton"
-          android:text="@string/btn_check_update" />
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/btnExportSettings"
@@ -211,6 +124,22 @@
           android:layout_marginTop="8dp"
           style="@style/Widget.Material3.Button.OutlinedButton"
           android:text="@string/btn_import_settings" />
+        
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/btnShowGuide"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          style="@style/Widget.Material3.Button.OutlinedButton"
+          android:text="@string/btn_show_guide" />
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/btnCheckUpdate"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          style="@style/Widget.Material3.Button.OutlinedButton"
+          android:text="@string/btn_check_update" />
 
         <!-- 关于 -->
         <com.google.android.material.button.MaterialButton

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:titleCentered="true"
+    app:title="@string/title_other_settings" />
+
+  <androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:fillViewport="true">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="16dp"
+      android:orientation="vertical">
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textColor="?attr/colorOnSurface"
+      android:textStyle="bold"
+      android:text="@string/custom_punct_section_title" />
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:boxBackgroundMode="outline"
+      android:hint="@string/label_custom_punct_1">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etPunct1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="3"
+        android:inputType="text"
+        android:textColor="?attr/colorOnSurface"
+        android:textColorHint="?attr/colorOnSurfaceVariant" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:boxBackgroundMode="outline"
+      android:hint="@string/label_custom_punct_2">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etPunct2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="3"
+        android:inputType="text"
+        android:textColor="?attr/colorOnSurface"
+        android:textColorHint="?attr/colorOnSurfaceVariant" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:boxBackgroundMode="outline"
+      android:hint="@string/label_custom_punct_3">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etPunct3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="3"
+        android:inputType="text"
+        android:textColor="?attr/colorOnSurface"
+        android:textColorHint="?attr/colorOnSurfaceVariant" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:boxBackgroundMode="outline"
+      android:hint="@string/label_custom_punct_4">
+
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etPunct4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="3"
+        android:inputType="text"
+        android:textColor="?attr/colorOnSurface"
+        android:textColorHint="?attr/colorOnSurfaceVariant" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- SyncClipboard 区域 -->
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="16dp" />
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textColor="?attr/colorOnSurface"
+      android:textStyle="bold"
+      android:text="@string/section_sync_clipboard" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+      android:id="@+id/switchSyncClipboard"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/label_enable_sync_clipboard" />
+
+    <LinearLayout
+      android:id="@+id/layoutSyncClipboard"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:paddingTop="8dp"
+      android:visibility="gone">
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="outline"
+        android:hint="@string/label_sc_server_base">
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/etScServerBase"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="textUri"
+          android:textColor="?attr/colorOnSurface"
+          android:textColorHint="?attr/colorOnSurfaceVariant"
+          android:hint="https://your-server.com/path" />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="outline"
+        android:hint="@string/label_sc_username">
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/etScUsername"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="textVisiblePassword"
+          android:textColor="?attr/colorOnSurface"
+          android:textColorHint="?attr/colorOnSurfaceVariant" />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="outline"
+        android:hint="@string/label_sc_password">
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/etScPassword"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="textPassword"
+          android:textColor="?attr/colorOnSurface"
+          android:textColorHint="?attr/colorOnSurfaceVariant" />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/switchScAutoPull"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_sc_auto_pull" />
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="outline"
+        android:hint="@string/label_sc_pull_interval">
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/etScPullInterval"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="number"
+          android:maxLength="3"
+          android:textColor="?attr/colorOnSurface"
+          android:textColorHint="?attr/colorOnSurfaceVariant" />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/btnScTestPull"
+          style="@style/Widget.Material3.Button.TonalButton"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/btn_sc_test_pull"
+          app:shapeAppearanceOverlay="@style/AsrkbShapeOverlayCapsule" />
+
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/btnScProjectHome"
+          style="?attr/materialButtonOutlinedStyle"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:layout_marginStart="8dp"
+          android:text="@string/btn_sc_project_home" />
+      </LinearLayout>
+
+      
+    </LinearLayout>
+    <!-- Close scroll content container -->
+    </LinearLayout>
+  </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

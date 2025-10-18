@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 import androidx.core.content.ContextCompat
 import com.brycewg.asrkb.R
 import com.brycewg.asrkb.store.Prefs
+import com.brycewg.asrkb.clipboard.SyncClipboardManager
 import com.brycewg.asrkb.LocaleHelper
 
 /**
@@ -419,11 +420,10 @@ class FloatingImeSwitcherService : Service() {
             setOnClickListener { hideRadialMenu() }
         }
         root.alpha = currentUiAlpha()
-        val btnSize = try { Prefs(this).floatingBallSizeDp } catch (_: Throwable) { 44 }
-        val radius = dp((btnSize * 2.2f).toInt().coerceAtLeast(72))
         val isLeft = isBallOnLeft()
-        // 4 个功能：ASR供应商、输入法选择器、移动、AI后处理开关
+        // 6 个功能：顶部 Prompt 切换 + 原 4 项 + 底部剪贴板同步（两者仅为 UI 占位）
         val items = listOf(
+            RadialItem(R.drawable.ic_prompt, getString(R.string.label_radial_switch_prompt), getString(R.string.label_radial_switch_prompt)) { onPickPromptPresetFromMenu() },
             RadialItem(R.drawable.ic_waveform, getString(R.string.label_radial_switch_asr), getString(R.string.label_radial_switch_asr)) { onPickAsrVendor() },
             RadialItem(R.drawable.ic_keyboard, getString(R.string.label_radial_switch_ime), getString(R.string.label_radial_switch_ime)) { invokeImePickerFromMenu() },
             RadialItem(R.drawable.ic_move, getString(R.string.label_radial_move), getString(R.string.label_radial_move)) { enableMoveModeFromMenu() },
@@ -431,48 +431,47 @@ class FloatingImeSwitcherService : Service() {
                 if (try { Prefs(this).postProcessEnabled } catch (_: Throwable) { false }) R.drawable.ic_star_filled else R.drawable.ic_star_outline,
                 getString(R.string.label_radial_postproc),
                 getString(R.string.label_radial_postproc)
-            ) { togglePostprocFromMenu() }
+            ) { togglePostprocFromMenu() },
+            // 一次性上传/拉取粘贴板
+            RadialItem(R.drawable.ic_stat_upload, getString(R.string.label_radial_clipboard_upload), getString(R.string.label_radial_clipboard_upload)) { uploadClipboardOnceFromMenu() },
+            RadialItem(R.drawable.ic_stat_download, getString(R.string.label_radial_clipboard_pull), getString(R.string.label_radial_clipboard_pull)) { pullClipboardOnceFromMenu() }
         )
-        val angles = floatArrayOf(-75f, -25f, 25f, 75f)
-        val centerX = p.x + (ballView?.width ?: p.width) / 2
-        val centerY = p.y + (ballView?.height ?: p.height) / 2
-        val base = if (isLeft) 0f else 180f
-        val dm = resources.displayMetrics
-        val screenW = dm.widthPixels
+        // 改为垂直排布：统一承载在纵向容器
+        val container = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            background = ContextCompat.getDrawable(this@FloatingImeSwitcherService, R.drawable.bg_panel_round)
+            val pad = dp(8)
+            setPadding(pad, pad, pad, pad)
+        }
         items.forEachIndexed { index, it ->
-            val a = Math.toRadians((base + angles[index]).toDouble())
-            val cx = (centerX + radius * Math.cos(a)).toInt()
-            val cy = (centerY + radius * Math.sin(a)).toInt()
-            val capsule = buildCapsule(it.iconRes, it.label, it.contentDescription) {
-                hideRadialMenu(); it.onClick()
-            }
-            val lpCap: android.widget.FrameLayout.LayoutParams = if (isLeft) {
-                android.widget.FrameLayout.LayoutParams(android.widget.FrameLayout.LayoutParams.WRAP_CONTENT, android.widget.FrameLayout.LayoutParams.WRAP_CONTENT)
-            } else {
-                android.widget.FrameLayout.LayoutParams(android.widget.FrameLayout.LayoutParams.WRAP_CONTENT, android.widget.FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.TOP or Gravity.END)
-            }
-            root.addView(capsule, lpCap)
-            capsule.alpha = 0f
-            capsule.scaleX = 0.95f
-            capsule.scaleY = 0.95f
-            capsule.post {
-                val spacing = dp(6)
-                val w = capsule.width
-                val h = capsule.height
-                val lp2 = capsule.layoutParams as android.widget.FrameLayout.LayoutParams
-                if (isLeft) {
-                    lp2.leftMargin = (cx + spacing)
-                } else {
-                    lp2.rightMargin = (screenW - (cx - spacing)).coerceAtLeast(0)
-                }
-                val dm2 = resources.displayMetrics
-                val screenH2 = dm2.heightPixels
-                val top = (cy - h / 2)
-                lp2.topMargin = top.coerceIn(dp(8), (screenH2 - h - dp(8)).coerceAtLeast(0))
-                capsule.layoutParams = lp2
-                // 简单弹入动画
-                capsule.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(140).setStartDelay((index * 20).toLong()).start()
-            }
+            val row = buildCapsule(it.iconRes, it.label, it.contentDescription) { it.onClick(); hideRadialMenu() }
+            val lpRow = android.widget.LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT)
+            if (index > 0) lpRow.topMargin = dp(6)
+            container.addView(row, lpRow)
+        }
+        container.alpha = 0f
+        container.translationX = if (isLeft) dp(8).toFloat() else -dp(8).toFloat()
+        val paramsContainer = android.widget.FrameLayout.LayoutParams(android.widget.FrameLayout.LayoutParams.WRAP_CONTENT, android.widget.FrameLayout.LayoutParams.WRAP_CONTENT)
+        root.addView(container, paramsContainer)
+        container.post {
+            try {
+                val dm = resources.displayMetrics
+                val screenW = dm.widthPixels
+                val screenH = dm.heightPixels
+                val centerX = p.x + (ballView?.width ?: p.width) / 2
+                val centerY = p.y + (ballView?.height ?: p.height) / 2
+                val offset = dp(16)
+                val w = container.width
+                val h = container.height
+                val lpC = container.layoutParams as android.widget.FrameLayout.LayoutParams
+                val left = if (isLeft) (centerX + offset) else (centerX - offset - w)
+                val top = centerY - h / 2
+                lpC.leftMargin = left.coerceIn(0, (screenW - w).coerceAtLeast(0))
+                lpC.topMargin = top.coerceIn(dp(8), (screenH - h - dp(8)).coerceAtLeast(0))
+                container.layoutParams = lpC
+                // 入场动画
+                container.animate().alpha(1f).translationX(0f).setDuration(160).start()
+            } catch (_: Throwable) { }
         }
 
         val type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -607,6 +606,8 @@ class FloatingImeSwitcherService : Service() {
     }
 
     private fun onPickAsrVendor() {
+        // 打开子面板期间保持可见，避免 lp 在可见性刷新时被清空
+        touchActiveGuard = true
         hideVendorMenu()
         // 构造供应商列表面板
         val root = android.widget.FrameLayout(this).apply {
@@ -678,8 +679,8 @@ class FloatingImeSwitcherService : Service() {
         )
         // 先添加，待测量后再根据左右位置与尺寸精确定位，避免越界与遮挡
         root.addView(container, paramsContainer)
-        val p = lp ?: return
-        val isLeft = isBallOnLeft()
+        val (cx, cy) = getBallCenterSnapshot()
+        val isLeft = cx < (resources.displayMetrics.widthPixels / 2)
         // 入场动画：从靠近悬浮球一侧轻微平移并淡入
         container.alpha = 0f
         container.translationX = if (isLeft) dp(8).toFloat() else -dp(8).toFloat()
@@ -688,8 +689,6 @@ class FloatingImeSwitcherService : Service() {
                 val dm = resources.displayMetrics
                 val screenW = dm.widthPixels
                 val screenH = dm.heightPixels
-                val cx = p.x + (ballView?.width ?: p.width) / 2
-                val cy = p.y + (ballView?.height ?: p.height) / 2
                 val offset = dp(16)
                 val w = container.width
                 val h = container.height
@@ -717,6 +716,7 @@ class FloatingImeSwitcherService : Service() {
         try {
             windowManager.addView(root, params)
             vendorMenuView = root
+            touchActiveGuard = false
             updateBallVisibility()
         } catch (_: Throwable) { }
     }
@@ -736,6 +736,145 @@ class FloatingImeSwitcherService : Service() {
             vendorMenuView = null
             updateBallVisibility()
         } ?: run { updateBallVisibility() }
+    }
+
+    // 获取悬浮球中心点（容错：lp 可能为 null 时使用持久化位置与默认大小）
+    private fun getBallCenterSnapshot(): Pair<Int, Int> {
+        val dm = resources.displayMetrics
+        val sizeDp = try { Prefs(this).floatingBallSizeDp } catch (_: Throwable) { 44 }
+        val vw = (ballView?.width?.takeIf { it > 0 }) ?: (lp?.width ?: dp(sizeDp))
+        val vh = (ballView?.height?.takeIf { it > 0 }) ?: (lp?.height ?: dp(sizeDp))
+        val px = lp?.x ?: run { try { Prefs(this).floatingBallPosX } catch (_: Throwable) { (dm.widthPixels - vw) / 2 } }
+        val py = lp?.y ?: run { try { Prefs(this).floatingBallPosY } catch (_: Throwable) { (dm.heightPixels - vh) / 2 } }
+        return (px + vw / 2) to (py + vh / 2)
+    }
+
+    private fun onPickPromptPresetFromMenu() {
+        // 打开子面板期间保持可见，避免 lp 在可见性刷新时被清空
+        touchActiveGuard = true
+        hideVendorMenu()
+        val root = android.widget.FrameLayout(this).apply {
+            setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            isClickable = true
+            setOnClickListener { hideVendorMenu() }
+        }
+        root.alpha = currentUiAlpha()
+        val container = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            background = ContextCompat.getDrawable(this@FloatingImeSwitcherService, R.drawable.bg_panel_round)
+            val pad = dp(12)
+            setPadding(pad, pad, pad, pad)
+        }
+        val title = android.widget.TextView(this).apply {
+            text = getString(R.string.label_llm_prompt_presets)
+            setTextColor(0xFF111111.toInt())
+            textSize = 16f
+            setPadding(0, 0, 0, dp(4))
+        }
+        container.addView(title, android.widget.LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT))
+
+        val prefs = Prefs(this)
+        val presets = try { prefs.getPromptPresets() } catch (_: Throwable) { emptyList() }
+        val active = try { prefs.activePromptId } catch (_: Throwable) { "" }
+        presets.forEach { p ->
+            val tv = android.widget.TextView(this).apply {
+                text = if (p.id == active) "✓  ${p.title}" else p.title
+                setTextColor(0xFF222222.toInt())
+                textSize = 14f
+                setPadding(dp(6), dp(8), dp(6), dp(8))
+                isClickable = true
+                isFocusable = true
+                setOnClickListener {
+                    try {
+                        Prefs(this@FloatingImeSwitcherService).activePromptId = p.id
+                        android.widget.Toast.makeText(this@FloatingImeSwitcherService, getString(R.string.switched_preset, p.title), android.widget.Toast.LENGTH_SHORT).show()
+                    } catch (_: Throwable) { }
+                    hideVendorMenu()
+                }
+            }
+            container.addView(tv, android.widget.LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT))
+        }
+
+        val paramsContainer = android.widget.FrameLayout.LayoutParams(
+            android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+            android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        root.addView(container, paramsContainer)
+        val (cx, cy) = getBallCenterSnapshot()
+        val isLeft = cx < (resources.displayMetrics.widthPixels / 2)
+        container.alpha = 0f
+        container.translationX = if (isLeft) dp(8).toFloat() else -dp(8).toFloat()
+        container.post {
+            try {
+                val dm = resources.displayMetrics
+                val screenW = dm.widthPixels
+                val screenH = dm.heightPixels
+                val offset = dp(16)
+                val w = container.width
+                val h = container.height
+                val lpC = container.layoutParams as android.widget.FrameLayout.LayoutParams
+                val left = if (isLeft) (cx + offset) else (cx - offset - w)
+                val top = cy - h / 2
+                lpC.leftMargin = left.coerceIn(0, (screenW - w).coerceAtLeast(0))
+                lpC.topMargin = top.coerceIn(0, (screenH - h).coerceAtLeast(0))
+                container.layoutParams = lpC
+                try { container.animate().alpha(1f).translationX(0f).setDuration(160).start() } catch (_: Throwable) { }
+            } catch (_: Throwable) { }
+        }
+
+        val type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        val params = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            type,
+            0,
+            PixelFormat.TRANSLUCENT
+        )
+        params.gravity = Gravity.TOP or Gravity.START
+        try {
+            windowManager.addView(root, params)
+            vendorMenuView = root
+            touchActiveGuard = false
+            updateBallVisibility()
+        } catch (_: Throwable) { }
+    }
+
+    private fun uploadClipboardOnceFromMenu() {
+        try {
+            val prefs = Prefs(this)
+            val mgr = SyncClipboardManager(this, prefs, serviceScope)
+            serviceScope.launch(Dispatchers.IO) {
+                val ok = try { mgr.uploadOnce() } catch (t: Throwable) { false }
+                handler.post {
+                    try {
+                        android.widget.Toast.makeText(
+                            this@FloatingImeSwitcherService,
+                            getString(if (ok) R.string.sc_status_uploaded else R.string.sc_test_failed),
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (_: Throwable) { }
+                }
+            }
+        } catch (_: Throwable) { }
+    }
+
+    private fun pullClipboardOnceFromMenu() {
+        try {
+            val prefs = Prefs(this)
+            val mgr = SyncClipboardManager(this, prefs, serviceScope)
+            serviceScope.launch(Dispatchers.IO) {
+                val ok = try { mgr.pullNow(updateClipboard = true).first } catch (t: Throwable) { false }
+                handler.post {
+                    try {
+                        android.widget.Toast.makeText(
+                            this@FloatingImeSwitcherService,
+                            getString(if (ok) R.string.sc_test_success else R.string.sc_test_failed),
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (_: Throwable) { }
+                }
+            }
+        } catch (_: Throwable) { }
     }
 
     private fun snapToEdge(v: View) {

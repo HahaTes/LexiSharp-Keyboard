@@ -2,7 +2,7 @@
   "version": "3.0.4",
   "version_code": 67,
   "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.0.4",
-  "release_notes": "本次更新包含 9 个提交:\n- feat(asr): 添加录音判停灵敏度一键校准功能\n- chore: auto-update version.json to 3.0.3 [skip ci]\n- Revert \"perf(asr): 优化 ASR 引擎音频录制初始化\"\n- feat(model): 添加本地模型后台下载与解压服务\n- fix(asr): 修复启用录音判停后 ASR 引擎重复输出\n- refactor(settings): 调整按钮布局，重新排列引导和检查更新按钮\n- perf(asr): 优化 ASR 引擎音频录制初始化",
+  "release_notes": "本次更新包含 8 个提交:\n- fix(ui): 增强悬浮菜单定位与子面板可见性\n- refactor(ui): 重命名标点设置页面为其他设置\n- refractor(settings): 引入输入设置页面并迁移相关选项\n- feat(ui): 重构悬浮球菜单为垂直布局，新增Prompt切换\n- fix: 更新 Telegram 链接至最新群组\n- feat(ime): 将麦克风长按判断时间去除,改为按下即说\n- Update Telegram link in README.md",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-18T04:10:49Z"
+  "update_time": "2025-10-18T07:22:47Z"
 }

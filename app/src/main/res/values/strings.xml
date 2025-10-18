@@ -41,9 +41,10 @@
     <string name="btn_check_update">检查更新</string>
   <!-- Material UI additions -->
   <string name="settings_title">言犀键盘设置</string>
+  <string name="title_input_settings">输入设置</string>
   <string name="title_asr_settings">ASR 设置</string>
   <string name="title_ai_settings">AI 后处理设置</string>
-  <string name="title_punct_settings">自定义标点设置</string>
+  <string name="title_other_settings">其他设置</string>
     <string name="title_floating_settings">悬浮球设置</string>
     <string name="volc_section_title">Volcano Engine 鉴权参数</string>
     <string name="sf_section_title">SiliconFlow 鉴权参数</string>
@@ -179,6 +180,9 @@
     <string name="label_radial_switch_ime">切换输入法</string>
     <string name="label_radial_move">移动悬浮球</string>
     <string name="label_radial_postproc">切换 AI 后处理</string>
+    <string name="label_radial_switch_prompt">切换 AI 后处理 Prompt</string>
+    <string name="label_radial_clipboard_upload">上传粘贴板</string>
+    <string name="label_radial_clipboard_pull">拉取粘贴板</string>
     <string name="label_choose_asr_vendor">选择 ASR 供应商</string>
     <string name="toast_move_mode_on">已进入移动模式，再次点击悬浮球退出</string>
 
@@ -361,4 +365,20 @@
     <string name="notif_model_title_int8">SenseVoice 模型（Small int8）</string>
     <string name="notif_model_title_full">SenseVoice 模型（Small full）</string>
     <string name="status_ai_edit_forSelected">对选中文本：</string>
+    
+    <!-- SyncClipboard settings -->
+    <string name="section_sync_clipboard">剪贴板同步</string>
+    <string name="label_enable_sync_clipboard">使用 SyncClipboard 项目来同步粘贴板</string>
+    <string name="label_sc_server_base">服务器地址（会自动拼接 /SyncClipboard.json）</string>
+    <string name="label_sc_username">用户名</string>
+    <string name="label_sc_password">密码</string>
+    <string name="label_sc_auto_pull">自动定时拉取粘贴板内容（仅在输入法面板展开时）</string>
+    <string name="label_sc_pull_interval">拉取间隔（秒，1-600）</string>
+    <string name="btn_sc_test_pull">立即验证</string>
+    <string name="sc_test_success">拉取成功</string>
+    <string name="sc_test_failed">拉取失败，请检查地址与凭证</string>
+    <string name="sc_status_pulled_new">获取到新粘贴内容</string>
+    <string name="sc_status_uploaded">成功上传粘贴板</string>
+    <string name="btn_sc_project_home">项目主页</string>
+    <string name="sc_open_browser_failed">无法打开浏览器</string>
 </resources>

@@ -4,4 +4,11 @@
     <item name="cornerFamily">rounded</item>
     <item name="cornerSize">20dp</item>
   </style>
+
+  <!-- 胶囊圆角（适用于 MaterialButton 的 shapeAppearanceOverlay） -->
+    <!-- 胶囊圆角（适用于 MaterialButton 的 shapeAppearanceOverlay） -->
+  <style name="AsrkbShapeOverlayCapsule">
+    <item name="cornerFamily">rounded</item>
+    <item name="cornerSize">50%</item>
+  </style>
 </resources>

@@ -40,9 +40,10 @@
     <string name="btn_check_update">Check for Updates</string>
     <!-- Material UI additions -->
     <string name="settings_title">LexiSharp Keyboard Settings</string>
+    <string name="title_input_settings">Input Settings</string>
     <string name="title_asr_settings">ASR Settings</string>
     <string name="title_ai_settings">AI Post-processing Settings</string>
-    <string name="title_punct_settings">Custom Punctuation Settings</string>
+    <string name="title_other_settings">Other Settings</string>
     <string name="title_floating_settings">Floating Settings</string>
     <string name="volc_section_title">Volcano Engine Credentials</string>
     <string name="sf_section_title">SiliconFlow Credentials</string>
@@ -182,6 +183,10 @@
     <string name="label_radial_switch_ime">Switch input method</string>
     <string name="label_radial_move">Move floating ball</string>
     <string name="label_radial_postproc">Toggle AI post-processing</string>
+    <string name="label_radial_switch_prompt">Switch AI post-processing prompt</string>
+    <string name="label_radial_clipboard_upload">Upload Clipboard</string>
+    <string name="label_radial_clipboard_pull">Pull Clipboard</string>
+    <string name="label_radial_clipboard_sync">Clipboard sync</string>
     <string name="label_choose_asr_vendor">Choose ASR provider</string>
     <string name="toast_move_mode_on">Move mode enabled. Tap the ball to exit.</string>
 
@@ -364,4 +369,19 @@
     <string name="sv_lang_yue">Cantonese (yue)</string>
     <string name="label_sv_use_itn">Enable ITN (inverse text normalization)</string>
     <string name="status_ai_edit_forSelected">AI edit for the selected text using</string>
+    <!-- SyncClipboard settings -->
+    <string name="section_sync_clipboard">Clipboard Sync</string>
+    <string name="label_enable_sync_clipboard">Use SyncClipboard project to sync clipboard</string>
+    <string name="label_sc_server_base">Server base URL (will append /SyncClipboard.json)</string>
+    <string name="label_sc_username">Username</string>
+    <string name="label_sc_password">Password</string>
+    <string name="label_sc_auto_pull">Auto pull clipboard periodically (only when IME is visible)</string>
+    <string name="label_sc_pull_interval">Pull interval (sec, 1-600)</string>
+    <string name="btn_sc_test_pull">Validate</string>
+    <string name="sc_test_success">Pull succeeded</string>
+    <string name="sc_test_failed">Pull failed. Please check URL and credentials.</string>
+    <string name="sc_status_pulled_new">Pulled new clipboard content</string>
+    <string name="sc_status_uploaded">Clipboard uploaded successfully</string>
+    <string name="btn_sc_project_home">Project Home</string>
+    <string name="sc_open_browser_failed">Cannot open browser</string>
 </resources>

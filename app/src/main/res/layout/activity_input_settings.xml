@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <com.google.android.material.appbar.MaterialToolbar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:titleCentered="true"
+    app:title="@string/title_input_settings" />
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_max="@dimen/settings_form_max_width">
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchTrimTrailingPunct"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/label_trim_trailing_punct" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchAutoSwitchPassword"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="@string/label_auto_switch_password" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchMicHaptic"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="@string/label_mic_haptic" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchMicTapToggle"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="@string/label_mic_tap_toggle" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchSwapAiEditWithSwitcher"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="@string/label_swap_ai_edit_switcher" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchHideRecentTasks"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="@string/label_hide_recent_task_card" />
+
+        <!-- 键盘高度 -->
+        <TextView
+          android:id="@+id/labelKeyboardHeight"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:textColor="?attr/colorOnSurface"
+          android:textStyle="bold"
+          android:text="@string/label_keyboard_height" />
+
+        <Spinner
+          android:id="@+id/spKeyboardHeight"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+
+        <!-- App language selection -->
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:textColor="?attr/colorOnSurface"
+          android:textStyle="bold"
+          android:text="@string/label_language" />
+
+        <Spinner
+          android:id="@+id/spLanguage"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+
+      </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </ScrollView>
+
+</LinearLayout>
+

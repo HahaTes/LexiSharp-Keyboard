@@ -40,6 +40,10 @@
         <!-- 直接子设置页（无中间层） -->
 
         <activity
+            android:name=".ui.InputSettingsActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ui.AsrSettingsActivity"
             android:exported="false" />
 
@@ -48,7 +52,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".ui.PunctSettingsActivity"
+            android:name=".ui.OtherSettingsActivity"
             android:exported="false" />
 
         <activity

@@ -85,137 +85,27 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         // 直达子设置页
+        findViewById<Button>(R.id.btnOpenInputSettings)?.setOnClickListener {
+            startActivity(Intent(this, InputSettingsActivity::class.java))
+        }
         findViewById<Button>(R.id.btnOpenAsrSettings)?.setOnClickListener {
             startActivity(Intent(this, AsrSettingsActivity::class.java))
         }
         findViewById<Button>(R.id.btnOpenAiSettings)?.setOnClickListener {
             startActivity(Intent(this, AiPostSettingsActivity::class.java))
         }
-        findViewById<Button>(R.id.btnOpenPunctSettings)?.setOnClickListener {
-            startActivity(Intent(this, PunctSettingsActivity::class.java))
+        findViewById<Button>(R.id.btnOpenOtherSettings)?.setOnClickListener {
+            startActivity(Intent(this, OtherSettingsActivity::class.java))
         }
         findViewById<Button>(R.id.btnOpenFloatingSettings)?.setOnClickListener {
             startActivity(Intent(this, FloatingSettingsActivity::class.java))
         }
 
         val prefs = Prefs(this)
-        val spLanguage = findViewById<Spinner>(R.id.spLanguage)
         val tvAsrTotalChars = findViewById<TextView>(R.id.tvAsrTotalChars)
-        val switchTrimTrailingPunct = findViewById<MaterialSwitch>(R.id.switchTrimTrailingPunct)
-        val switchAutoSwitchPassword = findViewById<MaterialSwitch>(R.id.switchAutoSwitchPassword)
-        val switchMicHaptic = findViewById<MaterialSwitch>(R.id.switchMicHaptic)
-        val switchMicTapToggle = findViewById<MaterialSwitch>(R.id.switchMicTapToggle)
-        val switchSwapAiEditWithSwitcher = findViewById<MaterialSwitch>(R.id.switchSwapAiEditWithSwitcher)
-        val switchHideRecentTasks = findViewById<MaterialSwitch>(R.id.switchHideRecentTasks)
-        val spKeyboardHeight = findViewById<Spinner>(R.id.spKeyboardHeight)
-
-
-        fun applyPrefsToUi() {
-            switchTrimTrailingPunct.isChecked = prefs.trimFinalTrailingPunct
-            switchAutoSwitchPassword.isChecked = prefs.autoSwitchOnPassword
-            switchMicHaptic.isChecked = prefs.micHapticEnabled
-            switchMicTapToggle.isChecked = prefs.micTapToggleEnabled
-            switchSwapAiEditWithSwitcher.isChecked = prefs.swapAiEditWithImeSwitcher
-            switchHideRecentTasks.isChecked = prefs.hideRecentTaskCard
-            try {
-                tvAsrTotalChars.text = getString(R.string.label_asr_total_chars, prefs.totalAsrChars)
-            } catch (_: Throwable) { }
-        }
-        applyPrefsToUi()
-
-        // 键盘高度：三档
-        val kbHeightOptions = arrayOf<String>(
-            getString(R.string.keyboard_height_small),
-            getString(R.string.keyboard_height_medium),
-            getString(R.string.keyboard_height_large)
-        )
-        spKeyboardHeight.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, kbHeightOptions)
-        spKeyboardHeight.setSelection((prefs.keyboardHeightTier - 1).coerceIn(0, 2))
-        // 已在 applyPrefsToUi 中统一设置上述字段
-
-        // 应用语言选择器设置（独立于高级视图）
-        val languageItems = listOf(
-            getString(R.string.lang_follow_system),
-            getString(R.string.lang_zh_cn),
-            getString(R.string.lang_en)
-        )
-        spLanguage.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, languageItems)
-        val savedTag = prefs.appLanguageTag
-        spLanguage.setSelection(
-            when (savedTag) {
-                "zh", "zh-CN", "zh-Hans" -> 1
-                "en" -> 2
-                else -> 0
-            }
-        )
-        val languageSpinnerInitialized = true
-
-        spLanguage.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (!languageSpinnerInitialized) return
-                val newTag = when (position) {
-                    // 使用通用中文标签，避免区域标签在部分设备上匹配异常
-                    1 -> "zh-CN"
-                    2 -> "en"
-                    else -> "" // 跟随系统
-                }
-                if (newTag != prefs.appLanguageTag) {
-                    prefs.appLanguageTag = newTag
-                    val locales = if (newTag.isBlank()) LocaleListCompat.getEmptyLocaleList() else LocaleListCompat.forLanguageTags(newTag)
-                    AppCompatDelegate.setApplicationLocales(locales)
-                }
-            }
-
-            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
-        }
-
-        // AI编辑与切换键位置交换
-        switchSwapAiEditWithSwitcher.setOnCheckedChangeListener { btn, isChecked ->
-            hapticTapIfEnabled(btn)
-            prefs.swapAiEditWithImeSwitcher = isChecked
-            try { sendBroadcast(Intent(AsrKeyboardService.ACTION_REFRESH_IME_UI)) } catch (_: Throwable) { }
-        }
-
-        // 键盘高度（保存到偏好并通知 IME 立即按比例缩放）
-        spKeyboardHeight.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val tier = (position + 1).coerceIn(1, 3)
-                if (prefs.keyboardHeightTier != tier) {
-                    prefs.keyboardHeightTier = tier
-                    try { sendBroadcast(Intent(AsrKeyboardService.ACTION_REFRESH_IME_UI)) } catch (_: Throwable) { }
-                }
-            }
-            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
-        }
-
-        // 基础开关即时写入
-        switchTrimTrailingPunct.setOnCheckedChangeListener { btn, isChecked ->
-            hapticTapIfEnabled(btn)
-            prefs.trimFinalTrailingPunct = isChecked
-        }
-        switchAutoSwitchPassword.setOnCheckedChangeListener { btn, isChecked ->
-            hapticTapIfEnabled(btn)
-            prefs.autoSwitchOnPassword = isChecked
-        }
-        switchMicHaptic.setOnCheckedChangeListener { btn, isChecked ->
-            // 更新为全局触觉开关，并对本次切换给出即时反馈
-            prefs.micHapticEnabled = isChecked
-            try { btn.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP) } catch (_: Throwable) { }
-        }
-        switchMicTapToggle.setOnCheckedChangeListener { btn, isChecked ->
-            hapticTapIfEnabled(btn)
-            prefs.micTapToggleEnabled = isChecked
-        }
-
-        // 后台隐藏任务卡片（从最近任务中排除）
-        switchHideRecentTasks.setOnCheckedChangeListener { btn, isChecked ->
-            hapticTapIfEnabled(btn)
-            prefs.hideRecentTaskCard = isChecked
-            applyExcludeFromRecents(isChecked)
-        }
-
-        // 初始时根据设置应用一次
-        applyExcludeFromRecents(prefs.hideRecentTaskCard)
+        try {
+            tvAsrTotalChars.text = getString(R.string.label_asr_total_chars, prefs.totalAsrChars)
+        } catch (_: Throwable) { }
 
 
         // 设置导入/导出
@@ -239,19 +129,7 @@ class SettingsActivity : AppCompatActivity() {
                     val json = contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { it.readText() } ?: ""
                     val ok = Prefs(this).importJsonString(json)
                     if (ok) {
-                        // 重新从 Prefs 读取并刷新界面与下拉框，确保导入立即生效
-                        applyPrefsToUi()
-                        // 高级控件（如存在）刷新在对应页面完成
-                        // 同步语言选择（将触发 onItemSelected 从而应用语言）
-                        val tag = prefs.appLanguageTag
-                        spLanguage.setSelection(
-                            when (tag) {
-                                "zh", "zh-CN", "zh-Hans" -> 1
-                                "en" -> 2
-                                else -> 0
-                            }
-                        )
-                        // 通知 IME 即时刷新（包含高度与按钮交换）
+                        // 导入完成后，通知 IME 即时刷新（包含高度与按钮交换）。
                         try { sendBroadcast(Intent(AsrKeyboardService.ACTION_REFRESH_IME_UI)) } catch (_: Throwable) { }
                         Toast.makeText(this, getString(R.string.toast_import_success), Toast.LENGTH_SHORT).show()
                     } else {

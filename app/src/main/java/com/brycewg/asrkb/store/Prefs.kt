@@ -597,6 +597,36 @@ class Prefs(context: Context) {
         totalAsrChars = next
     }
 
+    // ---- SyncClipboard 偏好项 ----
+    var syncClipboardEnabled: Boolean
+        get() = sp.getBoolean(KEY_SC_ENABLED, false)
+        set(value) = sp.edit { putBoolean(KEY_SC_ENABLED, value) }
+
+    var syncClipboardServerBase: String
+        get() = sp.getString(KEY_SC_SERVER_BASE, "") ?: ""
+        set(value) = sp.edit { putString(KEY_SC_SERVER_BASE, value.trim()) }
+
+    var syncClipboardUsername: String
+        get() = sp.getString(KEY_SC_USERNAME, "") ?: ""
+        set(value) = sp.edit { putString(KEY_SC_USERNAME, value.trim()) }
+
+    var syncClipboardPassword: String
+        get() = sp.getString(KEY_SC_PASSWORD, "") ?: ""
+        set(value) = sp.edit { putString(KEY_SC_PASSWORD, value.trim()) }
+
+    var syncClipboardAutoPullEnabled: Boolean
+        get() = sp.getBoolean(KEY_SC_AUTO_PULL, false)
+        set(value) = sp.edit { putBoolean(KEY_SC_AUTO_PULL, value) }
+
+    var syncClipboardPullIntervalSec: Int
+        get() = sp.getInt(KEY_SC_PULL_INTERVAL_SEC, 15).coerceIn(1, 600)
+        set(value) = sp.edit { putInt(KEY_SC_PULL_INTERVAL_SEC, value.coerceIn(1, 600)) }
+
+    // 仅用于变更检测（不上报/不导出）
+    var syncClipboardLastUploadedHash: String
+        get() = sp.getString(KEY_SC_LAST_UP_HASH, "") ?: ""
+        set(value) = sp.edit { putString(KEY_SC_LAST_UP_HASH, value) }
+
     companion object {
         private const val KEY_APP_KEY = "app_key"
         private const val KEY_ACCESS_KEY = "access_key"
@@ -679,6 +709,15 @@ class Prefs(context: Context) {
         private const val KEY_SV_USE_ITN = "sv_use_itn"
         private const val KEY_SV_PRELOAD_ENABLED = "sv_preload_enabled"
         private const val KEY_SV_KEEP_ALIVE_MINUTES = "sv_keep_alive_minutes"
+
+        // SyncClipboard keys
+        private const val KEY_SC_ENABLED = "syncclip_enabled"
+        private const val KEY_SC_SERVER_BASE = "syncclip_server_base"
+        private const val KEY_SC_USERNAME = "syncclip_username"
+        private const val KEY_SC_PASSWORD = "syncclip_password"
+        private const val KEY_SC_AUTO_PULL = "syncclip_auto_pull"
+        private const val KEY_SC_PULL_INTERVAL_SEC = "syncclip_pull_interval_sec"
+        private const val KEY_SC_LAST_UP_HASH = "syncclip_last_uploaded_hash"
 
         const val DEFAULT_ENDPOINT = "https://openspeech.bytedance.com/api/v3/auc/bigmodel/recognize/flash"
         const val SF_ENDPOINT = "https://api.siliconflow.cn/v1/audio/transcriptions"
@@ -837,6 +876,13 @@ class Prefs(context: Context) {
         o.put(KEY_SV_USE_ITN, svUseItn)
         o.put(KEY_SV_PRELOAD_ENABLED, svPreloadEnabled)
         o.put(KEY_SV_KEEP_ALIVE_MINUTES, svKeepAliveMinutes)
+        // SyncClipboard 配置
+        o.put(KEY_SC_ENABLED, syncClipboardEnabled)
+        o.put(KEY_SC_SERVER_BASE, syncClipboardServerBase)
+        o.put(KEY_SC_USERNAME, syncClipboardUsername)
+        o.put(KEY_SC_PASSWORD, syncClipboardPassword)
+        o.put(KEY_SC_AUTO_PULL, syncClipboardAutoPullEnabled)
+        o.put(KEY_SC_PULL_INTERVAL_SEC, syncClipboardPullIntervalSec)
         return o.toString()
     }
 
@@ -934,6 +980,13 @@ class Prefs(context: Context) {
             optBool(KEY_SV_USE_ITN)?.let { svUseItn = it }
             optBool(KEY_SV_PRELOAD_ENABLED)?.let { svPreloadEnabled = it }
             optInt(KEY_SV_KEEP_ALIVE_MINUTES)?.let { svKeepAliveMinutes = it }
+            // SyncClipboard 配置
+            optBool(KEY_SC_ENABLED)?.let { syncClipboardEnabled = it }
+            optString(KEY_SC_SERVER_BASE)?.let { syncClipboardServerBase = it }
+            optString(KEY_SC_USERNAME)?.let { syncClipboardUsername = it }
+            optString(KEY_SC_PASSWORD)?.let { syncClipboardPassword = it }
+            optBool(KEY_SC_AUTO_PULL)?.let { syncClipboardAutoPullEnabled = it }
+            optInt(KEY_SC_PULL_INTERVAL_SEC)?.let { syncClipboardPullIntervalSec = it }
             true
         } catch (_: Throwable) {
             false
