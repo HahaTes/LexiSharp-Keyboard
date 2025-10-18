@@ -49,6 +49,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import com.google.android.material.color.MaterialColors
 import com.brycewg.asrkb.LocaleHelper
+import kotlinx.coroutines.withContext
 
 class AsrKeyboardService : InputMethodService(), StreamingAsrEngine.Listener, com.brycewg.asrkb.asr.SenseVoiceFileAsrEngine.LocalModelLoadUi {
     companion object {
@@ -465,11 +466,39 @@ class AsrKeyboardService : InputMethodService(), StreamingAsrEngine.Listener, co
                 }
             }
             aiEditState = AiEditState(targetIsSelection, beforeLen, afterLen,selected.toString())
-            currentSessionKind = SessionKind.AiEdit
-            asrEngine = ensureEngineMatchesMode(asrEngine)
-            updateUiListening()
-            txtStatus?.text = getString(R.string.status_ai_edit_listening)
-            asrEngine?.start()
+            //bySt 选中文本不用语音指令，使用选择的AI后处理指令，不会重复进行后处理
+            if(!targetIsSelection) {
+                currentSessionKind = SessionKind.AiEdit
+                asrEngine = ensureEngineMatchesMode(asrEngine)
+                updateUiListening()
+                txtStatus?.text = getString(R.string.status_ai_edit_listening)
+                asrEngine?.start()
+            }else{
+                val selectedString = selected.toString()
+                txtStatus?.text = getString(R.string.status_ai_edit_forSelected) + prefs.activePromptTitle
+                serviceScope.launch {
+                    // This block runs in a background thread (Dispatchers.IO)
+                    val processed = runCatching {
+                        postproc.process(selectedString, prefs).ifBlank { selectedString }
+                    }.getOrElse {
+
+                        selectedString
+                    }
+
+                    // 如果开启去除句尾标点，对LLM后处理结果也执行一次修剪，避免模型重新补回标点导致设置失效
+                    val finalProcessed =
+                        if (prefs.trimFinalTrailingPunct) trimTrailingPunctuation(processed) else processed
+
+                    // Switch back to the main thread to update the UI
+                    withContext(Dispatchers.Main) {
+                        val ic = currentInputConnection
+                        ic?.setComposingText(finalProcessed, 1)
+                        ic?.finishComposingText()
+                        // Optional: Reset status text after completion
+                        updateUiIdle() // or txtStatus?.text = ""
+                    }
+                }
+            }
         }
         // Backspace: tap to delete one; swipe up/left to clear all; swipe down to undo within gesture; long-press to repeat delete
         btnBackspace?.setOnClickListener { v ->

@@ -309,7 +309,14 @@ class Prefs(context: Context) {
             val found = presets.firstOrNull { it.id == id }
             return found?.content ?: (llmPrompt.ifBlank { DEFAULT_LLM_PROMPT })
         }
-
+    //bySt 标题
+    val activePromptTitle: String
+        get() {
+            val id = activePromptId
+            val presets = getPromptPresets()
+            val found = presets.firstOrNull { it.id == id }
+            return found?.title ?: "默认"
+        }
     // SiliconFlow凭证
     var sfApiKey: String by stringPref(KEY_SF_API_KEY, "")
 

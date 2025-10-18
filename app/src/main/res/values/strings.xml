@@ -360,4 +360,5 @@
     <string name="notif_model_summary_text">正在后台下载/解压本地模型</string>
     <string name="notif_model_title_int8">SenseVoice 模型（Small int8）</string>
     <string name="notif_model_title_full">SenseVoice 模型（Small full）</string>
+    <string name="status_ai_edit_forSelected">对选中文本：</string>
 </resources>

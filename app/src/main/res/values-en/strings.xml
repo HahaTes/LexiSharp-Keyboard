@@ -363,4 +363,5 @@
     <string name="sv_lang_ko">Korean (ko)</string>
     <string name="sv_lang_yue">Cantonese (yue)</string>
     <string name="label_sv_use_itn">Enable ITN (inverse text normalization)</string>
+    <string name="status_ai_edit_forSelected">AI edit for the selected text using</string>
 </resources>
