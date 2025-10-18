@@ -620,7 +620,7 @@ Apache 2.0 License - 自由使用、修改、分发，需保留版权声明
 
 <div align="center">
 
-[![Telegram Group](https://img.shields.io/badge/Telegram-加入群组-blue?style=for-the-badge&logo=telegram)](https://t.me/+SqgKaDglg540YjIx)
+[![Telegram Group](https://img.shields.io/badge/Telegram-加入群组-blue?style=for-the-badge&logo=telegram)](https://t.me/+UGFobXqi2bYzMDFl)
 
 </div>
 
