@@ -342,7 +342,7 @@ class AsrKeyboardService : InputMethodService(), StreamingAsrEngine.Listener, co
         }
 
         btnMic?.setOnTouchListener { v, event ->
-            // 长按模式：处理；点按模式：放行让 onClick 处理
+            // 长按模式：改为“按下即录，松开即停”；点按模式：放行让 onClick 处理
             if (prefs.micTapToggleEnabled) return@setOnTouchListener false
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
@@ -373,26 +373,22 @@ class AsrKeyboardService : InputMethodService(), StreamingAsrEngine.Listener, co
                         }
                     }
                     asrEngine = ensureEngineMatchesMode(asrEngine)
-                    micLongPressStarted = false
-                    micLongPressPending = true
-                    val timeout = ViewConfiguration.getLongPressTimeout().toLong()
-                    val r = Runnable {
-                        if (micLongPressPending && asrEngine?.isRunning != true) {
-                            micLongPressStarted = true
-                            committedStableLen = 0
-                            updateUiListening()
-                            asrEngine?.start()
-                        }
-                    }
-                    micLongPressRunnable = r
-                    v.postDelayed(r, timeout)
-                    true
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    // 立即开始录音：清理长按延时任务并直接启动
                     micLongPressPending = false
                     micLongPressRunnable?.let { v.removeCallbacks(it) }
                     micLongPressRunnable = null
-                    if (micLongPressStarted && asrEngine?.isRunning == true) {
+                    micLongPressStarted = true
+                    committedStableLen = 0
+                    updateUiListening()
+                    asrEngine?.start()
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    // 结束录音：无论是否经历“长按判定”，此处都以引擎运行态为准
+                    micLongPressPending = false
+                    micLongPressRunnable?.let { v.removeCallbacks(it) }
+                    micLongPressRunnable = null
+                    if (asrEngine?.isRunning == true) {
                         asrEngine?.stop()
                         if (!prefs.postProcessEnabled) {
                             updateUiIdle()
