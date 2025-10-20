@@ -2,7 +2,7 @@
   "version": "3.1.7",
   "version_code": 74,
   "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.1.7",
-  "release_notes": "本次更新包含 1 个提交:\n- ci(workflow): 改进发布工作流的更新日志生成逻辑",
+  "release_notes": "首个发布版本",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-20T15:41:38Z"
+  "update_time": "2025-10-20T23:01:26Z"
 }
