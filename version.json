@@ -2,7 +2,7 @@
   "version": "3.2.0",
   "version_code": 75,
   "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.2.0",
-  "release_notes": "本次更新包含 19 个提交:\n- refactor(asr): 优化 VAD 判停逻辑并调整灵敏度范围\n- fix(ime): 确保状态文本更新时清除特殊样式\n- refactor(asr): 标准化本地伪流式 ASR 的分片与节流间隔\n- feat(floating): 在悬浮菜单中添加录音判停开关\n- fix(asr): 禁用长按说话模式下的 VAD 自动停止\n- feat(readme): 添加 Zread 和 DeepWiki Badge\n- feat(asr): 引入基于模型的语音活动检测 (VAD)\n- refactor(setup): 调整设置流程中的步骤顺序\n- fix(settings): 优化后处理设置中空输入值的处理\n- feat(llm): 添加 LLM 连接性测试功能\n- feat(asr): 为本地 ASR 实现录音开始时加载模型并进行音频预缓冲\n- refactor(floating): 移除输入法切换悬浮球服务\n- refactor(asr): 重构音频采集和本地 ASR 引擎管理\n- refactor(ime): 修复 ASR 状态处理并简化剪贴板认证\n- refactor(ime): 重构 IME 键盘服务，引入状态机和模块化组件\n- refactor(infra): 重构store与clipboard组件\n- refactor(ui): 重构 UI 模块，引入 ViewModel 和状态机模式，优化设置与浮动球体验\n- fix(changelog): 改进提交信息格式，添加可点击的提交哈希链接\n- ci(workflow): 改进发布工作流的更新日志生成逻辑",
+  "release_notes": "首个发布版本",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-22T13:17:09Z"
+  "update_time": "2025-10-22T13:23:08Z"
 }
