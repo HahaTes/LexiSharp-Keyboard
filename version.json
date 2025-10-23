@@ -2,7 +2,7 @@
   "version": "3.2.3",
   "version_code": 78,
   "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.2.3",
-  "release_notes": "本次更新包含 3 个提交:\n- refactor(ui): 为主设置页按钮添加图标\n- refactor(floatingball): 调整图标大小以随悬浮球缩放\n- refactor(ui): 全面使用新的图标资产,增加按钮点按图标反馈",
+  "release_notes": "首个发布版本",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-23T14:14:59Z"
+  "update_time": "2025-10-23T22:12:18Z"
 }
