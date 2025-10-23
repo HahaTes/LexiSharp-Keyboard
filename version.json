@@ -2,7 +2,7 @@
   "version": "3.2.2",
   "version_code": 77,
   "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.2.2",
-  "release_notes": "本次更新包含 8 个提交:\n- feat(floating): 添加悬浮球文字写入的粘贴方案\n- feat(ai): 优化 AI 后处理错误处理和默认范围选择\n- feat(asr): 录音时请求独占音频焦点以暂停媒体\n- feat(stats): 增强统计追踪与关于页中展示内容\n- feat(settings): 为云服务添加获取 API 密钥的指引链接\n- fix: 更新过渡动画方法以支持 Android 14+，修复已废弃 API 的使用;修改请求体创建方式以适应最新的 OkHttp API\n- fix: 更新 Volcano Engine 名称为 \"Volcano Engine（豆包语音）\"\n- refactor(settings): 移动音频兼容性设置到输入设置页",
+  "release_notes": "首个发布版本",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-23T09:51:19Z"
+  "update_time": "2025-10-23T13:54:26Z"
 }
