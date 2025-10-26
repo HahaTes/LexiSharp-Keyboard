@@ -276,6 +276,65 @@ class KeyboardActionHandler(
     }
 
     /**
+     * 使用当前激活的 Prompt 对文本进行处理：优先处理选区，否则处理整个输入框文本。
+     * 成功则用返回结果替换（保留撤销快照）。
+     */
+    fun applyActivePromptToSelectionOrAll(ic: InputConnection?) {
+        if (ic == null) return
+        scope.launch {
+            // 读取目标文本：优先选区，否则整个文本
+            val selected = try { inputHelper.getSelectedText(ic, 0)?.toString() } catch (_: Throwable) { null }
+            val targetText: String
+            val replaceSelection: Boolean
+            if (!selected.isNullOrEmpty()) {
+                targetText = selected
+                replaceSelection = true
+            } else {
+                val before = inputHelper.getTextBeforeCursor(ic, 10000)?.toString() ?: ""
+                val after = inputHelper.getTextAfterCursor(ic, 10000)?.toString() ?: ""
+                val all = before + after
+                if (all.isEmpty()) {
+                    uiListener?.onStatusMessage(context.getString(R.string.hint_cannot_read_text))
+                    return@launch
+                }
+                targetText = all
+                replaceSelection = false
+            }
+
+            // 显示处理状态
+            uiListener?.onStatusMessage(context.getString(R.string.status_ai_processing))
+
+            // 执行 LLM 处理
+            val res = try {
+                llmPostProcessor.processWithStatus(targetText, prefs)
+            } catch (t: Throwable) {
+                android.util.Log.e(TAG, "applyActivePromptToSelectionOrAll failed", t)
+                null
+            }
+
+            val out = res?.text ?: targetText
+            val ok = res?.ok == true
+
+            // 应用结果（带撤销）
+            saveUndoSnapshot(ic)
+            if (replaceSelection) {
+                // 在选区上直接提交将覆盖选区
+                inputHelper.commitText(ic, out)
+            } else {
+                // 清空并写入
+                val snapshot = inputHelper.captureUndoSnapshot(ic)
+                inputHelper.clearAllText(ic, snapshot)
+                inputHelper.commitText(ic, out)
+            }
+
+            uiListener?.onVibrate()
+            if (!ok) {
+                uiListener?.onStatusMessage(context.getString(R.string.status_llm_failed_used_raw))
+            }
+        }
+    }
+
+    /**
      * 显示剪贴板预览
      */
     fun showClipboardPreview(fullText: String) {

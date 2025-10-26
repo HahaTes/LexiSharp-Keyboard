@@ -139,6 +139,42 @@ class InputConnectionHelper(
     }
 
     /**
+     * 设置选区范围
+     */
+    fun setSelection(ic: InputConnection?, start: Int, end: Int): Boolean {
+        if (ic == null) {
+            Log.w(tag, "setSelection: InputConnection is null")
+            return false
+        }
+        return try {
+            ic.setSelection(start, end)
+            true
+        } catch (e: Throwable) {
+            Log.e(tag, "setSelection failed: start=$start, end=$end", e)
+            false
+        }
+    }
+
+    /**
+     * 选择全部文本（基于上下文长度估算）
+     */
+    fun selectAll(ic: InputConnection?): Boolean {
+        if (ic == null) {
+            Log.w(tag, "selectAll: InputConnection is null")
+            return false
+        }
+        return try {
+            val beforeLen = getTextBeforeCursor(ic, 10000)?.length ?: 0
+            val afterLen = getTextAfterCursor(ic, 10000)?.length ?: 0
+            ic.setSelection(0, beforeLen + afterLen)
+            true
+        } catch (e: Throwable) {
+            Log.e(tag, "selectAll failed", e)
+            false
+        }
+    }
+
+    /**
      * 获取撤销快照：捕获当前光标前后的文本
      */
     fun captureUndoSnapshot(ic: InputConnection?): UndoSnapshot? {

@@ -10,6 +10,11 @@
     android:paddingTop="8dp"
     android:paddingBottom="12dp">
 
+    <FrameLayout
+        android:id="@+id/layoutMainKeyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -258,6 +263,14 @@
             android:tint="?attr/colorOnSurfaceVariant" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+    <include
+        android:id="@+id/layoutAiEditPanel"
+        android:layout_gravity="center_vertical"
+        layout="@layout/keyboard_ai_edit_panel"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/groupMicStatus"

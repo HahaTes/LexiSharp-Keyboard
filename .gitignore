@@ -1,6 +1,8 @@
 *.md
 !README.md
 !README_EN.md
+!docs/
+!docs/*.md
 .gradle
 .idea
 app/build

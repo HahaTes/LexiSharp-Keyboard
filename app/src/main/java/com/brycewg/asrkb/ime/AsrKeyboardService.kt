@@ -78,6 +78,21 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
     // ========== 视图引用 ==========
     private var rootView: View? = null
     private var btnMic: FloatingActionButton? = null
+    private var layoutMainKeyboard: View? = null
+    private var layoutAiEditPanel: View? = null
+    private var btnAiEditPanelBack: ImageButton? = null
+    private var btnAiPanelApplyPreset: ImageButton? = null
+    private var btnAiPanelCursorLeft: ImageButton? = null
+    private var btnAiPanelCursorRight: ImageButton? = null
+    private var btnAiPanelMoveStart: ImageButton? = null
+    private var btnAiPanelMoveEnd: ImageButton? = null
+    private var btnAiPanelSelect: ImageButton? = null
+    private var btnAiPanelSelectAll: ImageButton? = null
+    private var btnAiPanelCopy: ImageButton? = null
+    private var btnAiPanelPaste: ImageButton? = null
+    private var btnAiPanelUndo: ImageButton? = null
+    private var btnAiPanelNumpad: ImageButton? = null
+    private var isAiEditPanelVisible: Boolean = false
     private var btnSettings: ImageButton? = null
     private var btnEnter: ImageButton? = null
     private var btnPostproc: ImageButton? = null
@@ -94,6 +109,9 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
     private var groupMicStatus: View? = null
     // 记录麦克风按下的原始Y坐标，用于检测上滑手势
     private var micDownRawY: Float = 0f
+    // AI编辑面板：选择模式与锚点
+    private var aiSelectMode: Boolean = false
+    private var aiSelectAnchor: Int? = null
 
     // ========== 剪贴板和其他辅助功能 ==========
     private var clipboardPreviewTimeout: Runnable? = null
@@ -101,6 +119,12 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
     private var syncClipboardManager: SyncClipboardManager? = null
     private var svPreloadTriggered: Boolean = false
     private var suppressReturnPrevImeOnHideOnce: Boolean = false
+    // 追踪宿主选区（用于精确控制选择扩展）
+    private var lastSelStart: Int = -1
+    private var lastSelEnd: Int = -1
+    // 光标左右移动长按连发
+    private var repeatLeftRunnable: Runnable? = null
+    private var repeatRightRunnable: Runnable? = null
 
     // ========== 生命周期 ==========
 
@@ -244,6 +268,7 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         btnImeSwitcher?.visibility = View.VISIBLE
         applyPunctuationLabels()
         refreshPermissionUi()
+        hideAiEditPanel()
 
         // 同步系统栏颜色
         try {
@@ -262,6 +287,19 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         try { BluetoothRouteManager.setImeActive(this, true) } catch (t: Throwable) { android.util.Log.w("AsrKeyboardService", "BluetoothRouteManager setImeActive(true)", t) }
     }
 
+    override fun onUpdateSelection(
+        oldSelStart: Int,
+        oldSelEnd: Int,
+        newSelStart: Int,
+        newSelEnd: Int,
+        candidatesStart: Int,
+        candidatesEnd: Int
+    ) {
+        super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        lastSelStart = newSelStart
+        lastSelEnd = newSelEnd
+    }
+
     override fun onFinishInputView(finishingInput: Boolean) {
         super.onFinishInputView(finishingInput)
         try {
@@ -270,6 +308,8 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         try {
             syncClipboardManager?.stop()
         } catch (_: Throwable) { }
+
+        hideAiEditPanel()
 
         // 键盘收起，解除预热（若未在录音）
         try { BluetoothRouteManager.setImeActive(this, false) } catch (t: Throwable) { android.util.Log.w("AsrKeyboardService", "BluetoothRouteManager setImeActive(false)", t) }
@@ -395,6 +435,21 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
     // ========== 视图绑定和监听器设置 ==========
 
     private fun bindViews(view: View) {
+        layoutMainKeyboard = view.findViewById(R.id.layoutMainKeyboard)
+        layoutAiEditPanel = view.findViewById(R.id.layoutAiEditPanel)
+        btnAiEditPanelBack = view.findViewById(R.id.btnAiPanelBack)
+        btnAiPanelApplyPreset = view.findViewById(R.id.btnAiPanelApplyPreset)
+        btnAiPanelCursorLeft = view.findViewById(R.id.btnAiPanelCursorLeft)
+        btnAiPanelCursorRight = view.findViewById(R.id.btnAiPanelCursorRight)
+        btnAiPanelMoveStart = view.findViewById(R.id.btnAiPanelMoveStart)
+        btnAiPanelMoveEnd = view.findViewById(R.id.btnAiPanelMoveEnd)
+        btnAiPanelSelect = view.findViewById(R.id.btnAiPanelSelect)
+        btnAiPanelSelectAll = view.findViewById(R.id.btnAiPanelSelectAll)
+        btnAiPanelCopy = view.findViewById(R.id.btnAiPanelCopy)
+        btnAiPanelPaste = view.findViewById(R.id.btnAiPanelPaste)
+        btnAiPanelUndo = view.findViewById(R.id.btnAiPanelUndo)
+        btnAiPanelNumpad = view.findViewById(R.id.btnAiPanelNumpad)
+        isAiEditPanelVisible = layoutAiEditPanel?.visibility == View.VISIBLE
         btnMic = view.findViewById(R.id.btnMic)
         btnSettings = view.findViewById(R.id.btnSettings)
         btnEnter = view.findViewById(R.id.btnEnter)
@@ -427,6 +482,72 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
     }
 
     private fun setupListeners() {
+        // AI 编辑面板返回按钮
+        btnAiEditPanelBack?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            hideAiEditPanel()
+        }
+
+        // AI 编辑面板：应用预设 Prompt 并处理文本
+        btnAiPanelApplyPreset?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            showPromptPickerForApply(v)
+        }
+
+        // AI 编辑面板：光标/选择移动
+        btnAiPanelCursorLeft?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            moveCursorBy(-1)
+        }
+        // 右移：点击一次移动一位，长按连发
+        btnAiPanelCursorRight?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            moveCursorBy(1)
+        }
+        btnAiPanelMoveStart?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            moveCursorToEdge(true)
+        }
+        btnAiPanelMoveEnd?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            moveCursorToEdge(false)
+        }
+
+        // AI 编辑面板：选择开关/全选
+        btnAiPanelSelect?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            toggleSelectionMode()
+        }
+        btnAiPanelSelectAll?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            selectAllText()
+        }
+
+        // AI 编辑面板：复制/粘贴/撤销
+        btnAiPanelCopy?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            handleCopyAction()
+        }
+        btnAiPanelPaste?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            handlePasteAction()
+        }
+        btnAiPanelUndo?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            actionHandler.handleUndo(currentInputConnection)
+        }
+
+        // AI 编辑面板：数字小键盘（占位）
+        btnAiPanelNumpad?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            // 预留：后续可切换到数字面板或弹出对话框
+            clearStatusTextStyle()
+            txtStatus?.text = getString(R.string.cd_numpad)
+        }
+
+        // 设置光标左右移动的长按连发
+        setupCursorRepeatHandlers()
+
         // 麦克风按钮
         btnMic?.setOnClickListener { v ->
             if (!prefs.micTapToggleEnabled) return@setOnClickListener
@@ -483,7 +604,7 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
                 txtStatus?.text = getString(R.string.hint_need_llm_keys)
                 return@setOnClickListener
             }
-            actionHandler.handleAiEditClick(currentInputConnection)
+            showAiEditPanel()
         }
 
         // 后处理开关：用填充/线性图标表示启用/禁用，不再使用透明度
@@ -590,6 +711,33 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         }
     }
 
+    private fun showAiEditPanel() {
+        if (isAiEditPanelVisible) return
+        layoutMainKeyboard?.visibility = View.GONE
+        layoutAiEditPanel?.visibility = View.VISIBLE
+        isAiEditPanelVisible = true
+        // 进入面板时重置选择模式
+        aiSelectMode = false
+        aiSelectAnchor = null
+        try {
+            btnAiPanelSelect?.isSelected = false
+            btnAiPanelSelect?.setImageResource(R.drawable.selection_toggle)
+        } catch (_: Throwable) { }
+    }
+
+    private fun hideAiEditPanel() {
+        layoutAiEditPanel?.visibility = View.GONE
+        layoutMainKeyboard?.visibility = View.VISIBLE
+        isAiEditPanelVisible = false
+        // 离开面板时重置选择模式
+        aiSelectMode = false
+        aiSelectAnchor = null
+        try {
+            btnAiPanelSelect?.isSelected = false
+            btnAiPanelSelect?.setImageResource(R.drawable.selection_toggle)
+        } catch (_: Throwable) { }
+    }
+
     // ========== UI 更新方法 ==========
 
     private fun updateUiIdle() {
@@ -656,6 +804,222 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
             tv.background = null
             tv.setPaddingRelative(0, 0, 0, 0)
         } catch (_: Throwable) { }
+    }
+
+    // ========== AI 编辑面板：辅助方法 ==========
+
+    private fun currentCursorPosition(): Int? {
+        val ic = currentInputConnection ?: return null
+        // 优先使用宿主回调的选区，选择模式下返回“活动端”（非锚点）
+        val selStart = lastSelStart
+        val selEnd = lastSelEnd
+        if (selStart >= 0 && selEnd >= 0) {
+            val anchor = aiSelectAnchor
+            if (aiSelectMode && anchor != null && selStart != selEnd) {
+                return if (anchor == selStart) selEnd else selStart
+            }
+            // 无选择或未进入选择模式：按光标位置（等同于 selEnd）
+            return selEnd
+        }
+        // 兜底：通过 beforeCursor 长度推断
+        return try { inputHelper.getTextBeforeCursor(ic, 10000)?.length } catch (_: Throwable) { null }
+    }
+
+    private fun totalTextLength(): Int? {
+        val ic = currentInputConnection ?: return null
+        return try {
+            val before = inputHelper.getTextBeforeCursor(ic, 10000)?.length ?: 0
+            val after = inputHelper.getTextAfterCursor(ic, 10000)?.length ?: 0
+            before + after
+        } catch (_: Throwable) { null }
+    }
+
+    private fun ensureAnchorForSelection() {
+        if (!aiSelectMode) return
+        if (aiSelectAnchor != null) return
+        val ic = currentInputConnection ?: return
+        // 若当前已有选区，优先使用宿主通知的起点作为锚点；否则以当前光标位置为锚点
+        if (lastSelStart >= 0 && lastSelEnd >= 0 && lastSelStart != lastSelEnd) {
+            aiSelectAnchor = minOf(lastSelStart, lastSelEnd)
+            return
+        }
+        val beforeLen = try { inputHelper.getTextBeforeCursor(ic, 10000)?.length ?: 0 } catch (_: Throwable) { 0 }
+        aiSelectAnchor = beforeLen
+    }
+
+    private fun moveCursorBy(delta: Int) {
+        val ic = currentInputConnection ?: return
+        val pos = currentCursorPosition() ?: return
+        val newPos = (pos + delta).coerceAtLeast(0)
+
+        if (aiSelectMode) {
+            ensureAnchorForSelection()
+            val anchor = aiSelectAnchor ?: 0
+            val start = minOf(anchor, newPos)
+            val end = maxOf(anchor, newPos)
+            inputHelper.setSelection(ic, start, end)
+        } else {
+            inputHelper.setSelection(ic, newPos, newPos)
+        }
+    }
+
+    private fun moveCursorToEdge(toStart: Boolean) {
+        val ic = currentInputConnection ?: return
+        val newPos = if (toStart) 0 else Int.MAX_VALUE
+        if (aiSelectMode) {
+            ensureAnchorForSelection()
+            val anchor = aiSelectAnchor ?: 0
+            val start = minOf(anchor, newPos)
+            val end = maxOf(anchor, newPos)
+            inputHelper.setSelection(ic, start, end)
+        } else {
+            inputHelper.setSelection(ic, newPos, newPos)
+        }
+    }
+
+    private fun toggleSelectionMode() {
+        aiSelectMode = !aiSelectMode
+        btnAiPanelSelect?.isSelected = aiSelectMode
+        try {
+            btnAiPanelSelect?.setImageResource(if (aiSelectMode) R.drawable.selection_fill else R.drawable.selection_toggle)
+        } catch (_: Throwable) { }
+        if (aiSelectMode) {
+            // 进入选择模式立即固定锚点
+            aiSelectAnchor = null
+            ensureAnchorForSelection()
+        } else {
+            // 退出选择模式清除锚点
+            aiSelectAnchor = null
+        }
+    }
+
+    private fun selectAllText() {
+        val ic = currentInputConnection ?: return
+        inputHelper.selectAll(ic)
+        // 关闭选择模式（避免后续移动混淆）
+        aiSelectMode = false
+        btnAiPanelSelect?.isSelected = false
+    }
+
+    private fun handleCopyAction() {
+        val ic = currentInputConnection
+        if (ic == null) return
+        // 优先用宿主提供的 ContextMenu Action
+        val ok = try { ic.performContextMenuAction(android.R.id.copy) } catch (t: Throwable) {
+            android.util.Log.w("AsrKeyboardService", "performContextMenuAction(COPY) failed", t)
+            false
+        }
+        if (!ok) {
+            // 回退到直接写剪贴板
+            try {
+                val selected = inputHelper.getSelectedText(ic, 0)?.toString()
+                if (!selected.isNullOrEmpty()) {
+                    val cm = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                    val clip = android.content.ClipData.newPlainText("ASR Copy", selected)
+                    cm.setPrimaryClip(clip)
+                }
+            } catch (t: Throwable) {
+                android.util.Log.e("AsrKeyboardService", "Fallback copy failed", t)
+            }
+        }
+    }
+
+    private fun handlePasteAction() {
+        val ic = currentInputConnection
+        if (ic == null) return
+        // 变更前记录撤销快照
+        actionHandler.saveUndoSnapshot(ic)
+        val ok = try { ic.performContextMenuAction(android.R.id.paste) } catch (t: Throwable) {
+            android.util.Log.w("AsrKeyboardService", "performContextMenuAction(PASTE) failed", t)
+            false
+        }
+        if (!ok) {
+            try {
+                val cm = getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                val text = cm.primaryClip?.getItemAt(0)?.coerceToText(this)?.toString()
+                if (!text.isNullOrEmpty()) {
+                    inputHelper.commitText(ic, text)
+                }
+            } catch (t: Throwable) {
+                android.util.Log.e("AsrKeyboardService", "Fallback paste failed", t)
+            }
+        }
+    }
+
+    private fun showPromptPickerForApply(anchor: View) {
+        try {
+            val presets = prefs.getPromptPresets()
+            if (presets.isEmpty()) return
+            val popup = androidx.appcompat.widget.PopupMenu(anchor.context, anchor)
+            presets.forEachIndexed { idx, p ->
+                val item = popup.menu.add(0, idx, idx, p.title)
+                item.isCheckable = true
+                if (p.id == prefs.activePromptId) item.isChecked = true
+            }
+            popup.menu.setGroupCheckable(0, true, true)
+            popup.setOnMenuItemClickListener { mi ->
+                val position = mi.itemId
+                val preset = presets.getOrNull(position) ?: return@setOnMenuItemClickListener false
+                prefs.activePromptId = preset.id
+                clearStatusTextStyle()
+                txtStatus?.text = getString(R.string.switched_preset, preset.title)
+                // 选定后立即应用到选区或全文
+                actionHandler.applyActivePromptToSelectionOrAll(currentInputConnection)
+                true
+            }
+            popup.show()
+        } catch (_: Throwable) { }
+    }
+
+    private fun setupCursorRepeatHandlers() {
+        val initialDelay = 350L
+        val repeatInterval = 50L
+
+        btnAiPanelCursorLeft?.setOnTouchListener { v, ev ->
+            when (ev.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    performKeyHaptic(v)
+                    moveCursorBy(-1)
+                    repeatLeftRunnable?.let { v.removeCallbacks(it) }
+                    val r = Runnable {
+                        moveCursorBy(-1)
+                        repeatLeftRunnable?.let { v.postDelayed(it, repeatInterval) }
+                    }
+                    repeatLeftRunnable = r
+                    v.postDelayed(r, initialDelay)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    repeatLeftRunnable?.let { v.removeCallbacks(it) }
+                    repeatLeftRunnable = null
+                    true
+                }
+                else -> false
+            }
+        }
+
+        btnAiPanelCursorRight?.setOnTouchListener { v, ev ->
+            when (ev.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    performKeyHaptic(v)
+                    moveCursorBy(1)
+                    repeatRightRunnable?.let { v.removeCallbacks(it) }
+                    val r = Runnable {
+                        moveCursorBy(1)
+                        repeatRightRunnable?.let { v.postDelayed(it, repeatInterval) }
+                    }
+                    repeatRightRunnable = r
+                    v.postDelayed(r, initialDelay)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    repeatRightRunnable?.let { v.removeCallbacks(it) }
+                    repeatRightRunnable = null
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onShowRetryChip(label: String) {
