@@ -45,6 +45,8 @@
     <string name="cd_cursor_left">光标左移</string>
     <string name="cd_cursor_right">光标右移</string>
     <string name="cd_numpad">数字小键盘</string>
+    <string name="cd_numpad_back">返回编辑面板</string>
+    <string name="cd_space">空格</string>
     <string name="cd_select_toggle">切换选择模式</string>
     <string name="cd_select_all">全选</string>
     <string name="cd_copy">复制</string>

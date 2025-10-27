@@ -274,6 +274,12 @@
         layout="@layout/keyboard_ai_edit_panel"
         android:visibility="gone" />
 
+    <include
+        android:id="@+id/layoutNumpadPanel"
+        android:layout_gravity="top"
+        layout="@layout/keyboard_numpad_panel"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/groupMicStatus"
         android:layout_width="match_parent"

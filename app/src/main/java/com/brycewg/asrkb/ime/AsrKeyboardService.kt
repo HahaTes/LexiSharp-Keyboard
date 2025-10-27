@@ -80,6 +80,7 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
     private var btnMic: FloatingActionButton? = null
     private var layoutMainKeyboard: View? = null
     private var layoutAiEditPanel: View? = null
+    private var layoutNumpadPanel: View? = null
     private var btnAiEditPanelBack: ImageButton? = null
     private var btnAiPanelApplyPreset: ImageButton? = null
     private var btnAiPanelCursorLeft: ImageButton? = null
@@ -92,7 +93,11 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
     private var btnAiPanelPaste: ImageButton? = null
     private var btnAiPanelUndo: ImageButton? = null
     private var btnAiPanelNumpad: ImageButton? = null
+    private var btnNumpadBack: ImageButton? = null
+    private var btnNumpadEnter: ImageButton? = null
+    private var btnNumpadBackspace: ImageButton? = null
     private var isAiEditPanelVisible: Boolean = false
+    private var isNumpadPanelVisible: Boolean = false
     private var btnSettings: ImageButton? = null
     private var btnEnter: ImageButton? = null
     private var btnPostproc: ImageButton? = null
@@ -274,6 +279,8 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         applyPunctuationLabels()
         refreshPermissionUi()
         hideAiEditPanel()
+        hideNumpadPanel()
+        hideNumpadPanel()
 
         // 同步系统栏颜色
         try {
@@ -442,6 +449,7 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
     private fun bindViews(view: View) {
         layoutMainKeyboard = view.findViewById(R.id.layoutMainKeyboard)
         layoutAiEditPanel = view.findViewById(R.id.layoutAiEditPanel)
+        layoutNumpadPanel = view.findViewById(R.id.layoutNumpadPanel)
         btnAiEditPanelBack = view.findViewById(R.id.btnAiPanelBack)
         btnAiPanelApplyPreset = view.findViewById(R.id.btnAiPanelApplyPreset)
         btnAiPanelCursorLeft = view.findViewById(R.id.btnAiPanelCursorLeft)
@@ -454,7 +462,11 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         btnAiPanelPaste = view.findViewById(R.id.btnAiPanelPaste)
         btnAiPanelUndo = view.findViewById(R.id.btnAiPanelUndo)
         btnAiPanelNumpad = view.findViewById(R.id.btnAiPanelNumpad)
+        btnNumpadBack = view.findViewById(R.id.np_btnBack)
+        btnNumpadEnter = view.findViewById(R.id.np_btnEnter)
+        btnNumpadBackspace = view.findViewById(R.id.np_btnBackspace)
         isAiEditPanelVisible = layoutAiEditPanel?.visibility == View.VISIBLE
+        isNumpadPanelVisible = layoutNumpadPanel?.visibility == View.VISIBLE
         btnMic = view.findViewById(R.id.btnMic)
         btnSettings = view.findViewById(R.id.btnSettings)
         btnEnter = view.findViewById(R.id.btnEnter)
@@ -550,10 +562,34 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         // AI 编辑面板：数字小键盘（占位）
         btnAiPanelNumpad?.setOnClickListener { v ->
             performKeyHaptic(v)
-            // 预留：后续可切换到数字面板或弹出对话框
-            clearStatusTextStyle()
-            txtStatus?.text = getString(R.string.cd_numpad)
+            showNumpadPanel()
         }
+
+        // 数字小键盘：返回编辑面板
+        btnNumpadBack?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            hideNumpadPanel()
+            showAiEditPanel()
+        }
+
+        // 数字小键盘：回车
+        btnNumpadEnter?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            inputHelper.sendEnter(currentInputConnection)
+        }
+
+        // 数字小键盘：退格（位于回车上方）
+        btnNumpadBackspace?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            actionHandler.saveUndoSnapshot(currentInputConnection)
+            inputHelper.sendBackspace(currentInputConnection)
+        }
+        btnNumpadBackspace?.setOnTouchListener { v, ev ->
+            backspaceGestureHandler.handleTouchEvent(v, ev, currentInputConnection)
+        }
+
+        // 绑定小键盘按键
+        bindNumpadKeys()
 
         // 设置光标左右移动的长按连发
         setupCursorRepeatHandlers()
@@ -723,6 +759,9 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
 
     private fun showAiEditPanel() {
         if (isAiEditPanelVisible) return
+        // 如果数字小键盘当前展示，先隐藏它
+        layoutNumpadPanel?.visibility = View.GONE
+        isNumpadPanelVisible = false
         layoutMainKeyboard?.visibility = View.GONE
         layoutAiEditPanel?.visibility = View.VISIBLE
         isAiEditPanelVisible = true
@@ -747,6 +786,30 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
             btnAiPanelSelect?.setImageResource(R.drawable.selection_toggle)
         } catch (_: Throwable) { }
         // 释放可能仍在队列中的光标连发回调，避免隐藏后仍触发
+        releaseCursorRepeatCallbacks()
+    }
+
+    private fun showNumpadPanel() {
+        if (isNumpadPanelVisible) return
+        // 隐藏编辑面板但不显示主键盘
+        layoutAiEditPanel?.visibility = View.GONE
+        isAiEditPanelVisible = false
+        // 取消编辑面板可能仍在的光标连续回调
+        releaseCursorRepeatCallbacks()
+        layoutNumpadPanel?.visibility = View.VISIBLE
+        isNumpadPanelVisible = true
+        // 数字/符号面板不需要显示麦克风悬浮按钮，避免遮挡
+        try { groupMicStatus?.visibility = View.GONE } catch (_: Throwable) { }
+    }
+
+    private fun hideNumpadPanel() {
+        layoutNumpadPanel?.visibility = View.GONE
+        isNumpadPanelVisible = false
+        // 还原麦克风悬浮按钮可见性
+        try { groupMicStatus?.visibility = View.VISIBLE } catch (_: Throwable) { }
+    }
+
+    private fun releaseCursorRepeatCallbacks() {
         try {
             repeatLeftRunnable?.let { btnAiPanelCursorLeft?.removeCallbacks(it) }
             repeatLeftRunnable = null
@@ -1037,6 +1100,33 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
                 else -> false
             }
         }
+    }
+
+    private fun bindNumpadKeys() {
+        val root = layoutNumpadPanel ?: return
+        fun bindView(v: View) {
+            val tag = try { v.tag as? String } catch (_: Throwable) { null }
+            if (tag == "key40" && v is TextView) {
+                v.setOnClickListener { btn ->
+                    performKeyHaptic(btn)
+                    val ic = currentInputConnection
+                    if (ic == null) return@setOnClickListener
+                    val text = when (v.id) {
+                        R.id.np_key_space -> " "
+                        else -> v.text?.toString() ?: ""
+                    }
+                    if (text.isNotEmpty()) {
+                        actionHandler.commitText(ic, text)
+                    }
+                }
+            }
+            if (v is android.view.ViewGroup) {
+                for (i in 0 until v.childCount) {
+                    bindView(v.getChildAt(i))
+                }
+            }
+        }
+        bindView(root)
     }
 
     override fun onShowRetryChip(label: String) {
@@ -1378,6 +1468,23 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
                 v.layoutParams = lp
             } catch (_: Throwable) { }
         }
+        fun scaleChildrenByTag(root: View?, tag: String) {
+            if (root == null) return
+            if (root is android.view.ViewGroup) {
+                for (i in 0 until root.childCount) {
+                    scaleChildrenByTag(root.getChildAt(i), tag)
+                }
+            }
+            val t = try { root.tag as? String } catch (_: Throwable) { null }
+            if (t == tag) {
+                try {
+                    val lp = root.layoutParams
+                    lp.height = dp(40f * scale)
+                    // 宽度可能由权重控制，不强制写入
+                    root.layoutParams = lp
+                } catch (_: Throwable) { }
+            }
+        }
 
         val ids40 = intArrayOf(
             // 主键盘按钮
@@ -1393,6 +1500,11 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
             R.id.btnAiPanelMoveStart, R.id.btnAiPanelMoveEnd
         )
         ids40.forEach { scaleSquareButton(it) }
+
+        // 数字/标点小键盘的方形按键（通过 tag="key40" 统一缩放高度）
+        try {
+            scaleChildrenByTag(layoutNumpadPanel, "key40")
+        } catch (_: Throwable) { }
 
         try {
             btnMic?.customSize = dp(72f * scale)
