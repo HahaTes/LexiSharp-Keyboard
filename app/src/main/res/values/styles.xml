@@ -13,7 +13,9 @@
     <item name="android:gravity">center</item>
     <item name="android:clickable">true</item>
     <item name="android:focusable">true</item>
-    <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+    <!-- Ripple 已内置于背景，前景不再需要叠加 -->
+    <item name="android:foreground">@null</item>
+    <item name="android:clipToOutline">true</item>
     <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
     <item name="android:textSize">18sp</item>
     <item name="android:includeFontPadding">false</item>
