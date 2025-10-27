@@ -50,7 +50,9 @@ English | [简体中文](README.md)
 
 ### 📝 Smart Input
 
-- **AI Editing** - Voice commands for text editing
+- **AI Edit Panel** - Dedicated editing interface with voice command text editing
+- **Rich Editing Tools** - Complete editing functions including cursor movement, selection, copy-paste
+- **Smart Target Selection** - Automatically identifies editing targets (selected text/last recognition/full text)
 - **Custom Keys** - Personalized punctuation keys
 
 </td>
@@ -103,6 +105,14 @@ English | [简体中文](README.md)
 <b>🤖 AI Post-Processing</b>
 <br/>
 <sub>LLM intelligently optimizes recognition results to improve text quality</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" align="center">
+<!-- TODO: Add AI Edit Panel screenshot -->
+<b>🎨 AI Edit Panel</b>
+<br/>
+<sub>Dedicated editing interface with voice command text editing and rich editing tools</sub>
 </td>
 </tr>
 </table>
@@ -179,9 +189,42 @@ English | [简体中文](README.md)
 <details>
 <summary><b>AI Editing Feature</b></summary>
 
-1. Click the edit button on the keyboard (AI icon)
+### 🎯 Basic Operations
+
+1. Click the edit button on the keyboard (AI icon) to enter the AI Edit Panel
 2. Speak editing commands (e.g., "delete the last word", "change 'hello' to 'hi'", etc.)
-3. After speaking the command, press the edit button again, and AI will modify the previously recognized text or selected content based on the command
+3. After speaking the command, AI will modify the selected text or previously recognized content based on the command
+
+### 🎨 AI Edit Panel Features
+
+The AI Edit Panel provides comprehensive text editing tools with a symmetrical layout:
+
+**Left Function Area:**
+- **⬅️ Return to Main Keyboard** - Exit AI Edit Panel
+- **✨ Apply Preset Prompt** - Quickly apply preset AI prompts
+- **◀️ ▶️ Cursor Movement** - Move cursor left and right
+- **🔢 Numpad** - Switch to numeric input panel
+- **📝 Selection Mode** - Toggle text selection mode
+
+**Right Function Area:**
+- **📄 Select All** - Select all text
+- **⌫ Undo/Backspace** - Undo operations or delete characters
+- **📋 Copy/Paste** - Copy and paste text
+- **🏠 🔚 Move to Start/End** - Quickly navigate to text beginning or end
+
+### 🎙️ Edit Target Selection
+
+AI Editing supports multiple target selection methods:
+- **Selected Text Priority**: If text is selected, prioritize editing the selected content
+- **Last Recognition Result**: When no selection, default to editing the last voice recognition result
+- **Entire Input Field**: Configurable to edit the entire input field content
+
+### 💡 Use Cases
+
+- **Text Correction**: "Fix typos", "Adjust sentence order"
+- **Format Optimization**: "Add punctuation", "Segment text"
+- **Content Rewriting**: "Simplify expression", "Polish text"
+- **Batch Operations**: "Remove duplicate content", "Standardize format"
 
 </details>
 
@@ -569,6 +612,8 @@ Thanks to the following users for their support and appreciation. Your encourage
 Return - 16.66 RMB
 
 树人 - 10.24 RMB
+
+x 年 - 10 RMB
 
 flyhunterl - 6.66 RMB
 
