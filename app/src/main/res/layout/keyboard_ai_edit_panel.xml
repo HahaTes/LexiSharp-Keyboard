@@ -162,16 +162,16 @@
                 android:tint="?attr/colorOnSurfaceVariant" />
 
             <ImageButton
-                android:id="@+id/btnAiPanelCopy"
+                android:id="@+id/btnAiPanelUndo"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="0dp"
                 android:background="@drawable/bg_key_button"
                 android:clipToOutline="true"
-                android:contentDescription="@string/cd_copy"
+                android:contentDescription="@string/cd_backspace"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:padding="6dp"
-                android:src="@drawable/copy_toggle"
+                android:src="@drawable/backspace_toggle"
                 android:stateListAnimator="@animator/key_button_state_list"
                 android:tint="?attr/colorOnSurfaceVariant" />
         </LinearLayout>
@@ -184,16 +184,16 @@
             android:layout_marginBottom="6dp">
 
             <ImageButton
-                android:id="@+id/btnAiPanelUndo"
+                android:id="@+id/btnAiPanelCopy"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="6dp"
                 android:background="@drawable/bg_key_button"
                 android:clipToOutline="true"
-                android:contentDescription="@string/cd_backspace"
+                android:contentDescription="@string/cd_copy"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:padding="6dp"
-                android:src="@drawable/backspace_toggle"
+                android:src="@drawable/copy_toggle"
                 android:stateListAnimator="@animator/key_button_state_list"
                 android:tint="?attr/colorOnSurfaceVariant" />
 
