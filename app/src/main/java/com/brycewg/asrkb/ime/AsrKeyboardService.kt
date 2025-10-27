@@ -1045,19 +1045,13 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
             if (presets.isEmpty()) return
             val popup = androidx.appcompat.widget.PopupMenu(anchor.context, anchor)
             presets.forEachIndexed { idx, p ->
-                val item = popup.menu.add(0, idx, idx, p.title)
-                item.isCheckable = true
-                if (p.id == prefs.activePromptId) item.isChecked = true
+                popup.menu.add(0, idx, idx, p.title)
             }
-            popup.menu.setGroupCheckable(0, true, true)
             popup.setOnMenuItemClickListener { mi ->
                 val position = mi.itemId
                 val preset = presets.getOrNull(position) ?: return@setOnMenuItemClickListener false
-                prefs.activePromptId = preset.id
-                clearStatusTextStyle()
-                txtStatus?.text = getString(R.string.switched_preset, preset.title)
-                // 选定后立即应用到选区或全文
-                actionHandler.applyActivePromptToSelectionOrAll(currentInputConnection)
+                // 直接应用选中的预设内容，不更改全局激活项
+                actionHandler.applyPromptToSelectionOrAll(currentInputConnection, promptContent = preset.content)
                 true
             }
             popup.show()

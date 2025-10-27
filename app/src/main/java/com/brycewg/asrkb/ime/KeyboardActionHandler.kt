@@ -290,10 +290,26 @@ class KeyboardActionHandler(
             // 读取目标文本：优先选区，否则整个文本
             val selected = try { inputHelper.getSelectedText(ic, 0)?.toString() } catch (_: Throwable) { null }
             val targetText: String
-            val replaceSelection: Boolean
+            val mode: Int // 0=selection, 1=lastAsr, 2=entire
             if (!selected.isNullOrEmpty()) {
                 targetText = selected
-                replaceSelection = true
+                mode = 0
+            } else if (prefs.aiEditDefaultToLastAsr) {
+                val last = sessionContext.lastAsrCommitText
+                if (!last.isNullOrEmpty()) {
+                    targetText = last
+                    mode = 1
+                } else {
+                    val before = inputHelper.getTextBeforeCursor(ic, 10000)?.toString() ?: ""
+                    val after = inputHelper.getTextAfterCursor(ic, 10000)?.toString() ?: ""
+                    val all = before + after
+                    if (all.isEmpty()) {
+                        uiListener?.onStatusMessage(context.getString(R.string.hint_cannot_read_text))
+                        return@launch
+                    }
+                    targetText = all
+                    mode = 2
+                }
             } else {
                 val before = inputHelper.getTextBeforeCursor(ic, 10000)?.toString() ?: ""
                 val after = inputHelper.getTextAfterCursor(ic, 10000)?.toString() ?: ""
@@ -303,7 +319,7 @@ class KeyboardActionHandler(
                     return@launch
                 }
                 targetText = all
-                replaceSelection = false
+                mode = 2
             }
 
             // 显示处理状态
@@ -322,18 +338,124 @@ class KeyboardActionHandler(
 
             // 应用结果（带撤销）
             saveUndoSnapshot(ic)
-            if (replaceSelection) {
-                // 在选区上直接提交将覆盖选区
-                inputHelper.commitText(ic, out)
-            } else {
-                // 清空并写入
-                val snapshot = inputHelper.captureUndoSnapshot(ic)
-                inputHelper.clearAllText(ic, snapshot)
-                inputHelper.commitText(ic, out)
+            when (mode) {
+                0 -> {
+                    // 在选区上直接提交将覆盖选区
+                    inputHelper.commitText(ic, out)
+                }
+                1 -> {
+                    // 替换最近一次 ASR 提交的文本
+                    val replaced = inputHelper.replaceText(ic, targetText, out)
+                    if (!replaced) {
+                        uiListener?.onStatusMessage(context.getString(R.string.status_last_asr_not_found))
+                        return@launch
+                    }
+                    // 更新 lastAsrCommitText 为新文本
+                    sessionContext = sessionContext.copy(lastAsrCommitText = out)
+                }
+                else -> {
+                    // 清空并写入全文
+                    val snapshot = inputHelper.captureUndoSnapshot(ic)
+                    inputHelper.clearAllText(ic, snapshot)
+                    inputHelper.commitText(ic, out)
+                }
             }
 
             uiListener?.onVibrate()
             // 记录“后处理提交”，便于全局撤销优先恢复原文
+            if (ok && out.isNotEmpty() && out != targetText) {
+                sessionContext = sessionContext.copy(
+                    lastPostprocCommit = PostprocCommit(processed = out, raw = targetText)
+                )
+            } else {
+                sessionContext = sessionContext.copy(lastPostprocCommit = null)
+            }
+
+            if (!ok) {
+                uiListener?.onStatusMessage(context.getString(R.string.status_llm_failed_used_raw))
+            } else {
+                uiListener?.onStatusMessage(context.getString(R.string.status_idle))
+            }
+        }
+    }
+
+    /**
+     * 使用指定的 Prompt 内容对文本进行处理：优先处理选区，否则处理整个输入框文本。
+     * 不修改全局激活的 Prompt；成功则用返回结果替换（保留撤销快照）。
+     */
+    fun applyPromptToSelectionOrAll(ic: InputConnection?, promptContent: String) {
+        if (ic == null) return
+        scope.launch {
+            if (!prefs.hasLlmKeys()) {
+                uiListener?.onStatusMessage(context.getString(R.string.hint_need_llm_keys))
+                return@launch
+            }
+
+            val selected = try { inputHelper.getSelectedText(ic, 0)?.toString() } catch (_: Throwable) { null }
+            val targetText: String
+            val mode: Int // 0=selection, 1=lastAsr, 2=entire
+            if (!selected.isNullOrEmpty()) {
+                targetText = selected
+                mode = 0
+            } else if (prefs.aiEditDefaultToLastAsr) {
+                val last = sessionContext.lastAsrCommitText
+                if (!last.isNullOrEmpty()) {
+                    targetText = last
+                    mode = 1
+                } else {
+                    val before = inputHelper.getTextBeforeCursor(ic, 10000)?.toString() ?: ""
+                    val after = inputHelper.getTextAfterCursor(ic, 10000)?.toString() ?: ""
+                    val all = before + after
+                    if (all.isEmpty()) {
+                        uiListener?.onStatusMessage(context.getString(R.string.hint_cannot_read_text))
+                        return@launch
+                    }
+                    targetText = all
+                    mode = 2
+                }
+            } else {
+                val before = inputHelper.getTextBeforeCursor(ic, 10000)?.toString() ?: ""
+                val after = inputHelper.getTextAfterCursor(ic, 10000)?.toString() ?: ""
+                val all = before + after
+                if (all.isEmpty()) {
+                    uiListener?.onStatusMessage(context.getString(R.string.hint_cannot_read_text))
+                    return@launch
+                }
+                targetText = all
+                mode = 2
+            }
+
+            uiListener?.onStatusMessage(context.getString(R.string.status_ai_processing))
+
+            val res = try {
+                llmPostProcessor.processWithStatus(targetText, prefs, promptOverride = promptContent)
+            } catch (t: Throwable) {
+                Log.e(TAG, "applyPromptToSelectionOrAll failed", t)
+                null
+            }
+
+            val out = res?.text ?: targetText
+            val ok = res?.ok == true
+
+            saveUndoSnapshot(ic)
+            when (mode) {
+                0 -> inputHelper.commitText(ic, out)
+                1 -> {
+                    val replaced = inputHelper.replaceText(ic, targetText, out)
+                    if (!replaced) {
+                        uiListener?.onStatusMessage(context.getString(R.string.status_last_asr_not_found))
+                        return@launch
+                    }
+                    sessionContext = sessionContext.copy(lastAsrCommitText = out)
+                }
+                else -> {
+                    val snapshot = inputHelper.captureUndoSnapshot(ic)
+                    inputHelper.clearAllText(ic, snapshot)
+                    inputHelper.commitText(ic, out)
+                }
+            }
+
+            uiListener?.onVibrate()
             if (ok && out.isNotEmpty() && out != targetText) {
                 sessionContext = sessionContext.copy(
                     lastPostprocCommit = PostprocCommit(processed = out, raw = targetText)

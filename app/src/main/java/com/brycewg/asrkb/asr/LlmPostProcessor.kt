@@ -277,14 +277,18 @@ class LlmPostProcessor(private val client: OkHttpClient? = null) {
     /**
    * 与 process 等价，但返回是否成功及错误信息，便于 UI 反馈。
    */
-  suspend fun processWithStatus(input: String, prefs: Prefs): LlmProcessResult = withContext(Dispatchers.IO) {
+  suspend fun processWithStatus(
+    input: String,
+    prefs: Prefs,
+    promptOverride: String? = null
+  ): LlmProcessResult = withContext(Dispatchers.IO) {
     if (input.isBlank()) {
       Log.d(TAG, "Input is blank, skipping processing")
       return@withContext LlmProcessResult(ok = true, text = input)
     }
 
     val config = getActiveConfig(prefs)
-    val prompt = prefs.activePromptContent.ifBlank { Prefs.DEFAULT_LLM_PROMPT }
+    val prompt = (promptOverride ?: prefs.activePromptContent).ifBlank { Prefs.DEFAULT_LLM_PROMPT }
 
     val messages = JSONArray().apply {
       put(JSONObject().apply {
