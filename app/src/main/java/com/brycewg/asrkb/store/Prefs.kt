@@ -97,9 +97,9 @@ class Prefs(context: Context) {
         get() = sp.getBoolean(KEY_AI_EDIT_DEFAULT_TO_LAST_ASR, false)
         set(value) = sp.edit { putBoolean(KEY_AI_EDIT_DEFAULT_TO_LAST_ASR, value) }
 
-    // 耳机麦克风优先（自动切换到蓝牙/有线耳机麦克风），默认开启
+    // 耳机麦克风优先（自动切换到蓝牙/有线耳机麦克风），默认关闭
     var headsetMicPriorityEnabled: Boolean
-        get() = sp.getBoolean(KEY_HEADSET_MIC_PRIORITY_ENABLED, true)
+        get() = sp.getBoolean(KEY_HEADSET_MIC_PRIORITY_ENABLED, false)
         set(value) = sp.edit { putBoolean(KEY_HEADSET_MIC_PRIORITY_ENABLED, value) }
 
     // 静音自动判停：开关
@@ -117,9 +117,9 @@ class Prefs(context: Context) {
         get() = sp.getInt(KEY_AUTO_STOP_SILENCE_SENSITIVITY, DEFAULT_SILENCE_SENSITIVITY).coerceIn(1, 10)
         set(value) = sp.edit { putInt(KEY_AUTO_STOP_SILENCE_SENSITIVITY, value.coerceIn(1, 10)) }
 
-    // 键盘高度档位（1/2/3），默认一档
+    // 键盘高度档位（1/2/3），默认中档
     var keyboardHeightTier: Int
-        get() = sp.getInt(KEY_KEYBOARD_HEIGHT_TIER, 1).coerceIn(1, 3)
+        get() = sp.getInt(KEY_KEYBOARD_HEIGHT_TIER, 2).coerceIn(1, 3)
         set(value) = sp.edit { putInt(KEY_KEYBOARD_HEIGHT_TIER, value.coerceIn(1, 3)) }
 
     // 键盘底部间距（单位 dp，范围 0-100，默认 0）

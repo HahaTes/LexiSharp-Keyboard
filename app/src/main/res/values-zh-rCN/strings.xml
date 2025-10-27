@@ -239,7 +239,7 @@
     <string name="toast_silence_autostop_on">已开启录音判停</string>
     <string name="toast_silence_autostop_off">已关闭录音判停</string>
     <string name="label_audio_ducking_on_record">录音时音频避让</string>
-    <string name="label_headset_mic_priority">耳机麦克风优先</string>
+    <string name="label_headset_mic_priority">优先尝试使用耳机的麦克风(实验性)</string>
     <string name="label_return_prev_ime_on_hide">键盘收起后切回上一个输入法</string>
     <string name="toast_bt_connect_permission_required">需要授予蓝牙连接权限，才能使用耳机麦克风</string>
     <string name="toast_bt_connect_permission_denied">蓝牙连接权限已拒绝，已取消启用耳机优先</string>
@@ -350,7 +350,7 @@
     <string name="llm_test_missing_params">请填写 API 地址与模型名</string>
 
     <!-- Keyboard height -->
-    <string name="label_keyboard_height">键盘高度</string>
+    <string name="label_keyboard_height">键盘比例</string>
     <string name="keyboard_height_small">小</string>
     <string name="keyboard_height_medium">中</string>
     <string name="keyboard_height_large">大</string>
@@ -360,7 +360,7 @@
     <string name="keyboard_bottom_padding_value">%d dp</string>
 
     <!-- Keyboard layout option -->
-    <string name="label_fcitx5_return_on_switcher">Fcitx5联动-通过输入法切换键返回</string>
+    <string name="label_fcitx5_return_on_switcher">输入法切换键功能改为返回上个输入法</string>
     <string name="label_hide_recent_task_card">后台隐藏任务卡片</string>
 
     <!-- SenseVoice 本地设置 -->

@@ -376,7 +376,7 @@
     <string name="btn_get_api_key_guide">Get API Key</string>
 
     <!-- Keyboard height -->
-    <string name="label_keyboard_height">Keyboard height</string>
+    <string name="label_keyboard_height">Keyboard scale</string>
     <string name="keyboard_height_small">Small</string>
     <string name="keyboard_height_medium">Medium</string>
     <string name="keyboard_height_large">Large</string>
@@ -386,7 +386,7 @@
     <string name="keyboard_bottom_padding_value">%d dp</string>
 
     <!-- Keyboard layout option -->
-    <string name="label_fcitx5_return_on_switcher">Fcitx5 integration: hide self on IME switch key</string>
+    <string name="label_fcitx5_return_on_switcher">IME switch key returns to previous input method</string>
     <string name="label_hide_recent_task_card">Hide recent task preview</string>
 
     <!-- Model download notifications -->
@@ -457,7 +457,7 @@
 
     <!-- Audio -->
     <string name="label_audio_ducking_on_record">Audio ducking during recording</string>
-    <string name="label_headset_mic_priority">Prefer headset microphone</string>
+    <string name="label_headset_mic_priority">Prefer headset microphone (experimental)</string>
     <string name="label_return_prev_ime_on_hide">Switch back to previous IME when hidden</string>
     <string name="toast_bt_connect_permission_required">Bluetooth connect permission is required to use headset mic</string>
     <string name="toast_bt_connect_permission_denied">Bluetooth connect permission denied; headset priority disabled</string>
