@@ -84,8 +84,20 @@ class LlmPostProcessor(private val client: OkHttpClient? = null) {
     val raw = base.trim()
     if (raw.isEmpty()) return Prefs.DEFAULT_LLM_ENDPOINT.trimEnd('/') + "/chat/completions"
     val b = raw.trimEnd('/')
-    val withScheme = if (b.startsWith("http://", true) || b.startsWith("https://", true)) b else "https://$b"
-    return if (withScheme.endsWith("/chat/completions") || withScheme.endsWith("/responses")) withScheme else "$withScheme/chat/completions"
+    // 要求用户填写完整 URL（包含 http/https），不再自动补全协议
+    val hasScheme = b.startsWith("http://", true) || b.startsWith("https://", true)
+    if (!hasScheme) throw IllegalArgumentException("Endpoint must start with http:// or https://")
+
+    // 如果已直接指向 chat/completions 或 responses，则原样使用
+    if (b.endsWith("/chat/completions")) return b
+
+    // 若以 /v1 结尾，自动补全到 chat/completions
+    if (b.endsWith("/v1", true)) return "$b/chat/completions"
+
+    // 其他情况：要求至少包含 /v1 或已是完整的 chat 路径
+    if (b.contains("/v1/")) return b // 允许自定义 /v1/* 完整路径
+
+    throw IllegalArgumentException("Endpoint must include /v1 or end with /chat/completions")
   }
 
   /**
