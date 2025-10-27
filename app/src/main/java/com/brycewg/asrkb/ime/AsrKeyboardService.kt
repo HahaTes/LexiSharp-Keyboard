@@ -523,7 +523,7 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
             selectAllText()
         }
 
-        // AI 编辑面板：复制/粘贴/撤销
+        // AI 编辑面板：复制/粘贴/退格（带主键盘同款手势）
         btnAiPanelCopy?.setOnClickListener { v ->
             performKeyHaptic(v)
             handleCopyAction()
@@ -532,9 +532,14 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
             performKeyHaptic(v)
             handlePasteAction()
         }
+        // 点按退格（注：手势由 onTouch 托管，onClick 多为兜底）
         btnAiPanelUndo?.setOnClickListener { v ->
             performKeyHaptic(v)
-            actionHandler.handleUndo(currentInputConnection)
+            inputHelper.sendBackspace(currentInputConnection)
+        }
+        // 退格手势复用主键盘逻辑：
+        btnAiPanelUndo?.setOnTouchListener { v, event ->
+            backspaceGestureHandler.handleTouchEvent(v, event, currentInputConnection)
         }
 
         // AI 编辑面板：数字小键盘（占位）
@@ -736,6 +741,13 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
             btnAiPanelSelect?.isSelected = false
             btnAiPanelSelect?.setImageResource(R.drawable.selection_toggle)
         } catch (_: Throwable) { }
+        // 释放可能仍在队列中的光标连发回调，避免隐藏后仍触发
+        try {
+            repeatLeftRunnable?.let { btnAiPanelCursorLeft?.removeCallbacks(it) }
+            repeatLeftRunnable = null
+            repeatRightRunnable?.let { btnAiPanelCursorRight?.removeCallbacks(it) }
+            repeatRightRunnable = null
+        } catch (_: Throwable) { }
     }
 
     // ========== UI 更新方法 ==========
@@ -865,7 +877,7 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
 
     private fun moveCursorToEdge(toStart: Boolean) {
         val ic = currentInputConnection ?: return
-        val newPos = if (toStart) 0 else Int.MAX_VALUE
+        val newPos = if (toStart) 0 else (totalTextLength() ?: Int.MAX_VALUE)
         if (aiSelectMode) {
             ensureAnchorForSelection()
             val anchor = aiSelectAnchor ?: 0

@@ -194,10 +194,10 @@
                 android:layout_marginEnd="6dp"
                 android:background="@drawable/bg_key_button"
                 android:clipToOutline="true"
-                android:contentDescription="@string/cd_undo"
+                android:contentDescription="@string/cd_backspace"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:padding="6dp"
-                android:src="@drawable/arrow_counter_clockwise_toggle"
+                android:src="@drawable/backspace_toggle"
                 android:stateListAnimator="@animator/key_button_state_list"
                 android:tint="?attr/colorOnSurfaceVariant" />
 
