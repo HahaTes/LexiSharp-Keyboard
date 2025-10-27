@@ -114,7 +114,7 @@ jobs:
           vn_prev, vc_prev = parse_versions(text_prev)
 
           # 只检查 versionCode 是否变化
-          changed = False
+          changed = True
           if vc_head and (vc_head != (vc_prev or '')):
               changed = True
 
