@@ -282,6 +282,11 @@ class KeyboardActionHandler(
     fun applyActivePromptToSelectionOrAll(ic: InputConnection?) {
         if (ic == null) return
         scope.launch {
+            // LLM 参数可用性校验
+            if (!prefs.hasLlmKeys()) {
+                uiListener?.onStatusMessage(context.getString(R.string.hint_need_llm_keys))
+                return@launch
+            }
             // 读取目标文本：优先选区，否则整个文本
             val selected = try { inputHelper.getSelectedText(ic, 0)?.toString() } catch (_: Throwable) { null }
             val targetText: String
@@ -328,8 +333,19 @@ class KeyboardActionHandler(
             }
 
             uiListener?.onVibrate()
+            // 记录“后处理提交”，便于全局撤销优先恢复原文
+            if (ok && out.isNotEmpty() && out != targetText) {
+                sessionContext = sessionContext.copy(
+                    lastPostprocCommit = PostprocCommit(processed = out, raw = targetText)
+                )
+            } else {
+                sessionContext = sessionContext.copy(lastPostprocCommit = null)
+            }
+
             if (!ok) {
                 uiListener?.onStatusMessage(context.getString(R.string.status_llm_failed_used_raw))
+            } else {
+                uiListener?.onStatusMessage(context.getString(R.string.status_idle))
             }
         }
     }
