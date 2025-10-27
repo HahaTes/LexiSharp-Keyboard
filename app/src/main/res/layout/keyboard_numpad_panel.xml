@@ -70,7 +70,7 @@
                 <TextView style="@style/NpKeyRect" android:layout_width="0dp" android:layout_weight="1" android:text="；" android:tag="key40" />
                 <TextView style="@style/NpKeyRect" android:layout_width="0dp" android:layout_weight="1" android:text="“" android:tag="key40" />
                 <TextView style="@style/NpKeyRect" android:layout_width="0dp" android:layout_weight="1" android:text="”" android:tag="key40" />
-                <TextView style="@style/NpKeyRect" android:layout_width="0dp" android:layout_weight="1" android:text="……" android:tag="key40" android:layout_marginEnd="0dp" />
+                <TextView style="@style/NpKeyRect" android:layout_width="0dp" android:layout_weight="1" android:text="@" android:tag="key40" android:layout_marginEnd="0dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -87,11 +87,11 @@
                 <TextView style="@style/NpKeyRect" android:layout_width="0dp" android:layout_weight="1" android:text="]" android:tag="key40" />
                 <TextView style="@style/NpKeyRect" android:layout_width="0dp" android:layout_weight="1" android:text="{" android:tag="key40" />
                 <TextView style="@style/NpKeyRect" android:layout_width="0dp" android:layout_weight="1" android:text="}" android:tag="key40" />
-                <TextView style="@style/NpKeyRect" android:layout_width="0dp" android:layout_weight="1" android:text="&lt;" android:tag="key40" />
+                <TextView style="@style/NpKeyRect" android:layout_width="0dp" android:layout_weight="1" android:text="/" android:tag="key40" />
                 <TextView style="@style/NpKeyRect"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:text="&gt;"
+                    android:text="`"
                     android:tag="key40"
                     android:layout_marginEnd="4dp" />
                 
@@ -144,11 +144,27 @@
             android:stateListAnimator="@animator/key_button_state_list"
             android:tint="?attr/colorOnSurfaceVariant" />
 
+        <ImageButton
+            android:id="@+id/np_btnPunctToggle"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:tag="key40"
+            android:background="@drawable/bg_key_rect_button"
+            android:clipToOutline="true"
+            android:contentDescription="@string/cd_punct_lang_toggle"
+            android:foreground="@null"
+            android:padding="6dp"
+            android:src="@drawable/translate"
+            android:stateListAnimator="@animator/key_button_state_list"
+            android:tint="?attr/colorOnSurfaceVariant" />
+
         <TextView
             android:id="@+id/np_key_space"
             style="@style/NpKeyRect"
             android:layout_width="0dp"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:tag="key40"
             android:text="@string/cd_space"
             android:contentDescription="@string/cd_space" />

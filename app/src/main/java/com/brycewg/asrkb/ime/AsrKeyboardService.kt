@@ -96,6 +96,7 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
     private var btnNumpadBack: ImageButton? = null
     private var btnNumpadEnter: ImageButton? = null
     private var btnNumpadBackspace: ImageButton? = null
+    private var btnNumpadPunctToggle: ImageButton? = null
     private var isAiEditPanelVisible: Boolean = false
     private var isNumpadPanelVisible: Boolean = false
     private var btnSettings: ImageButton? = null
@@ -465,6 +466,7 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         btnNumpadBack = view.findViewById(R.id.np_btnBack)
         btnNumpadEnter = view.findViewById(R.id.np_btnEnter)
         btnNumpadBackspace = view.findViewById(R.id.np_btnBackspace)
+        btnNumpadPunctToggle = view.findViewById(R.id.np_btnPunctToggle)
         isAiEditPanelVisible = layoutAiEditPanel?.visibility == View.VISIBLE
         isNumpadPanelVisible = layoutNumpadPanel?.visibility == View.VISIBLE
         btnMic = view.findViewById(R.id.btnMic)
@@ -590,6 +592,14 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
 
         // 绑定小键盘按键
         bindNumpadKeys()
+
+        // 数字小键盘：标点中英文切换
+        btnNumpadPunctToggle?.setOnClickListener { v ->
+            performKeyHaptic(v)
+            val newState = !prefs.numpadCnPunctEnabled
+            prefs.numpadCnPunctEnabled = newState
+            applyNumpadPunctMode()
+        }
 
         // 设置光标左右移动的长按连发
         setupCursorRepeatHandlers()
@@ -802,6 +812,7 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         isNumpadPanelVisible = true
         // 数字/符号面板不需要显示麦克风悬浮按钮，避免遮挡
         try { groupMicStatus?.visibility = View.GONE } catch (_: Throwable) { }
+        applyNumpadPunctMode()
     }
 
     private fun hideNumpadPanel() {
@@ -1129,6 +1140,47 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
             }
         }
         bindView(root)
+    }
+
+    private fun applyNumpadPunctMode() {
+        val root = layoutNumpadPanel ?: return
+        val cn = try { prefs.numpadCnPunctEnabled } catch (_: Throwable) { true }
+        // 更新底栏按钮图标
+        try {
+            btnNumpadPunctToggle?.setImageResource(if (cn) R.drawable.translate_fill else R.drawable.translate)
+        } catch (_: Throwable) { }
+        // 行1：10 个按钮
+        val row1 = try { root.findViewById<android.view.View>(R.id.rowPunct1) as? android.view.ViewGroup } catch (_: Throwable) { null }
+        val row2 = try { root.findViewById<android.view.View>(R.id.rowPunct2) as? android.view.ViewGroup } catch (_: Throwable) { null }
+        val cn1 = arrayOf("，","。","、","！","？","：","；","“","”","@")
+        val en1 = arrayOf(",",".",",","!","?",":",";","\"","\"","@")
+        if (row1 != null) {
+            val arr = if (cn) cn1 else en1
+            val count = minOf(row1.childCount, arr.size)
+            var idx = 0
+            for (i in 0 until count) {
+                val tv = row1.getChildAt(i)
+                if (tv is TextView) {
+                    tv.text = arr[idx]
+                    idx++
+                }
+            }
+        }
+        // 行2：前 8 个为标点，后面为退格
+        val cn2 = arrayOf("（","）","[","]","{","}","/","`")
+        val en2 = arrayOf("(",")","[","]","{","}","/","`")
+        if (row2 != null) {
+            val arr = if (cn) cn2 else en2
+            val count = minOf(row2.childCount, arr.size)
+            var idx = 0
+            for (i in 0 until count) {
+                val v = row2.getChildAt(i)
+                if (v is TextView) {
+                    v.text = arr[idx]
+                    idx++
+                }
+            }
+        }
     }
 
     override fun onShowRetryChip(label: String) {

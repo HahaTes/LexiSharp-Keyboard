@@ -239,6 +239,11 @@ class Prefs(context: Context) {
         get() = sp.getString(KEY_LLM_ACTIVE_ID, "") ?: ""
         set(value) = sp.edit { putString(KEY_LLM_ACTIVE_ID, value) }
 
+    // 数字/符号小键盘：中文标点模式（true=中文形态，false=英文/ASCII 形态）
+    var numpadCnPunctEnabled: Boolean
+        get() = sp.getBoolean(KEY_NUMPAD_CN_PUNCT, true)
+        set(value) = sp.edit { putBoolean(KEY_NUMPAD_CN_PUNCT, value) }
+
     @Serializable
     data class LlmProvider(
         val id: String,
@@ -927,6 +932,7 @@ class Prefs(context: Context) {
         private const val KEY_OA_ASR_USE_PROMPT = "oa_asr_use_prompt"
         private const val KEY_OA_ASR_PROMPT = "oa_asr_prompt"
         private const val KEY_OA_ASR_LANGUAGE = "oa_asr_language"
+        private const val KEY_NUMPAD_CN_PUNCT = "numpad_cn_punct"
         private const val KEY_GEM_API_KEY = "gem_api_key"
         private const val KEY_GEM_MODEL = "gem_model"
         private const val KEY_GEM_PROMPT = "gem_prompt"
