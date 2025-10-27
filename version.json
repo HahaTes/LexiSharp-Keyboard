@@ -1,7 +1,7 @@
 {
-  "version": "3.2.6",
-  "version_code": 81,
-  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.2.6",
+  "version": "3.2.6.1",
+  "version_code": 82,
+  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.2.6.1",
   "release_notes": "本次更新包含 7 个提交:\n- feat(ime): 添加键盘收起后自动切换输入法功能\n- feat(ime): 调节键盘底部间距功能\n- feat(asr): 固定 Soniox 语音识别模型至 V3 版本\n- feat(audio): 提前预热蓝牙耳机音频路由以减少录音延迟\n- feat(audio): 引入耳机麦克风优先的音频路由功能\n- refactor(accessibility): 移除全选粘贴的文本替换逻辑\n- fix(asr): 增强对 429 速率限制错误的识别和处理",
   "min_supported_version": "2.6.5",
   "update_time": "2025-10-26T02:49:30Z"
