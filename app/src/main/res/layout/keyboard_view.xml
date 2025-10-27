@@ -187,9 +187,11 @@
 
     <!-- Overlay: original function row placed around middle height without increasing total panel height -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rowOverlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="top"
+        android:layout_marginTop="46dp"
         android:translationY="0dp">
 
         <ImageButton
@@ -268,7 +270,7 @@
 
     <include
         android:id="@+id/layoutAiEditPanel"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="top"
         layout="@layout/keyboard_ai_edit_panel"
         android:visibility="gone" />
 

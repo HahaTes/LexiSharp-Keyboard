@@ -16,10 +16,8 @@
         android:id="@+id/groupAiEditLeft"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:gravity="center_vertical"
+        android:gravity="start|center_vertical"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -29,7 +27,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="6dp">
 
             <ImageButton
                 android:id="@+id/btnAiPanelBack"
@@ -49,7 +47,7 @@
                 android:id="@+id/btnAiPanelApplyPreset"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="0dp"
                 android:background="@drawable/bg_key_button"
                 android:clipToOutline="true"
                 android:contentDescription="@string/cd_apply_preset_prompt"
@@ -65,7 +63,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="6dp">
 
             <ImageButton
                 android:id="@+id/btnAiPanelCursorLeft"
@@ -85,7 +83,7 @@
                 android:id="@+id/btnAiPanelCursorRight"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="0dp"
                 android:background="@drawable/bg_key_button"
                 android:clipToOutline="true"
                 android:contentDescription="@string/cd_cursor_right"
@@ -120,7 +118,7 @@
                 android:id="@+id/btnAiPanelSelect"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="0dp"
                 android:background="@drawable/bg_key_button"
                 android:clipToOutline="true"
                 android:contentDescription="@string/cd_select_toggle"
@@ -136,10 +134,8 @@
         android:id="@+id/groupAiEditRight"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:gravity="center_vertical"
+        android:gravity="end|center_vertical"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/guidelineCenter"
         app:layout_constraintTop_toTopOf="parent">
@@ -149,7 +145,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="6dp">
 
             <ImageButton
                 android:id="@+id/btnAiPanelSelectAll"
@@ -169,7 +165,7 @@
                 android:id="@+id/btnAiPanelCopy"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="0dp"
                 android:background="@drawable/bg_key_button"
                 android:clipToOutline="true"
                 android:contentDescription="@string/cd_copy"
@@ -185,7 +181,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="6dp">
 
             <ImageButton
                 android:id="@+id/btnAiPanelUndo"
@@ -205,7 +201,7 @@
                 android:id="@+id/btnAiPanelPaste"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="0dp"
                 android:background="@drawable/bg_key_button"
                 android:clipToOutline="true"
                 android:contentDescription="@string/cd_paste"
@@ -240,7 +236,7 @@
                 android:id="@+id/btnAiPanelMoveEnd"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="0dp"
                 android:background="@drawable/bg_key_button"
                 android:clipToOutline="true"
                 android:contentDescription="@string/cd_move_end"

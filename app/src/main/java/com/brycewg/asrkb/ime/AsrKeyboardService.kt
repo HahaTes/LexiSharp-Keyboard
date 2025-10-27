@@ -227,6 +227,11 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
+        // 每次键盘视图启动时应用一次高度/底部间距等缩放，
+        try {
+            applyKeyboardHeightScale(rootView)
+            rootView?.requestLayout()
+        } catch (_: Throwable) { }
         try {
             DebugLogManager.log(
                 category = "ime",
@@ -1348,6 +1353,22 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
             }
         } catch (_: Throwable) { }
 
+        // 使主键盘功能行（overlay）从顶部锚定，避免垂直居中导致的像素舍入抖动
+        // 计算规则：将原本居中位置换算为等效的顶部边距
+        // 总高约为 80s(top) + 12(margin) + 40s(punct)，中心到顶部距离为 (总高/2 - overlayHalf)
+        // overlayHalf=20s，化简后顶边距=40s + 6
+        try {
+            val overlay = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.rowOverlay)
+            if (overlay != null) {
+                val lp = overlay.layoutParams as? android.widget.FrameLayout.LayoutParams
+                if (lp != null) {
+                    lp.topMargin = dp(40f * scale + 6f)
+                    lp.gravity = android.view.Gravity.TOP
+                    overlay.layoutParams = lp
+                }
+            }
+        } catch (_: Throwable) { }
+
         fun scaleSquareButton(id: Int) {
             try {
                 val v = view.findViewById<View>(id) ?: return
@@ -1359,9 +1380,17 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         }
 
         val ids40 = intArrayOf(
+            // 主键盘按钮
             R.id.btnHide, R.id.btnPostproc, R.id.btnBackspace, R.id.btnPromptPicker,
             R.id.btnSettings, R.id.btnImeSwitcher, R.id.btnEnter, R.id.btnAiEdit,
-            R.id.btnPunct1, R.id.btnPunct2, R.id.btnPunct3, R.id.btnPunct4
+            R.id.btnPunct1, R.id.btnPunct2, R.id.btnPunct3, R.id.btnPunct4,
+            // AI 编辑面板按钮
+            R.id.btnAiPanelBack, R.id.btnAiPanelApplyPreset,
+            R.id.btnAiPanelCursorLeft, R.id.btnAiPanelCursorRight,
+            R.id.btnAiPanelNumpad, R.id.btnAiPanelSelect,
+            R.id.btnAiPanelSelectAll, R.id.btnAiPanelCopy,
+            R.id.btnAiPanelUndo, R.id.btnAiPanelPaste,
+            R.id.btnAiPanelMoveStart, R.id.btnAiPanelMoveEnd
         )
         ids40.forEach { scaleSquareButton(it) }
 
