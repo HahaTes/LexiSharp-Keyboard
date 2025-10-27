@@ -1,8 +1,8 @@
 {
-  "version": "3.2.6",
-  "version_code": 81,
-  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.2.6",
-  "release_notes": "本次更新包含 7 个提交:\n- feat(ime): 添加键盘收起后自动切换输入法功能\n- feat(ime): 调节键盘底部间距功能\n- feat(asr): 固定 Soniox 语音识别模型至 V3 版本\n- feat(audio): 提前预热蓝牙耳机音频路由以减少录音延迟\n- feat(audio): 引入耳机麦克风优先的音频路由功能\n- refactor(accessibility): 移除全选粘贴的文本替换逻辑\n- fix(asr): 增强对 429 速率限制错误的识别和处理",
+  "version": "3.3.0",
+  "version_code": 82,
+  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.3.0",
+  "release_notes": "本次更新包含 7 个提交:\n- feat(ime): 为数字面板添加标点中英文切换功能\n- style(ime): 将按键波纹效果集成到背景 drawable\n- refactor(ime): 调整键盘功能行按钮布局和功能\n- feat(ime): 添加专用的数字/标点面板\n- fix(ime): 锚定功能行和编辑面板至顶部\n- feat(ime): 将编辑面板的撤回改为退格键\n- feat(ime): 实现专用的 ai/文本编辑面板部分功能",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-26T02:49:30Z"
+  "update_time": "2025-10-27T08:35:45Z"
 }
