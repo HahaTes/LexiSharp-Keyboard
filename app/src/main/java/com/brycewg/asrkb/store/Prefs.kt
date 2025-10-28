@@ -69,7 +69,7 @@ class Prefs(context: Context) {
 
     // 在密码框中自动切换输入法
     var autoSwitchOnPassword: Boolean
-        get() = sp.getBoolean(KEY_AUTO_SWITCH_ON_PASSWORD, true)
+        get() = sp.getBoolean(KEY_AUTO_SWITCH_ON_PASSWORD, false)
         set(value) = sp.edit { putBoolean(KEY_AUTO_SWITCH_ON_PASSWORD, value) }
 
     // 麦克风按钮触觉反馈
