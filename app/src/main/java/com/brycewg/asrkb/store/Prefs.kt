@@ -449,11 +449,19 @@ class Prefs(context: Context) {
     // Google Gemini 语音理解（通过提示词转写）
     var gemApiKey: String by stringPref(KEY_GEM_API_KEY, "")
 
+    fun getGeminiApiKeys(): List<String> {
+        return gemApiKey.split("\n").map { it.trim() }.filter { it.isNotBlank() }
+    }
+
     var gemModel: String by stringPref(KEY_GEM_MODEL, DEFAULT_GEM_MODEL)
 
     var gemPrompt: String
         get() = sp.getString(KEY_GEM_PROMPT, DEFAULT_GEM_PROMPT) ?: DEFAULT_GEM_PROMPT
         set(value) = sp.edit { putString(KEY_GEM_PROMPT, value) }
+
+    var geminiDisableThinking: Boolean
+        get() = sp.getBoolean(KEY_GEMINI_DISABLE_THINKING, false)
+        set(value) = sp.edit { putBoolean(KEY_GEMINI_DISABLE_THINKING, value) }
 
     // Soniox 语音识别
     var sonioxApiKey: String by stringPref(KEY_SONIOX_API_KEY, "")
@@ -936,6 +944,7 @@ class Prefs(context: Context) {
         private const val KEY_GEM_API_KEY = "gem_api_key"
         private const val KEY_GEM_MODEL = "gem_model"
         private const val KEY_GEM_PROMPT = "gem_prompt"
+        private const val KEY_GEMINI_DISABLE_THINKING = "gemini_disable_thinking"
         private const val KEY_VOLC_STREAMING_ENABLED = "volc_streaming_enabled"
         private const val KEY_VOLC_DDC_ENABLED = "volc_ddc_enabled"
         private const val KEY_VOLC_VAD_ENABLED = "volc_vad_enabled"

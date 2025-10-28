@@ -619,7 +619,10 @@
             android:id="@+id/etGeminiApiKey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:maxLines="6"
+            android:gravity="top|start"
             android:textColor="?attr/colorOnSurface"
             android:textColorHint="?attr/colorOnSurfaceVariant" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -656,6 +659,13 @@
             android:textColor="?attr/colorOnSurface"
             android:textColorHint="?attr/colorOnSurfaceVariant" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switchGeminiDisableThinking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_gemini_disable_thinking" />
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/btnGeminiGetKey"
