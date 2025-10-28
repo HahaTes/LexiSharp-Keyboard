@@ -34,6 +34,12 @@ class BackspaceGestureHandler(
     private var startY: Float = 0f
     private var isPressed: Boolean = false
     private var clearedInGesture: Boolean = false
+    // 单次手势内去抖标记：避免在 MOVE 过程中重复触发撤销/恢复
+    private var undoTriggeredInGesture: Boolean = false
+    private var restoredAfterClearInGesture: Boolean = false
+    // 清空发生时的参考坐标：用于在同一手势中判定“清空后向下滑动恢复”
+    private var clearRefX: Float = 0f
+    private var clearRefY: Float = 0f
 
     // 长按重复删除状态
     private var longPressStarted: Boolean = false
@@ -68,23 +74,38 @@ class BackspaceGestureHandler(
             MotionEvent.ACTION_MOVE -> {
                 val dx = event.x - startX
                 val dy = event.y - startY
+                val absDx = abs(dx)
+                val absDy = abs(dy)
 
-                // 向上/向左滑动：清空所有文本
-                if (!clearedInGesture && (dy <= -slop || dx <= -slop)) {
+                // 向上/向左滑动：清空所有文本（要求方向占优，减少误触）
+                if (!clearedInGesture && (
+                        (dy <= -slop && absDy >= absDx) ||
+                        (dx <= -slop && absDx >= absDy)
+                    )
+                ) {
+                    // 记录清空时的参考坐标（用于后续“清空后下滑恢复”的判定）
+                    clearRefX = event.x
+                    clearRefY = event.y
                     onSwipeToClear(view, ic)
                     return true
                 }
 
-                // 向下滑动：执行撤销
-                if (!clearedInGesture && dy >= slop) {
+                // 向下滑动：执行撤销（要求方向占优）
+                if (!clearedInGesture && !undoTriggeredInGesture && dy >= slop && absDy >= absDx) {
                     onSwipeToUndo(view)
+                    undoTriggeredInGesture = true
                     return true
                 }
 
-                // 清空后向下滑动：恢复快照
-                if (clearedInGesture && dy >= slop) {
-                    onRestoreAfterClear(view, ic)
-                    return true
+                // 清空后向下滑动：相对清空点的位移判断（要求方向占优）
+                if (clearedInGesture && !restoredAfterClearInGesture) {
+                    val dxSinceClear = event.x - clearRefX
+                    val dySinceClear = event.y - clearRefY
+                    if (dySinceClear >= slop && abs(dySinceClear) >= abs(dxSinceClear)) {
+                        onRestoreAfterClear(view, ic)
+                        restoredAfterClearInGesture = true
+                        return true
+                    }
                 }
 
                 return true
@@ -112,6 +133,10 @@ class BackspaceGestureHandler(
         startX = event.x
         startY = event.y
         clearedInGesture = false
+        undoTriggeredInGesture = false
+        restoredAfterClearInGesture = false
+        clearRefX = startX
+        clearRefY = startY
         isPressed = true
         longPressStarted = false
 
@@ -136,11 +161,14 @@ class BackspaceGestureHandler(
         // 取消长按计时器
         cancelTimers(view)
 
-        // 清空所有文本
+        // 先通知监听方保存撤销快照（需在清空之前保存）
+        // 这样全局下滑撤回会恢复到清空前的内容，而不是空文本
+        listener?.onClearAll()
+
+        // 再执行清空
         inputHelper.clearAllText(ic, gestureSnapshot)
         clearedInGesture = true
         listener?.onVibrateRequest()
-        listener?.onClearAll()
 
         // 离开按压态
         try { view.isPressed = false } catch (e: Throwable) { android.util.Log.w("BackspaceGestureHandler", "Failed to set pressed=false (clear)", e) }
@@ -181,6 +209,8 @@ class BackspaceGestureHandler(
         // 清理快照
         gestureSnapshot = null
         clearedInGesture = false
+        undoTriggeredInGesture = false
+        restoredAfterClearInGesture = false
     }
 
     private fun scheduleLongPress(view: View) {

@@ -699,7 +699,8 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
             }
 
             override fun onClearAll() {
-                actionHandler.saveUndoSnapshot(currentInputConnection)
+                // 强制以清空前的文本作为撤销快照
+                actionHandler.saveUndoSnapshot(currentInputConnection, force = true)
             }
 
             override fun onUndo() {

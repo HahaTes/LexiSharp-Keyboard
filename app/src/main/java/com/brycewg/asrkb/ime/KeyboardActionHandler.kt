@@ -261,8 +261,9 @@ class KeyboardActionHandler(
     /**
      * 保存撤销快照（在执行变更操作前调用）
      */
-    fun saveUndoSnapshot(ic: InputConnection?) {
-        if (ic == null || undoSnapshot != null) return
+    fun saveUndoSnapshot(ic: InputConnection?, force: Boolean = false) {
+        if (ic == null) return
+        if (undoSnapshot != null && !force) return
         undoSnapshot = inputHelper.captureUndoSnapshot(ic)
     }
 
