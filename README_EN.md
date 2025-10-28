@@ -109,14 +109,6 @@ English | [简体中文](README.md)
 <sub>LLM intelligently optimizes recognition results to improve text quality</sub>
 </td>
 </tr>
-<tr>
-<td width="50%" align="center">
-<!-- TODO: Add AI Edit Panel screenshot -->
-<b>🎨 AI Edit Panel</b>
-<br/>
-<sub>Dedicated editing interface with voice command text editing and rich editing tools</sub>
-</td>
-</tr>
 </table>
 
 ## 🚀 Quick Start
@@ -609,6 +601,8 @@ If this project helps you, please give it a Star ⭐️ and feel free to buy me 
 ## 💝 Appreciation List
 
 Thanks to the following users for their support and appreciation. Your encouragement is the driving force for the project's continuous development!
+
+Anonymous - 50 RMB
 
 王千郡 - 26.66 RMB
 
