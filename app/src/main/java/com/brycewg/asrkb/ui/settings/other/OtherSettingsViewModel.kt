@@ -32,7 +32,6 @@ class OtherSettingsViewModel(private val prefs: Prefs) : ViewModel() {
         val presets: List<SpeechPreset> = emptyList(),
         val activePresetId: String = "",
         val currentPreset: SpeechPreset? = null,
-        val nameError: String? = null,
         val isEnabled: Boolean = false
     )
 
@@ -72,7 +71,6 @@ class OtherSettingsViewModel(private val prefs: Prefs) : ViewModel() {
                     presets = presets,
                     activePresetId = current?.id ?: "",
                     currentPreset = current,
-                    nameError = null,
                     isEnabled = presets.isNotEmpty()
                 )
             } catch (e: Exception) {
@@ -121,31 +119,35 @@ class OtherSettingsViewModel(private val prefs: Prefs) : ViewModel() {
     fun updateActivePresetName(name: String) {
         viewModelScope.launch {
             try {
-                val trimmed = name.trim()
-                if (trimmed.isEmpty()) {
-                    _speechPresetsState.value = _speechPresetsState.value.copy(
-                        nameError = "error_speech_preset_name_required"
-                    )
-                    return@launch
-                }
-
                 val list = prefs.getSpeechPresets().toMutableList()
                 val idx = list.indexOfFirst { it.id == prefs.activeSpeechPresetId }
                 if (idx < 0) return@launch
 
                 val current = list[idx]
-                if (current.name == trimmed) {
-                    // No change
-                    _speechPresetsState.value = _speechPresetsState.value.copy(nameError = null)
+                // 允许名称为空：为空时只更新 UI 状态，不立刻持久化，避免被清除
+                if (name.isEmpty()) {
+                    val mutated = current.copy(name = "")
+                    val uiList = list.toMutableList()
+                    uiList[idx] = mutated
+                    _speechPresetsState.value = _speechPresetsState.value.copy(
+                        presets = uiList,
+                        activePresetId = prefs.activeSpeechPresetId,
+                        currentPreset = mutated,
+                        isEnabled = uiList.isNotEmpty()
+                    )
                     return@launch
                 }
 
-                val mutated = current.copy(name = trimmed)
+                val newName = name
+                if (current.name == newName) {
+                    return@launch
+                }
+
+                val mutated = current.copy(name = newName)
                 list[idx] = mutated
                 prefs.setSpeechPresets(list)
 
-                // Clear error and reload to refresh display
-                _speechPresetsState.value = _speechPresetsState.value.copy(nameError = null)
+                // 刷新状态
                 loadSpeechPresets()
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to update preset name", e)

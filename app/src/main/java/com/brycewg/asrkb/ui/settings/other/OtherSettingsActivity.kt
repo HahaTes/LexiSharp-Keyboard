@@ -218,14 +218,7 @@ class OtherSettingsActivity : AppCompatActivity() {
             etSpeechPresetContent.setText(currentContent)
         }
 
-        // Update error state
-        if (state.nameError != null) {
-            tilSpeechPresetName.error = getString(
-                resources.getIdentifier(state.nameError, "string", packageName)
-            )
-        } else {
-            tilSpeechPresetName.error = null
-        }
+        tilSpeechPresetName.error = null
 
         // Update enabled state
         val enable = state.isEnabled
