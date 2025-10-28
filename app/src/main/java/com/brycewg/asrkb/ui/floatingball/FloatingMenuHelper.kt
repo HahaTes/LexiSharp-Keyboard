@@ -64,7 +64,7 @@ class FloatingMenuHelper(
                     onDismiss()
                 }
             }
-            root.alpha = alpha
+            root.alpha = 1.0f
             try { root.requestFocus() } catch (e: Throwable) { Log.w(TAG, "Failed to request focus for radial root", e) }
 
             val (centerX, centerY) = anchorCenter
@@ -166,7 +166,7 @@ class FloatingMenuHelper(
                     onDismiss()
                 }
             }
-            root.alpha = alpha
+            root.alpha = 1.0f
             try { root.requestFocus() } catch (e: Throwable) { Log.w(TAG, "Failed to request focus for panel root", e) }
 
             val container = LinearLayout(context).apply {
