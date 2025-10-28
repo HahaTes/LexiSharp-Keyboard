@@ -1,8 +1,8 @@
 {
-  "version": "3.3.2",
-  "version_code": 84,
-  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.3.2",
-  "release_notes": "本次更新包含 2 个提交:\n- fix(ime): 确保获取 ASR 结果后立即切换到 Idle 状态\n- fix(ui/settings): 允许语音预设名称为空",
+  "version": "3.3.3",
+  "version_code": 85,
+  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.3.3",
+  "release_notes": "本次更新包含 1 个提交:\n- fix(asr/audio): 优化蓝牙 SCO 兼容性处理并移除空 try-catch",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-28T04:11:02Z"
+  "update_time": "2025-10-28T07:40:31Z"
 }
