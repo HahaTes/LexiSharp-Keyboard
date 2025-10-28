@@ -79,7 +79,9 @@
 <table>
 <tr>
 <td width="50%" align="center">
-<img src="images/keyboard_view.jpg" alt="键盘视图" style="max-height: 500px; width: auto;"/>
+<img src="images/keyboard_view.jpg" alt="键盘视图" style="max-height: 200px; width: auto;"/>
+<img src="images/edit_keyboard_view.jpg" alt="编辑键盘视图" style="max-height: 200px; width: auto;"/>
+<img src="images/numpad_keyboard_view.jpg" alt="小键盘视图" style="max-height: 200px; width: auto;"/>
 <br/>
 <b>🎹 键盘视图</b>
 <br/>
@@ -200,6 +202,7 @@
 AI 编辑面板提供了丰富的文本编辑工具，左右对称布局：
 
 **左侧功能区：**
+
 - **⬅️ 返回主键盘** - 退出 AI 编辑面板
 - **✨ 应用预设 Prompt** - 快速应用预设的 AI 提示词
 - **◀️ ▶️ 光标移动** - 左右移动光标位置
@@ -207,6 +210,7 @@ AI 编辑面板提供了丰富的文本编辑工具，左右对称布局：
 - **📝 选择模式** - 切换文本选择模式
 
 **右侧功能区：**
+
 - **📄 全选** - 选中全部文本
 - **⌫ 撤销/退格** - 撤销操作或删除字符
 - **📋 复制/粘贴** - 复制和粘贴文本
@@ -215,6 +219,7 @@ AI 编辑面板提供了丰富的文本编辑工具，左右对称布局：
 ### 🎙️ 编辑目标选择
 
 AI 编辑支持多种目标选择方式：
+
 - **选中文本优先**：如果有选中文本，优先编辑选中内容
 - **上次识别结果**：无选中时，默认编辑最后一次语音识别结果
 - **整个输入框**：可配置为编辑整个输入框内容
@@ -608,7 +613,7 @@ Return - 16.66 RMB
 
 树人 - 10.24 RMB
 
-x年 - 10 RMB
+x 年 - 10 RMB
 
 flyhunterl - 6.66 RMB
 

@@ -77,7 +77,9 @@ English | [简体中文](README.md)
 <table>
 <tr>
 <td width="50%" align="center">
-<img src="images/keyboard_view_en.jpg" alt="Keyboard View" style="max-height: 500px; width: auto;"/>
+<img src="images/keyboard_view_en.jpg" alt="Keyboard View" style="max-height: 200px; width: auto;"/>
+<img src="images/edit_keyboard_view.jpg" alt="Editing Keyboard View" style="max-height: 200px; width: auto;"/>
+<img src="images/numpad_keyboard_view.jpg" alt="NumPad View" style="max-height: 200px; width: auto;"/>
 <br/>
 <b>🎹 Keyboard View</b>
 <br/>
@@ -200,6 +202,7 @@ English | [简体中文](README.md)
 The AI Edit Panel provides comprehensive text editing tools with a symmetrical layout:
 
 **Left Function Area:**
+
 - **⬅️ Return to Main Keyboard** - Exit AI Edit Panel
 - **✨ Apply Preset Prompt** - Quickly apply preset AI prompts
 - **◀️ ▶️ Cursor Movement** - Move cursor left and right
@@ -207,6 +210,7 @@ The AI Edit Panel provides comprehensive text editing tools with a symmetrical l
 - **📝 Selection Mode** - Toggle text selection mode
 
 **Right Function Area:**
+
 - **📄 Select All** - Select all text
 - **⌫ Undo/Backspace** - Undo operations or delete characters
 - **📋 Copy/Paste** - Copy and paste text
@@ -215,6 +219,7 @@ The AI Edit Panel provides comprehensive text editing tools with a symmetrical l
 ### 🎙️ Edit Target Selection
 
 AI Editing supports multiple target selection methods:
+
 - **Selected Text Priority**: If text is selected, prioritize editing the selected content
 - **Last Recognition Result**: When no selection, default to editing the last voice recognition result
 - **Entire Input Field**: Configurable to edit the entire input field content
