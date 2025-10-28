@@ -69,6 +69,10 @@
             android:name=".ui.settings.backup.BackupSettingsActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.history.AsrHistoryActivity"
+            android:exported="false" />
+
         <!-- 关于页面 -->
         <activity
             android:name=".ui.about.AboutActivity"

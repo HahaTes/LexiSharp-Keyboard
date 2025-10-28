@@ -976,6 +976,8 @@ class Prefs(context: Context) {
         private const val KEY_AI_EDIT_DEFAULT_TO_LAST_ASR = "ai_edit_default_to_last_asr"
         private const val KEY_HEADSET_MIC_PRIORITY_ENABLED = "headset_mic_priority_enabled"
         private const val KEY_USAGE_STATS_JSON = "usage_stats"
+        // ASR 历史（JSON 数组字符串），用于备份/恢复
+        private const val KEY_ASR_HISTORY_JSON = "asr_history"
         private const val KEY_FIRST_USE_DATE = "first_use_date"
 
         // SyncClipboard keys
@@ -1144,6 +1146,8 @@ class Prefs(context: Context) {
         o.put(KEY_TOTAL_ASR_CHARS, totalAsrChars)
         // 使用统计（聚合）与首次使用日期
         try { o.put(KEY_USAGE_STATS_JSON, usageStatsJson) } catch (t: Throwable) { Log.w(TAG, "Failed to export usage stats", t) }
+        // 历史记录纳入备份范围
+        try { o.put(KEY_ASR_HISTORY_JSON, getPrefString(KEY_ASR_HISTORY_JSON, "")) } catch (t: Throwable) { Log.w(TAG, "Failed to export ASR history", t) }
         try { o.put(KEY_FIRST_USE_DATE, firstUseDate) } catch (t: Throwable) { Log.w(TAG, "Failed to export first use date", t) }
         // 写入兼容/粘贴方案
         o.put(KEY_FLOATING_WRITE_COMPAT_ENABLED, floatingWriteTextCompatEnabled)
@@ -1269,6 +1273,8 @@ class Prefs(context: Context) {
             }
             // 使用统计（可选）
             optString(KEY_USAGE_STATS_JSON)?.let { usageStatsJson = it }
+            // 历史记录纳入恢复范围
+            optString(KEY_ASR_HISTORY_JSON)?.let { setPrefString(KEY_ASR_HISTORY_JSON, it) }
             optString(KEY_FIRST_USE_DATE)?.let { firstUseDate = it }
             // SenseVoice（本地 ASR）
             optString(KEY_SV_MODEL_DIR)?.let { svModelDir = it }

@@ -776,13 +776,30 @@ class KeyboardActionHandler(
         // 更新会话上下文
         sessionContext = sessionContext.copy(lastAsrCommitText = finalProcessed)
 
-        // 统计字数
+        // 统计字数 & 记录使用统计/历史
         try {
             prefs.addAsrChars(finalProcessed.length)
             // 记录使用统计（IME）
             try {
                 val audioMs = asrManager.popLastAudioMsForStats()
                 prefs.recordUsageCommit("ime", prefs.asrVendor, audioMs, finalProcessed.length)
+                // 写入历史记录（AI 后处理）
+                try {
+                    val store = com.brycewg.asrkb.store.AsrHistoryStore(context)
+                    store.add(
+                        com.brycewg.asrkb.store.AsrHistoryStore.AsrHistoryRecord(
+                            timestamp = System.currentTimeMillis(),
+                            text = finalProcessed,
+                            vendorId = prefs.asrVendor.id,
+                            audioMs = audioMs,
+                            source = "ime",
+                            aiProcessed = true,
+                            charCount = finalProcessed.length
+                        )
+                    )
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to add ASR history (with postprocess)", e)
+                }
             } catch (t: Throwable) {
                 Log.e(TAG, "Failed to record usage stats (with postprocess)", t)
             }
@@ -882,13 +899,30 @@ class KeyboardActionHandler(
             autoEnterOnce = false
         }
 
-        // 统计字数
+        // 统计字数 & 记录使用统计/历史
         try {
             prefs.addAsrChars(finalText.length)
             // 记录使用统计（IME）
             try {
                 val audioMs = asrManager.popLastAudioMsForStats()
                 prefs.recordUsageCommit("ime", prefs.asrVendor, audioMs, finalText.length)
+                // 写入历史记录（无 AI 后处理）
+                try {
+                    val store = com.brycewg.asrkb.store.AsrHistoryStore(context)
+                    store.add(
+                        com.brycewg.asrkb.store.AsrHistoryStore.AsrHistoryRecord(
+                            timestamp = System.currentTimeMillis(),
+                            text = finalText,
+                            vendorId = prefs.asrVendor.id,
+                            audioMs = audioMs,
+                            source = "ime",
+                            aiProcessed = false,
+                            charCount = finalText.length
+                        )
+                    )
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to add ASR history (no postprocess)", e)
+                }
             } catch (t: Throwable) {
                 Log.e(TAG, "Failed to record usage stats (no postprocess)", t)
             }

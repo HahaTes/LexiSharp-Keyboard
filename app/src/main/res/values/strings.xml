@@ -238,6 +238,7 @@
     <!-- Backup settings -->
     <string name="title_backup_settings">配置备份</string>
     <string name="btn_open_backup_settings">配置备份</string>
+    <string name="btn_open_asr_history">识别历史</string>
     <string name="section_file_backup">文件备份</string>
     <string name="btn_export_to_file">导出到文件</string>
     <string name="btn_import_from_file">从文件导入</string>
@@ -270,6 +271,43 @@
 
     <!-- Stats -->
     <string name="label_asr_total_chars">历史语音识别总字数：%1$d</string>
+
+    <!-- ASR History -->
+    <string name="title_asr_history">识别历史</string>
+    <string name="hint_search_history">搜索识别文本…</string>
+    <string name="history_section_2h">2 小时内</string>
+    <string name="history_section_today">今天</string>
+    <string name="history_section_7d">近一周</string>
+    <string name="history_section_30d">近一个月</string>
+    <string name="history_section_older">更早</string>
+    <string name="label_vendor">供应商</string>
+    <string name="label_source">来源</string>
+    <string name="source_ime">键盘</string>
+    <string name="source_floating">悬浮球</string>
+    <string name="source_ime_full">键盘输入</string>
+    <string name="source_floating_full">悬浮球输入</string>
+    <string name="label_ai_processed">AI 处理</string>
+    <string name="label_chars_count">字数:%1$d</string>
+    <string name="label_audio_duration_s">用时:%1$.1f 秒</string>
+    <string name="meta_cost_seconds">用时%1$.1fs</string>
+    <string name="ai_processed_yes">已后处理</string>
+    <string name="ai_processed_no">未后处理</string>
+    <string name="label_timestamp">时间</string>
+    <string name="btn_copy">复制</string>
+    <string name="toast_copied">已复制</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="menu_filter">筛选</string>
+    <string name="menu_select_all">全选</string>
+    <string name="menu_clear_selection">取消全选</string>
+    <string name="menu_delete_selected">删除选中</string>
+    <string name="dialog_filter_title">筛选</string>
+    <string name="dialog_filter_ok">确定</string>
+    <string name="dialog_filter_cancel">取消</string>
+    <string name="dialog_delete_selected_title">删除确认</string>
+    <string name="dialog_delete_selected_msg">确定删除选中的 %1$d 条记录吗？此操作不可撤销。</string>
+    <string name="toast_deleted">已删除 %1$d 条记录</string>
+    <string name="empty_history">暂无识别历史</string>
 
     <!-- Errors (ASR engines) -->
     <string name="error_record_permission_denied">录音权限未授予</string>

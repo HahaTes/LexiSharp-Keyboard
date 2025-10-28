@@ -140,6 +140,18 @@
           app:icon="@drawable/cloud_arrow_up"
           app:iconGravity="textStart"
           app:iconPadding="8dp" />
+
+        <!-- 识别历史入口：位于“配置备份”按钮下方 -->
+        <com.google.android.material.button.MaterialButton
+          android:id="@+id/btnOpenAsrHistory"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          style="@style/Widget.Material3.Button.OutlinedButton"
+          android:text="@string/btn_open_asr_history"
+          app:icon="@drawable/article"
+          app:iconGravity="textStart"
+          app:iconPadding="8dp" />
         
         <com.google.android.material.button.MaterialButton
           android:id="@+id/btnShowGuide"

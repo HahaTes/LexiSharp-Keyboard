@@ -186,6 +186,16 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnExportSettings)?.setOnClickListener {
             startActivity(Intent(this, BackupSettingsActivity::class.java))
         }
+
+        // 识别历史页入口
+        findViewById<Button>(R.id.btnOpenAsrHistory)?.setOnClickListener {
+            try {
+                startActivity(Intent(this, com.brycewg.asrkb.ui.history.AsrHistoryActivity::class.java))
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to open AsrHistoryActivity", e)
+                Toast.makeText(this, getString(R.string.toast_debug_failed), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     // ==================== 一键设置相关 ====================
