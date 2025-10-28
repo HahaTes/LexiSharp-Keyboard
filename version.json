@@ -1,8 +1,8 @@
 {
-  "version": "3.3.1",
-  "version_code": 83,
-  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.3.1",
-  "release_notes": "本次更新包含 7 个提交:\n- feat(gemini): 支持Gemini多 API 密钥轮换并添加关闭思考选项\n- style(ui): 确保键盘按钮的波纹效果正确裁剪\n- fix(ime): 修复退格手势清空后撤销快照并优化判定\n- feat(ime): 优化编辑面板后处理Prompt选择器并改进上次 ASR 文本替换\n- feat(config): 增强 LLM 端点配置校验并允许 HTTP 流量\n- feat(ime): 修复后处理状态不刷新的问题\n- feat(docs): 更新 README 和 README_EN，添加 AI 编辑面板功能描述",
+  "version": "3.3.2",
+  "version_code": 84,
+  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.3.2",
+  "release_notes": "本次更新包含 2 个提交:\n- fix(ime): 确保获取 ASR 结果后立即切换到 Idle 状态\n- fix(ui/settings): 允许语音预设名称为空",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-28T03:24:18Z"
+  "update_time": "2025-10-28T04:11:02Z"
 }
