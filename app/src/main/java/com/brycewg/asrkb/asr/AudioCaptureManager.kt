@@ -150,7 +150,7 @@ class AudioCaptureManager(
                         }
 
                         // 记录调用前是否已为 SCO，避免 finally 误停预热的 SCO
-                        scoWasOnBefore = try { audioManager.isBluetoothScoOn } catch (_: Throwable) { false }
+                        scoWasOnBefore = isScoOnCompat(audioManager)
                         val connected = startScoAndAwaitConnected(audioManager)
                         if (connected) {
                             scoStarted = true
@@ -289,12 +289,7 @@ class AudioCaptureManager(
                 Log.w(TAG, "Failed clearing communication device", t)
             }
             if (scoStarted && !scoWasOnBefore) {
-                try {
-                    audioManager.stopBluetoothSco()
-                    Log.i(TAG, "Bluetooth SCO stopped")
-                } catch (t: Throwable) {
-                    Log.w(TAG, "stopBluetoothSco failed", t)
-                }
+                stopScoCompat(audioManager)
             }
             if (audioModeChanged && previousAudioMode != null) {
                 try {
@@ -515,10 +510,12 @@ class AudioCaptureManager(
                         try { r.run() } catch (t: Throwable) { Log.w(TAG, "CommDevice listener runnable error", t) }
                     }
                     val l = AudioManager.OnCommunicationDeviceChangedListener { dev ->
-                        if (dev != null && selected != null && dev.id == selected.id) {
-                            val dt = if (t0 > 0) (android.os.SystemClock.elapsedRealtime() - t0) else -1
-                            if (dt >= 0) Log.i(TAG, "Communication device ready in ${dt}ms (id=${dev.id})")
-                            if (cont.isActive) cont.resume(true)
+                        selected?.let { sel ->
+                            if (dev != null && dev.id == sel.id) {
+                                val dt = if (t0 > 0) (android.os.SystemClock.elapsedRealtime() - t0) else -1
+                                if (dt >= 0) Log.i(TAG, "Communication device ready in ${dt}ms (id=${dev.id})")
+                                if (cont.isActive) cont.resume(true)
+                            }
                         }
                     }
                     listenerToken = l
@@ -564,6 +561,7 @@ class AudioCaptureManager(
     /**
      * 旧版：启动 SCO 并等待 ACTION_SCO_AUDIO_STATE_UPDATED 变为 CONNECTED。
      */
+    @Suppress("DEPRECATION")
     private suspend fun startScoAndAwaitConnected(am: AudioManager): Boolean {
         return try {
             if (!am.isBluetoothScoAvailableOffCall) {
@@ -609,15 +607,36 @@ class AudioCaptureManager(
                         if (cont.isActive) cont.resume(false)
                     }
                     cont.invokeOnCancellation {
-                        try { if (receiver != null) context.unregisterReceiver(receiver) } catch (_: Throwable) {}
+                        try { receiver?.let { context.unregisterReceiver(it) } } catch (_: Throwable) {}
                     }
                 }
             } ?: false
-            try { if (receiver != null) context.unregisterReceiver(receiver) } catch (_: Throwable) {}
+            try { receiver?.let { context.unregisterReceiver(it) } } catch (_: Throwable) {}
             ok
         } catch (t: Throwable) {
             Log.w(TAG, "startScoAndAwaitConnected exception", t)
             false
+        }
+    }
+
+    // 仅用于兼容旧版 SCO 路径的封装，集中抑制弃用告警
+    @Suppress("DEPRECATION")
+    private fun isScoOnCompat(am: AudioManager): Boolean {
+        return try {
+            am.isBluetoothScoOn
+        } catch (t: Throwable) {
+            Log.w(TAG, "Query isBluetoothScoOn failed", t)
+            false
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun stopScoCompat(am: AudioManager) {
+        try {
+            am.stopBluetoothSco()
+            Log.i(TAG, "Bluetooth SCO stopped")
+        } catch (t: Throwable) {
+            Log.w(TAG, "stopBluetoothSco failed", t)
         }
     }
 

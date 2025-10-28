@@ -116,6 +116,7 @@ object BluetoothRouteManager {
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun disconnectInternal(reason: String) {
         val ctx = appContext ?: return
         val am = ctx.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -211,6 +212,7 @@ object BluetoothRouteManager {
         try { am.addOnCommunicationDeviceChangedListener(exec, l) } catch (t: Throwable) { Log.w(TAG, "addOnCommunicationDeviceChangedListener", t) }
     }
 
+    @Suppress("DEPRECATION")
     private fun tryLegacyScoConnect(am: AudioManager) {
         // 仅当经典蓝牙可用时尝试；BLE 不涉及 SCO
         if (!am.isBluetoothScoAvailableOffCall) return
