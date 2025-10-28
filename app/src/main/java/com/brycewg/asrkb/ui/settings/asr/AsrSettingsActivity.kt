@@ -511,6 +511,14 @@ class AsrSettingsActivity : AppCompatActivity() {
             bindString { prefs.gemPrompt = it }
         }
 
+        findViewById<MaterialSwitch>(R.id.switchGeminiDisableThinking).apply {
+            isChecked = prefs.geminiDisableThinking
+            setOnCheckedChangeListener { btn, isChecked ->
+                hapticTapIfEnabled(btn)
+                prefs.geminiDisableThinking = isChecked
+            }
+        }
+
         // Key guide link
         findViewById<com.google.android.material.button.MaterialButton>(R.id.btnGeminiGetKey).setOnClickListener { v ->
             hapticTapIfEnabled(v)

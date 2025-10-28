@@ -40,7 +40,7 @@ class GeminiFileAsrEngine(
 
     override fun ensureReady(): Boolean {
         if (!super.ensureReady()) return false
-        if (prefs.gemApiKey.isBlank()) {
+        if (prefs.getGeminiApiKeys().isEmpty()) {
             listener.onError(context.getString(R.string.error_missing_gemini_key))
             return false
         }
@@ -51,11 +51,12 @@ class GeminiFileAsrEngine(
         try {
             val wav = pcmToWav(pcm)
             val b64 = Base64.encodeToString(wav, Base64.NO_WRAP)
-            val apiKey = prefs.gemApiKey
+            val apiKeys = prefs.getGeminiApiKeys()
+            val apiKey = apiKeys.random()
             val model = prefs.gemModel.ifBlank { Prefs.DEFAULT_GEM_MODEL }
             val prompt = prefs.gemPrompt.ifBlank { DEFAULT_GEM_PROMPT }
 
-            val body = buildGeminiRequestBody(b64, prompt)
+            val body = buildGeminiRequestBody(b64, prompt, model)
             val req = Request.Builder()
                 .url("${GEM_BASE}/models/${model}:generateContent?key=${apiKey}")
                 .addHeader("Content-Type", "application/json; charset=utf-8")
@@ -92,7 +93,7 @@ class GeminiFileAsrEngine(
     /**
      * 构建 Gemini API 请求体
      */
-    private fun buildGeminiRequestBody(base64Wav: String, prompt: String): String {
+    private fun buildGeminiRequestBody(base64Wav: String, prompt: String, model: String): String {
         val inlineAudio = JSONObject().apply {
             put("inline_data", JSONObject().apply {
                 put("mime_type", "audio/wav")
@@ -109,7 +110,20 @@ class GeminiFileAsrEngine(
         }
         return JSONObject().apply {
             put("contents", org.json.JSONArray().apply { put(user) })
-            put("generation_config", JSONObject().apply { put("temperature", 0) })
+            put("generation_config", JSONObject().apply {
+                put("temperature", 0)
+                if (prefs.geminiDisableThinking) {
+                    // 根据模型类型设置合适的 thinkingBudget
+                    val budget = when {
+                        model.contains("2.5-pro", ignoreCase = true) -> 128 // Pro 最低 128
+                        model.contains("2.5-flash", ignoreCase = true) -> 0  // Flash 可以为 0
+                        else -> 0 // 其他情况默认为 0
+                    }
+                    put("thinkingConfig", JSONObject().apply {
+                        put("thinkingBudget", budget)
+                    })
+                }
+            })
         }.toString()
     }
 
