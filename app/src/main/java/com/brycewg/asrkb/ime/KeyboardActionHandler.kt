@@ -986,12 +986,14 @@ class KeyboardActionHandler(
     private fun transitionToIdleWithTiming() {
         val ms = asrManager.getLastRequestDuration()
         if (ms != null) {
+            // 立刻切到 Idle，确保此时再次点按可直接开始录音，同时取消任何兜底定时器，避免后续误判为“取消”
+            transitionToIdle(keepMessage = true)
+            // 切换到 Idle 后再设置耗时文案，避免被 UI 的 Idle 文案覆盖
             uiListener?.onStatusMessage(context.getString(R.string.status_last_request_ms, ms))
-            // 延迟恢复到 Idle
             scope.launch {
                 kotlinx.coroutines.delay(1500)
                 if (currentState !is KeyboardState.Listening) {
-                    transitionToIdle()
+                    uiListener?.onStatusMessage(context.getString(R.string.status_idle))
                 }
             }
         } else {
