@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.inputmethod.InputConnection
 import com.brycewg.asrkb.R
 import com.brycewg.asrkb.asr.LlmPostProcessor
+import com.brycewg.asrkb.util.TextSanitizer
 import com.brycewg.asrkb.store.Prefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -729,7 +730,7 @@ class KeyboardActionHandler(
         uiListener?.onStatusMessage(context.getString(R.string.status_ai_processing))
 
         // AI 后处理
-        val raw = if (prefs.trimFinalTrailingPunct) trimTrailingPunctuation(text) else text
+        val raw = if (prefs.trimFinalTrailingPunct) TextSanitizer.trimTrailingPunctAndEmoji(text) else text
         var postprocFailed = false
         val processed = try {
             val res = llmPostProcessor.processWithStatus(raw, prefs)
@@ -747,7 +748,7 @@ class KeyboardActionHandler(
 
         // 如果开启去除句尾标点，对 LLM 结果也修剪一次
         val finalProcessed = if (prefs.trimFinalTrailingPunct) {
-            trimTrailingPunctuation(processed)
+            TextSanitizer.trimTrailingPunctAndEmoji(processed)
         } else {
             processed
         }
@@ -831,7 +832,7 @@ class KeyboardActionHandler(
         seq: Long
     ) {
         val trimmedFinal = if (prefs.trimFinalTrailingPunct) {
-            trimTrailingPunctuation(text)
+            TextSanitizer.trimTrailingPunctAndEmoji(text)
         } else {
             text
         }
@@ -949,7 +950,7 @@ class KeyboardActionHandler(
         uiListener?.onStatusMessage(context.getString(R.string.status_ai_editing))
 
         val instruction = if (prefs.trimFinalTrailingPunct) {
-            trimTrailingPunctuation(text)
+            TextSanitizer.trimTrailingPunctAndEmoji(text)
         } else {
             text
         }
@@ -1035,10 +1036,6 @@ class KeyboardActionHandler(
         }
     }
 
-    private fun trimTrailingPunctuation(s: String): String {
-        if (s.isEmpty()) return s
-        return s.replace(Regex("[\\p{Punct}，。！？；、：]+$"), "")
-    }
 
     /**
      * 获取当前输入连接（需要从外部注入）

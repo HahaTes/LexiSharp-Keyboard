@@ -146,7 +146,7 @@
     
     <string name="btn_close">Close</string>
     <string name="title_quick_guide">Quick Start Guide</string>
-    <string name="label_trim_trailing_punct">Remove trailing punctuation on finish</string>
+    <string name="label_trim_trailing_punct">Remove trailing punctuation and emoji on finish</string>
     <string name="label_mic_haptic">Haptic feedback for keys and floating ball</string>
     <string name="label_mic_tap_toggle">Use tap to control recording</string>
     <string name="label_floating_only_when_ime_visible">Only show floating ball when keyboard is visible</string>

@@ -12,6 +12,7 @@ import com.brycewg.asrkb.asr.*
 import com.brycewg.asrkb.asr.BluetoothRouteManager
 import com.brycewg.asrkb.store.Prefs
 import com.brycewg.asrkb.ui.AsrAccessibilityService.FocusContext
+import com.brycewg.asrkb.util.TextSanitizer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -197,7 +198,7 @@ class AsrSessionManager(
                     listener.onSessionStateChanged(FloatingBallState.Processing)
                 }
 
-                val raw = if (prefs.trimFinalTrailingPunct) trimTrailingPunctuation(text) else text
+                val raw = if (prefs.trimFinalTrailingPunct) TextSanitizer.trimTrailingPunctAndEmoji(text) else text
                 finalText = try {
                     val res = postproc.processWithStatus(raw, prefs)
                     if (!res.ok) Log.w(TAG, "Post-processing failed; using raw text: ${res.httpCode ?: ""} ${res.errorMessage ?: ""}")
@@ -208,11 +209,11 @@ class AsrSessionManager(
                 }
 
                 if (prefs.trimFinalTrailingPunct) {
-                    finalText = trimTrailingPunctuation(finalText)
+                    finalText = TextSanitizer.trimTrailingPunctAndEmoji(finalText)
                 }
                 Log.d(TAG, "Post-processing completed: $finalText")
             } else if (prefs.trimFinalTrailingPunct) {
-                finalText = trimTrailingPunctuation(text)
+                finalText = TextSanitizer.trimTrailingPunctAndEmoji(text)
             }
 
             // 更新状态
@@ -444,7 +445,7 @@ class AsrSessionManager(
         }
 
         var textOut = candidate
-        if (prefs.trimFinalTrailingPunct) textOut = trimTrailingPunctuation(textOut)
+        if (prefs.trimFinalTrailingPunct) textOut = TextSanitizer.trimTrailingPunctAndEmoji(textOut)
         if (prefs.postProcessEnabled && prefs.hasLlmKeys()) {
             try {
                 val res = postproc.processWithStatus(textOut, prefs)
@@ -453,7 +454,7 @@ class AsrSessionManager(
             } catch (e: Throwable) {
                 Log.e(TAG, "Post-processing failed in timeout fallback", e)
             }
-            if (prefs.trimFinalTrailingPunct) textOut = trimTrailingPunctuation(textOut)
+            if (prefs.trimFinalTrailingPunct) textOut = TextSanitizer.trimTrailingPunctAndEmoji(textOut)
         }
 
         val success = insertTextToFocus(textOut)
@@ -574,11 +575,5 @@ class AsrSessionManager(
         val rules = raw.split('\n').map { it.trim() }.filter { it.isNotEmpty() }
         // 前缀匹配（包名边界）
         return rules.any { rule -> pkg == rule || pkg.startsWith("$rule.") }
-    }
-
-    private fun trimTrailingPunctuation(s: String): String {
-        if (s.isEmpty()) return s
-        val regex = Regex("[\\p{Punct}，。！？；、：]+$")
-        return s.replace(regex, "")
     }
 }

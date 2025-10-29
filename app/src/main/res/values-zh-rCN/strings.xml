@@ -128,7 +128,7 @@
     
     <string name="btn_close">关闭</string>
     <string name="title_quick_guide">快速上手教程</string>
-    <string name="label_trim_trailing_punct">完成后去除句末标点</string>
+    <string name="label_trim_trailing_punct">完成后去除句末标点与 emoji</string>
     <string name="label_mic_haptic">按键与悬浮球振动反馈</string>
     <string name="label_mic_tap_toggle">语音键盘使用点按控制</string>
     <string name="label_floating_alpha">悬浮球透明度</string>
