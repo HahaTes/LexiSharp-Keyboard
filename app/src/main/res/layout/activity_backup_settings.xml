@@ -147,6 +147,13 @@
         android:textColor="@android:color/darker_gray"
         android:text="@string/tip_backup_contains_secrets" />
 
+      <!-- Pro 插槽：仅在 Pro 变体中通过运行时注入 UI-->
+      <ViewStub
+        android:id="@+id/pro_inject_stub_backup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" />
+
     </LinearLayout>
   </androidx.core.widget.NestedScrollView>
 
