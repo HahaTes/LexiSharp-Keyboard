@@ -12,6 +12,64 @@
     app:titleCentered="true"
     app:title="@string/title_asr_history" />
 
+  <!-- 操作胶囊按钮行：筛选 / 全选 / 取消全选 -->
+  <HorizontalScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="0dp"
+    android:fillViewport="false">
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
+
+      <com.google.android.material.chip.Chip
+        android:id="@+id/chipFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/menu_filter"
+        android:checkable="false" />
+
+      <com.google.android.material.chip.Chip
+        android:id="@+id/chipSelectAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/menu_select_all"
+        android:checkable="false" />
+
+      <com.google.android.material.chip.Chip
+        android:id="@+id/chipClearSelection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/menu_clear_selection"
+        android:checkable="false" />
+        
+      <com.google.android.material.chip.Chip
+        android:id="@+id/chipDeleteSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/menu_delete_selected"
+        android:checkable="false" />
+
+      <com.google.android.material.chip.Chip
+        android:id="@+id/chipSelectionCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="0"
+        android:clickable="false"
+        android:checkable="false"
+        android:visibility="gone" />
+
+    </LinearLayout>
+  </HorizontalScrollView>
+
   <com.google.android.material.textfield.TextInputLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -46,4 +104,3 @@
     android:visibility="gone" />
 
 </LinearLayout>
-

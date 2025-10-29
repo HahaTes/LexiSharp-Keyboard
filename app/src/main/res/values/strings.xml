@@ -293,6 +293,9 @@
     <string name="ai_processed_yes">已后处理</string>
     <string name="ai_processed_no">未后处理</string>
     <string name="label_timestamp">时间</string>
+    <string name="label_time">时间范围</string>
+    <string name="filter_time_all">不限</string>
+    <string name="filter_all">不限</string>
     <string name="btn_copy">复制</string>
     <string name="toast_copied">已复制</string>
     <string name="yes">是</string>
@@ -304,6 +307,7 @@
     <string name="dialog_filter_title">筛选</string>
     <string name="dialog_filter_ok">确定</string>
     <string name="dialog_filter_cancel">取消</string>
+    <string name="dialog_filter_reset">重置</string>
     <string name="dialog_delete_selected_title">删除确认</string>
     <string name="dialog_delete_selected_msg">确定删除选中的 %1$d 条记录吗？此操作不可撤销。</string>
     <string name="toast_deleted">已删除 %1$d 条记录</string>

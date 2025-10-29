@@ -4,15 +4,18 @@
   <item
     android:id="@+id/action_filter"
     android:title="@string/menu_filter"
-    app:showAsAction="never" />
+    app:showAsAction="always"
+    app:actionLayout="@layout/toolbar_chip_filter" />
   <item
     android:id="@+id/action_select_all"
     android:title="@string/menu_select_all"
-    app:showAsAction="never" />
+    app:showAsAction="always"
+    app:actionLayout="@layout/toolbar_chip_select_all" />
   <item
     android:id="@+id/action_clear_selection"
     android:title="@string/menu_clear_selection"
-    app:showAsAction="never" />
+    app:showAsAction="always"
+    app:actionLayout="@layout/toolbar_chip_clear_selection" />
   <item
     android:id="@+id/action_delete_selected"
     android:title="@string/menu_delete_selected"

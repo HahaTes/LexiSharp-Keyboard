@@ -376,6 +376,9 @@
     <string name="ai_processed_yes">Post-processed</string>
     <string name="ai_processed_no">Not post-processed</string>
     <string name="label_timestamp">Time</string>
+    <string name="label_time">Time Range</string>
+    <string name="filter_time_all">All</string>
+    <string name="filter_all">All</string>
     <string name="btn_copy">Copy</string>
     <string name="toast_copied">Copied</string>
     <string name="yes">Yes</string>
@@ -387,6 +390,7 @@
     <string name="dialog_filter_title">Filter</string>
     <string name="dialog_filter_ok">OK</string>
     <string name="dialog_filter_cancel">Cancel</string>
+    <string name="dialog_filter_reset">Reset</string>
     <string name="dialog_delete_selected_title">Confirm Delete</string>
     <string name="dialog_delete_selected_msg">Delete %1$d selected items? This action cannot be undone.</string>
     <string name="toast_deleted">Deleted %1$d item(s)</string>

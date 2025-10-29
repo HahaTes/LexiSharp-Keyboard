@@ -29,21 +29,13 @@
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintBottom_toBottomOf="parent" />
 
-    <CheckBox
-      android:id="@+id/cbSelect"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:visibility="gone"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
       android:id="@+id/tvTimestamp"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:textColor="?attr/colorOnSurface"
       android:textSize="12sp"
-      app:layout_constraintStart_toEndOf="@id/cbSelect"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintEnd_toStartOf="@id/btnCopy"
       android:layout_marginStart="8dp"

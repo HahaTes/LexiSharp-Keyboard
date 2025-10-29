@@ -12,7 +12,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.card.MaterialCardView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -25,6 +26,8 @@ import com.brycewg.asrkb.asr.AsrVendor
 import com.brycewg.asrkb.store.AsrHistoryStore
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -42,16 +45,28 @@ class AsrHistoryActivity : AppCompatActivity() {
     private const val TAG = "AsrHistoryActivity"
   }
 
+  private enum class TimeFilter { ALL, WITHIN_2H, TODAY, LAST_7D, LAST_30D }
+
   private lateinit var store: AsrHistoryStore
   private lateinit var adapter: HistoryAdapter
   private lateinit var rv: RecyclerView
   private lateinit var etSearch: TextInputEditText
   private lateinit var tvEmpty: TextView
+  private lateinit var chipFilter: com.google.android.material.chip.Chip
+  private lateinit var chipSelectAll: com.google.android.material.chip.Chip
+  private lateinit var chipClearSelection: com.google.android.material.chip.Chip
+  private lateinit var chipDeleteSelected: com.google.android.material.chip.Chip
+  private lateinit var chipSelectionCount: com.google.android.material.chip.Chip
 
   private var allRecords: List<AsrHistoryStore.AsrHistoryRecord> = emptyList()
   private var filtered: List<AsrHistoryStore.AsrHistoryRecord> = emptyList()
   private var activeVendorIds: Set<String> = emptySet() // 为空表示不过滤
   private var activeSources: Set<String> = emptySet() // "ime"/"floating"；为空表示不过滤
+  private var activeTimeFilter: TimeFilter = TimeFilter.ALL
+  // 分页：默认一次加载 30 条，向下滚动加载更多；搜索时不分页
+  private val pageSize: Int = 30
+  private var currentDisplayLimit: Int = pageSize
+  private var isLoadingMore: Boolean = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -68,6 +83,7 @@ class AsrHistoryActivity : AppCompatActivity() {
       Log.w(TAG, "Failed to setSupportActionBar", e)
       // 兜底：手动管理菜单
       tb.inflateMenu(R.menu.menu_asr_history)
+      wireToolbarActions(tb.menu)
       tb.setOnMenuItemClickListener { onOptionsItemSelected(it) }
     }
 
@@ -78,12 +94,45 @@ class AsrHistoryActivity : AppCompatActivity() {
       onSelectionChanged = { updateToolbarTitleWithSelection() }
     )
     rv.adapter = adapter
+    // 无限滚动加载更多（仅在未搜索时启用）
+    rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+      override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        super.onScrolled(recyclerView, dx, dy)
+        if (dy <= 0) return
+        val lm = recyclerView.layoutManager as? LinearLayoutManager ?: return
+        val last = lm.findLastVisibleItemPosition()
+        val q = etSearch.text?.toString()?.trim().orEmpty()
+        val hasMore = q.isEmpty() && currentDisplayLimit < filtered.size
+        if (!isLoadingMore && hasMore && last >= (adapter.itemCount - 4).coerceAtLeast(0)) {
+          // 触底前预取下一页
+          isLoadingMore = true
+          currentDisplayLimit = (currentDisplayLimit + pageSize).coerceAtMost(filtered.size)
+          // 仅基于最新 filtered 重渲染（保留选择）
+          renderCurrentWithLimit()
+          isLoadingMore = false
+        }
+      }
+    })
+
+    chipFilter = findViewById(R.id.chipFilter)
+    chipSelectAll = findViewById(R.id.chipSelectAll)
+    chipClearSelection = findViewById(R.id.chipClearSelection)
+    chipDeleteSelected = findViewById(R.id.chipDeleteSelected)
+    chipSelectionCount = findViewById(R.id.chipSelectionCount)
+    chipFilter.setOnClickListener { showFilterDialog() }
+    chipSelectAll.setOnClickListener { adapter.selectAll(true); updateToolbarTitleWithSelection() }
+    chipClearSelection.setOnClickListener { adapter.selectAll(false); updateToolbarTitleWithSelection() }
+    chipDeleteSelected.setOnClickListener { confirmDeleteSelected() }
 
     etSearch = findViewById(R.id.etSearch)
     etSearch.addTextChangedListener(object : TextWatcher {
       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
       override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-      override fun afterTextChanged(s: Editable?) { applyFilterAndRender() }
+      override fun afterTextChanged(s: Editable?) {
+        val qNow = s?.toString()?.trim().orEmpty()
+        if (qNow.isEmpty()) currentDisplayLimit = pageSize
+        applyFilterAndRender()
+      }
     })
 
     tvEmpty = findViewById(R.id.tvEmpty)
@@ -93,12 +142,15 @@ class AsrHistoryActivity : AppCompatActivity() {
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.menu_asr_history, menu)
+    wireToolbarActions(menu)
     updateMenuVisibility(menu)
     return true
   }
 
   override fun onPrepareOptionsMenu(menu: Menu): Boolean {
     updateMenuVisibility(menu)
+    // 确保 actionView 存在且有点击行为（某些设备上可能在此时才完成渲染）
+    wireToolbarActions(menu)
     return super.onPrepareOptionsMenu(menu)
   }
 
@@ -114,10 +166,12 @@ class AsrHistoryActivity : AppCompatActivity() {
 
   private fun updateMenuVisibility(menu: Menu) {
     val anySelected = adapter.getSelectedCount() > 0
-    menu.findItem(R.id.action_delete_selected)?.isVisible = anySelected
-    menu.findItem(R.id.action_clear_selection)?.isVisible = anySelected
-    menu.findItem(R.id.action_select_all)?.isVisible = !anySelected && adapter.hasData()
-    menu.findItem(R.id.action_filter)?.isVisible = true
+    // 顶栏也不再显示删除按钮
+    menu.findItem(R.id.action_delete_selected)?.isVisible = false
+    // 顶栏改为单独一行胶囊按钮，隐藏这三项菜单入口
+    menu.findItem(R.id.action_clear_selection)?.isVisible = false
+    menu.findItem(R.id.action_select_all)?.isVisible = false
+    menu.findItem(R.id.action_filter)?.isVisible = false
   }
 
   private fun updateToolbarTitleWithSelection() {
@@ -125,47 +179,167 @@ class AsrHistoryActivity : AppCompatActivity() {
       invalidateOptionsMenu()
       val tb = findViewById<MaterialToolbar>(R.id.toolbar)
       val sel = adapter.getSelectedCount()
-      tb.subtitle = if (sel > 0) "$sel" else null
+      tb.subtitle = null
+      // 同步更新胶囊按钮显示状态
+      val anySelected = sel > 0
+      chipClearSelection.visibility = if (anySelected) View.VISIBLE else View.GONE
+      chipDeleteSelected.visibility = if (anySelected) View.VISIBLE else View.GONE
+      chipSelectAll.visibility = if (!anySelected && adapter.hasData()) View.VISIBLE else View.GONE
+      chipFilter.visibility = View.VISIBLE
+      chipSelectionCount.text = sel.toString()
+      chipSelectionCount.visibility = if (anySelected) View.VISIBLE else View.GONE
     } catch (e: Exception) {
       Log.w(TAG, "Failed to update subtitle", e)
     }
   }
+  private fun wireToolbarActions(menu: Menu) {
+    menu.findItem(R.id.action_filter)?.actionView?.setOnClickListener { showFilterDialog() }
+    menu.findItem(R.id.action_select_all)?.actionView?.setOnClickListener {
+      adapter.selectAll(true)
+      updateToolbarTitleWithSelection()
+    }
+    menu.findItem(R.id.action_clear_selection)?.actionView?.setOnClickListener {
+      adapter.selectAll(false)
+      updateToolbarTitleWithSelection()
+    }
+  }
 
   private fun showFilterDialog() {
+    val content = layoutInflater.inflate(R.layout.dialog_asr_history_filter, null)
+    val cgVendors = content.findViewById<ChipGroup>(R.id.cgVendors)
+    val cgSources = content.findViewById<ChipGroup>(R.id.cgSources)
+    val cgTime = content.findViewById<ChipGroup>(R.id.cgTime)
+
+    fun createChip(text: String, tag: String): Chip {
+      val chip = Chip(this)
+      chip.text = text
+      chip.tag = tag
+      chip.isCheckable = true
+      chip.isCheckedIconVisible = false
+      chip.isChipIconVisible = false
+      chip.id = View.generateViewId()
+      return chip
+    }
+
+    // Vendors
     val vendors = AsrVendor.values().toList()
-    val vendorNames = vendors.map { getVendorName(it) }.toTypedArray()
-    val vendorChecked = vendors.map { activeVendorIds.isNotEmpty() && activeVendorIds.contains(it.id) }.toBooleanArray()
-
-    val sources = arrayOf("ime", "floating")
-    val sourceNames = arrayOf(getString(R.string.source_ime), getString(R.string.source_floating))
-    val sourceChecked = sources.map { activeSources.isNotEmpty() && activeSources.contains(it) }.toBooleanArray()
-
-    val view = layoutInflater.inflate(android.R.layout.simple_list_item_1, null)
-    // 采用双对话框简化：先选供应商再选来源
-    AlertDialog.Builder(this)
-      .setTitle(getString(R.string.dialog_filter_title) + " - " + getString(R.string.label_vendor))
-      .setMultiChoiceItems(vendorNames, vendorChecked) { _, which, isChecked ->
-        vendorChecked[which] = isChecked
+    val allVendorChip = createChip(getString(R.string.filter_all), "ALL")
+    allVendorChip.isChecked = activeVendorIds.isEmpty()
+    cgVendors.addView(allVendorChip)
+    vendors.forEach { v ->
+      val chip = createChip(getVendorName(v), v.id)
+      chip.isChecked = activeVendorIds.isNotEmpty() && activeVendorIds.contains(v.id)
+      cgVendors.addView(chip)
+    }
+    cgVendors.setOnCheckedStateChangeListener { group, checkedIds ->
+      val allChip = group.findViewWithTag<Chip>("ALL")
+      val hasAll = checkedIds.contains(allChip.id)
+      val hasOthers = checkedIds.any { it != allChip.id }
+      if (hasAll && hasOthers) {
+        // 当选择了其他供应商时，自动取消“不限”
+        allChip.isChecked = false
+      } else if (hasAll && !hasOthers) {
+        // 仅选择“不限”时，确保其他都未选
+        for (i in 0 until group.childCount) {
+          val c = group.getChildAt(i) as? Chip ?: continue
+          if (c.tag != "ALL") c.isChecked = false
+        }
+      } else {
+        // 仅选择了其他供应商：确保“不限”未选中
+        allChip.isChecked = false
       }
-      .setPositiveButton(R.string.dialog_filter_ok) { dlg, _ ->
-        val selVendorIds = vendors.filterIndexed { idx, _ -> vendorChecked[idx] }.map { it.id }.toSet()
+    }
 
-        // 来源子对话框
-        AlertDialog.Builder(this)
-          .setTitle(getString(R.string.dialog_filter_title) + " - " + getString(R.string.label_source))
-          .setMultiChoiceItems(sourceNames, sourceChecked) { _, which, isChecked ->
-            sourceChecked[which] = isChecked
-          }
-          .setPositiveButton(R.string.dialog_filter_ok) { _, _ ->
-            activeVendorIds = if (selVendorIds.isEmpty()) emptySet() else selVendorIds
-            val selSources = sources.filterIndexed { idx, _ -> sourceChecked[idx] }.toSet()
-            activeSources = if (selSources.isEmpty()) emptySet() else selSources
-            applyFilterAndRender()
-          }
-          .setNegativeButton(R.string.dialog_filter_cancel, null)
-          .show()
+    // Sources
+    val sources = listOf("ime" to getString(R.string.source_ime), "floating" to getString(R.string.source_floating))
+    cgSources.isSingleSelection = true
+    val allSrcChip = createChip(getString(R.string.filter_all), "ALL")
+    val initialSrcTag = if (activeSources.isEmpty()) "ALL" else activeSources.first()
+    allSrcChip.isChecked = initialSrcTag == "ALL"
+    cgSources.addView(allSrcChip)
+    sources.forEach { (id, label) ->
+      val chip = createChip(label, id)
+      chip.isChecked = initialSrcTag == id
+      cgSources.addView(chip)
+    }
+    cgSources.setOnCheckedStateChangeListener { group, checkedIds ->
+      val allChip = group.findViewWithTag<Chip>("ALL")
+      // 单选：若选择了“不限”，确保其他不选；若选择了其他，自动取消“不限”
+      if (checkedIds.contains(allChip.id)) {
+        for (i in 0 until group.childCount) {
+          val c = group.getChildAt(i) as? Chip ?: continue
+          if (c.tag != "ALL") c.isChecked = false
+        }
+      } else {
+        allChip.isChecked = false
+      }
+    }
 
-        dlg.dismiss()
+    // Time (single selection)
+    cgTime.isSingleSelection = true
+    val timeAll = createChip(getString(R.string.filter_all), "all")
+    val time2h = createChip(getString(R.string.history_section_2h), "2h")
+    val timeToday = createChip(getString(R.string.history_section_today), "today")
+    val time7d = createChip(getString(R.string.history_section_7d), "7d")
+    val time30d = createChip(getString(R.string.history_section_30d), "30d")
+    cgTime.addView(timeAll)
+    cgTime.addView(time2h)
+    cgTime.addView(timeToday)
+    cgTime.addView(time7d)
+    cgTime.addView(time30d)
+    when (activeTimeFilter) {
+      TimeFilter.ALL -> timeAll.isChecked = true
+      TimeFilter.WITHIN_2H -> time2h.isChecked = true
+      TimeFilter.TODAY -> timeToday.isChecked = true
+      TimeFilter.LAST_7D -> time7d.isChecked = true
+      TimeFilter.LAST_30D -> time30d.isChecked = true
+    }
+
+    AlertDialog.Builder(this)
+      .setTitle(R.string.dialog_filter_title)
+      .setView(content)
+      .setPositiveButton(R.string.dialog_filter_ok) { _, _ ->
+        // Read vendors
+        val selectedVendorIds = mutableSetOf<String>()
+        var vendorAllSelected = false
+        for (i in 0 until cgVendors.childCount) {
+          val c = cgVendors.getChildAt(i) as? Chip ?: continue
+          if (c.isChecked) {
+            if (c.tag == "ALL") vendorAllSelected = true else selectedVendorIds.add(c.tag as String)
+          }
+        }
+        activeVendorIds = if (vendorAllSelected || selectedVendorIds.isEmpty()) emptySet() else selectedVendorIds
+
+        // Read sources
+        val selectedSources = mutableSetOf<String>()
+        var srcAllSelected = false
+        for (i in 0 until cgSources.childCount) {
+          val c = cgSources.getChildAt(i) as? Chip ?: continue
+          if (c.isChecked) {
+            if (c.tag == "ALL") srcAllSelected = true else selectedSources.add(c.tag as String)
+          }
+        }
+        activeSources = if (srcAllSelected || selectedSources.isEmpty()) emptySet() else selectedSources
+
+        // Read time
+        val checkedTimeId = cgTime.checkedChipId
+        val timeChip = cgTime.findViewById<Chip>(checkedTimeId)
+        activeTimeFilter = when (timeChip?.tag as? String) {
+          "2h" -> TimeFilter.WITHIN_2H
+          "today" -> TimeFilter.TODAY
+          "7d" -> TimeFilter.LAST_7D
+          "30d" -> TimeFilter.LAST_30D
+          else -> TimeFilter.ALL
+        }
+        currentDisplayLimit = pageSize
+        applyFilterAndRender()
+      }
+      .setNeutralButton(R.string.dialog_filter_reset) { _, _ ->
+        activeVendorIds = emptySet()
+        activeSources = emptySet()
+        activeTimeFilter = TimeFilter.ALL
+        currentDisplayLimit = pageSize
+        applyFilterAndRender()
       }
       .setNegativeButton(R.string.dialog_filter_cancel, null)
       .show()
@@ -199,18 +373,57 @@ class AsrHistoryActivity : AppCompatActivity() {
 
   private fun loadData() {
     allRecords = try { store.listAll() } catch (e: Exception) { Log.e(TAG, "listAll failed", e); emptyList() }
+    // 重新加载数据时重置分页
+    currentDisplayLimit = pageSize
     applyFilterAndRender()
   }
 
   private fun applyFilterAndRender() {
     val q = etSearch.text?.toString()?.trim().orEmpty()
+    val now = System.currentTimeMillis()
+    val cal = java.util.Calendar.getInstance()
+    cal.timeInMillis = now
+    cal.set(java.util.Calendar.HOUR_OF_DAY, 0)
+    cal.set(java.util.Calendar.MINUTE, 0)
+    cal.set(java.util.Calendar.SECOND, 0)
+    cal.set(java.util.Calendar.MILLISECOND, 0)
+    val startOfToday = cal.timeInMillis
+    val twoHoursMs = 2 * 60 * 60 * 1000L
+    val weekMs = 7 * 24 * 60 * 60 * 1000L
+    val monthMs = 30 * 24 * 60 * 60 * 1000L
     filtered = allRecords.filter { r ->
       val okVendor = activeVendorIds.isEmpty() || activeVendorIds.contains(r.vendorId)
       val okSrc = activeSources.isEmpty() || activeSources.contains(r.source)
       val okText = q.isEmpty() || r.text.contains(q, ignoreCase = true)
-      okVendor && okSrc && okText
+      val okTime = when (activeTimeFilter) {
+        TimeFilter.ALL -> true
+        TimeFilter.WITHIN_2H -> r.timestamp >= now - twoHoursMs
+        TimeFilter.TODAY -> r.timestamp in startOfToday..now
+        TimeFilter.LAST_7D -> r.timestamp >= now - weekMs
+        TimeFilter.LAST_30D -> r.timestamp >= now - monthMs
+      }
+      okVendor && okSrc && okText && okTime
     }
-    val rows = buildRows(filtered)
+    // 搜索时不分页；未搜索时按分页限制展示
+    if (q.isEmpty()) {
+      // 若筛选条件变更，重置分页游标（避免显示数量与过滤后总数不协调）
+      if (currentDisplayLimit > filtered.size) currentDisplayLimit = filtered.size
+      if (currentDisplayLimit <= 0) currentDisplayLimit = pageSize.coerceAtMost(filtered.size)
+      renderCurrentWithLimit()
+    } else {
+      // 搜索：直接展示所有匹配项
+      val selectedIds = adapter.getSelectedIds()
+      val rows = buildRows(filtered, selectedIds)
+      adapter.submit(rows)
+      tvEmpty.visibility = if (rows.isEmpty()) View.VISIBLE else View.GONE
+      updateToolbarTitleWithSelection()
+    }
+  }
+
+  private fun renderCurrentWithLimit() {
+    val selectedIds = adapter.getSelectedIds()
+    val display = if (filtered.isEmpty()) emptyList() else filtered.take(currentDisplayLimit)
+    val rows = buildRows(display, selectedIds)
     adapter.submit(rows)
     tvEmpty.visibility = if (rows.isEmpty()) View.VISIBLE else View.GONE
     updateToolbarTitleWithSelection()
@@ -229,7 +442,7 @@ class AsrHistoryActivity : AppCompatActivity() {
     }
   }
 
-  private fun buildRows(list: List<AsrHistoryStore.AsrHistoryRecord>): List<Row> {
+  private fun buildRows(list: List<AsrHistoryStore.AsrHistoryRecord>, selected: Set<String> = emptySet()): List<Row> {
     val now = System.currentTimeMillis()
     val startOfToday = java.util.Calendar.getInstance().apply {
       timeInMillis = now
@@ -246,7 +459,7 @@ class AsrHistoryActivity : AppCompatActivity() {
     fun addSection(titleRes: Int, items: List<AsrHistoryStore.AsrHistoryRecord>) {
       if (items.isNotEmpty()) {
         rows.add(Row.Header(getString(titleRes)))
-        items.forEach { rows.add(Row.Item(it)) }
+        items.forEach { r -> rows.add(Row.Item(r, selected = selected.contains(r.id))) }
       }
     }
 
@@ -347,7 +560,6 @@ class AsrHistoryActivity : AppCompatActivity() {
       private val tvTimestamp = v.findViewById<TextView>(R.id.tvTimestamp)
       private val tvText = v.findViewById<TextView>(R.id.tvText)
       private val tvMeta = v.findViewById<TextView>(R.id.tvMeta)
-      private val cb = v.findViewById<CheckBox>(R.id.cbSelect)
       private val btnCopy = v.findViewById<MaterialButton>(R.id.btnCopy)
 
       private val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -363,12 +575,11 @@ class AsrHistoryActivity : AppCompatActivity() {
         val durPart = itemView.context.getString(R.string.meta_cost_seconds, r.audioMs / 1000.0)
         tvMeta.text = listOf(vendor, source, ai, charsPart, durPart).joinToString("·")
 
-        cb.visibility = if (getSelectedCount() > 0) View.VISIBLE else View.GONE
-        cb.isChecked = row.selected
-        cb.setOnCheckedChangeListener { _, isChecked ->
-          row.selected = isChecked
-          onSelectionChanged()
-        }
+        // 选中高亮（不使用勾选图标），使用更深的 Monet 取色
+        val card = itemView as MaterialCardView
+        val colorSelected = MaterialColors.getColor(itemView, com.google.android.material.R.attr.colorSecondaryContainer)
+        val colorDefault = MaterialColors.getColor(itemView, com.google.android.material.R.attr.colorSurface)
+        card.setCardBackgroundColor(if (row.selected) colorSelected else colorDefault)
 
         itemView.setOnLongClickListener {
           val before = getSelectedCount()
