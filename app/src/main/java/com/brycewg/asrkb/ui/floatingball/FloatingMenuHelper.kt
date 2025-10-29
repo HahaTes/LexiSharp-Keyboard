@@ -259,6 +259,171 @@ class FloatingMenuHelper(
     }
 
     /**
+     * 创建并显示“文本列表”面板（支持滚动），用于展示识别历史纯文本
+     * @param anchorCenter 悬浮球中心点坐标
+     * @param alpha UI 透明度
+     * @param title 标题
+     * @param texts 文本条目列表，仅展示内容
+     * @param onItemClick 点击条目回调（已在本方法中先执行，再移除面板）
+     * @param onDismiss 面板关闭回调
+     */
+    fun showScrollableTextPanel(
+        anchorCenter: Pair<Int, Int>,
+        alpha: Float,
+        title: String,
+        texts: List<String>,
+        onItemClick: (String) -> Unit,
+        onDismiss: () -> Unit
+    ): View? {
+        try {
+            val root = android.widget.FrameLayout(context).apply {
+                setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                isClickable = true
+                isFocusable = true
+                isFocusableInTouchMode = true
+                setOnClickListener {
+                    try { windowManager.removeView(this) } catch (e: Throwable) {
+                        Log.e(TAG, "Failed to remove text panel root on blank click", e)
+                    }
+                    onDismiss()
+                }
+            }
+            root.alpha = 1.0f
+            try { root.requestFocus() } catch (e: Throwable) { Log.w(TAG, "Failed to request focus for text panel root", e) }
+
+            val container = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                background = ContextCompat.getDrawable(context, R.drawable.bg_panel_round)
+                val pad = dp(12)
+                setPadding(pad, pad, pad, pad)
+            }
+
+            val titleView = TextView(context).apply {
+                text = title
+                setTextColor(0xFF111111.toInt())
+                textSize = 16f
+                setPadding(0, 0, 0, dp(4))
+            }
+            container.addView(
+                titleView,
+                LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            )
+
+            val scroll = android.widget.ScrollView(context).apply {
+                isFillViewport = false
+                overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
+            }
+            val list = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+            }
+            scroll.addView(
+                list,
+                android.widget.FrameLayout.LayoutParams(
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+                )
+            )
+            container.addView(
+                scroll,
+                LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = dp(4)
+                }
+            )
+
+            texts.forEach { text ->
+                val tv = TextView(context).apply {
+                    this.text = text
+                    setTextColor(0xFF222222.toInt())
+                    textSize = 14f
+                    setPadding(dp(10), dp(8), dp(10), dp(8))
+                    isClickable = true
+                    isFocusable = true
+                    background = ContextCompat.getDrawable(context, R.drawable.ripple_capsule)
+                    maxLines = 3
+                    ellipsize = android.text.TextUtils.TruncateAt.END
+                    setOnClickListener {
+                        try { onItemClick(text) } catch (e: Throwable) {
+                            Log.e(TAG, "Text item action failed", e)
+                        }
+                        try { windowManager.removeView(root) } catch (e: Throwable) {
+                            Log.e(TAG, "Failed to remove text panel root on item click", e)
+                        }
+                        onDismiss()
+                    }
+                }
+                list.addView(
+                    tv,
+                    LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply { topMargin = dp(4) }
+                )
+            }
+
+            val paramsContainer = android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+            )
+            root.addView(container, paramsContainer)
+
+            val (centerX, centerY) = anchorCenter
+            val isLeft = centerX < (context.resources.displayMetrics.widthPixels / 2)
+            container.alpha = 0f
+            container.translationX = if (isLeft) dp(8).toFloat() else -dp(8).toFloat()
+            container.post {
+                try {
+                    // 目标：面板整体高度不超过屏幕的一半，并尽量保持面板中心贴近悬浮球中心
+                    val dm = context.resources.displayMetrics
+                    val maxPanelHeight = ((dm.heightPixels * 0.5f).toInt()).coerceAtLeast(dp(220))
+
+                    // 首次测量后的容器高度，如超过上限则按超出量收缩 ScrollView 的高度
+                    val overflow = (container.height - maxPanelHeight).coerceAtLeast(0)
+                    if (overflow > 0) {
+                        val lpScroll = scroll.layoutParams as LinearLayout.LayoutParams
+                        val current = if (scroll.height > 0) scroll.height else maxPanelHeight
+                        val newH = (current - overflow).coerceAtLeast(dp(120))
+                        lpScroll.height = newH
+                        scroll.layoutParams = lpScroll
+                    }
+
+                    // 第二帧：在最终高度生效后再以“中心对齐”进行定位，避免看起来偏上或偏下
+                    container.post {
+                        try {
+                            positionContainer(container, centerX, centerY, isLeft)
+                            container.animate().alpha(1f).translationX(0f).setDuration(160).start()
+                        } catch (e: Throwable) {
+                            Log.e(TAG, "Failed to finalize position for text panel", e)
+                        }
+                    }
+                } catch (e: Throwable) {
+                    Log.e(TAG, "Failed to limit and position text panel", e)
+                }
+            }
+
+            val params = WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                0,
+                PixelFormat.TRANSLUCENT
+            )
+            params.gravity = Gravity.TOP or Gravity.START
+
+            windowManager.addView(root, params)
+            return root
+        } catch (e: Throwable) {
+            Log.e(TAG, "Failed to show scrollable text panel", e)
+            return null
+        }
+    }
+
+    /**
      * 隐藏菜单
      */
     fun hideMenu(menuView: View?) {

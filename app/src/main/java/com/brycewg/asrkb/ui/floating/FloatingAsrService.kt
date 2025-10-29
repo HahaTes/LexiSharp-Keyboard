@@ -584,6 +584,12 @@ class FloatingAsrService : Service(),
                 getString(R.string.label_radial_postproc),
                 getString(R.string.label_radial_postproc)
             ) { togglePostprocFromMenu() },
+            // 查看识别历史（简版面板）
+            FloatingMenuHelper.MenuItem(
+                R.drawable.textbox,
+                getString(R.string.label_radial_open_history),
+                getString(R.string.label_radial_open_history)
+            ) { showHistoryPanelFromMenu() },
             FloatingMenuHelper.MenuItem(
                 R.drawable.cloud_arrow_up,
                 getString(R.string.label_radial_clipboard_upload),
@@ -766,6 +772,54 @@ class FloatingAsrService : Service(),
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
         } catch (e: Throwable) {
             Log.e(TAG, "Failed to toggle postproc", e)
+        }
+    }
+
+    private fun showHistoryPanelFromMenu() {
+        touchActiveGuard = true
+        hideVendorMenu()
+
+        val center = viewManager.getBallCenterSnapshot()
+        val alpha = try {
+            prefs.floatingSwitcherAlpha
+        } catch (e: Throwable) {
+            Log.w(TAG, "Failed to get alpha", e)
+            1.0f
+        }
+
+        // 读取历史文本（倒序，限制前 100 条以避免过长）
+        val texts: List<String> = try {
+            com.brycewg.asrkb.store.AsrHistoryStore(this)
+                .listAll()
+                .map { it.text }
+                .filter { it.isNotBlank() }
+                .take(100)
+        } catch (e: Throwable) {
+            Log.e(TAG, "Failed to load ASR history for panel", e)
+            emptyList()
+        }
+
+        vendorMenuView = menuHelper.showScrollableTextPanel(
+            center,
+            alpha,
+            getString(R.string.btn_open_asr_history),
+            if (texts.isEmpty()) listOf(getString(R.string.empty_history)) else texts,
+            onItemClick = { text ->
+                // 空态占位不复制
+                if (text == getString(R.string.empty_history)) return@showScrollableTextPanel
+                try {
+                    val clipMgr = getSystemService(android.content.ClipboardManager::class.java)
+                    val clip = android.content.ClipData.newPlainText("asr_history", text)
+                    clipMgr?.setPrimaryClip(clip)
+                    Toast.makeText(this, getString(R.string.floating_asr_copied), Toast.LENGTH_SHORT).show()
+                } catch (e: Throwable) {
+                    Log.e(TAG, "Failed to copy history text", e)
+                }
+            }
+        ) {
+            vendorMenuView = null
+            touchActiveGuard = false
+            updateVisibilityByPref()
         }
     }
 

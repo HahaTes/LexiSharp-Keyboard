@@ -200,6 +200,7 @@
     <string name="label_radial_clipboard_upload">Upload Clipboard</string>
     <string name="label_radial_clipboard_pull">Pull Clipboard</string>
     <string name="label_radial_toggle_silence_autostop">Toggle auto-stop on silence</string>
+    <string name="label_radial_open_history">ASR History</string>
     <string name="label_choose_asr_vendor">Choose ASR provider</string>
     <string name="toast_move_mode_on">Move mode enabled. Tap the ball to exit.</string>
 
