@@ -26,6 +26,79 @@ class FloatingMenuHelper(
     }
 
     /**
+     * 拖拽选择会话控制器
+     * - 负责基于屏幕坐标进行命中测试与高亮
+     * - 提供在抬手时执行对应项点击并关闭菜单的能力
+     */
+    inner class DragRadialMenuSession internal constructor(
+        private val context: Context,
+        private val windowManager: WindowManager,
+        val root: View,
+        private val container: LinearLayout,
+        private val itemRows: List<View>,
+        private val actions: List<() -> Unit>,
+        private val onDismiss: () -> Unit
+    ) {
+        private var highlightedIndex: Int = -1
+        private var dismissed: Boolean = false
+
+        /** 更新悬停高亮，返回命中索引（未命中为 -1） */
+        fun updateHover(rawX: Float, rawY: Float): Int {
+            val x = rawX.toInt()
+            val y = rawY.toInt()
+            var hit = -1
+            itemRows.forEachIndexed { index, row ->
+                val loc = IntArray(2)
+                try {
+                    row.getLocationOnScreen(loc)
+                } catch (_: Throwable) {
+                    return@forEachIndexed
+                }
+                val left = loc[0]
+                val top = loc[1]
+                val right = left + row.width
+                val bottom = top + row.height
+                if (x in left..right && y in top..bottom) {
+                    hit = index
+                }
+            }
+            if (hit != highlightedIndex) {
+                // 切换按压态作为高亮效果
+                itemRows.forEachIndexed { i, v ->
+                    try {
+                        v.isPressed = (i == hit)
+                    } catch (_: Throwable) { /* ignore visual error */ }
+                }
+                highlightedIndex = hit
+            }
+            return hit
+        }
+
+        /** 在当前位置执行选择；若未命中则仅关闭菜单 */
+        fun performSelectionAt(rawX: Float, rawY: Float) {
+            val hit = updateHover(rawX, rawY)
+            if (hit >= 0) {
+                // 触发反馈与点击
+                try { root.performHapticFeedback(android.view.HapticFeedbackConstants.KEYBOARD_TAP) } catch (_: Throwable) {}
+                try { actions.getOrNull(hit)?.invoke() } catch (e: Throwable) { Log.e(TAG, "Drag select action failed", e) }
+            }
+            dismiss()
+        }
+
+        fun dismiss() {
+            if (dismissed) return
+            dismissed = true
+            try {
+                this@FloatingMenuHelper.cancelAllAnimations(root)
+                windowManager.removeView(root)
+            } catch (e: Throwable) {
+                Log.e(TAG, "Failed to remove drag radial root", e)
+            }
+            try { onDismiss.invoke() } catch (e: Throwable) { Log.w(TAG, "onDismiss error in drag session", e) }
+        }
+    }
+
+    /**
      * 菜单项数据类
      */
     data class MenuItem(
@@ -131,6 +204,96 @@ class FloatingMenuHelper(
             return root
         } catch (e: Throwable) {
             Log.e(TAG, "Failed to show radial menu", e)
+            return null
+        }
+    }
+
+    /**
+     * 创建并显示支持“拖拽选中”的轮盘菜单，返回控制会话
+     */
+    fun showRadialMenuForDrag(
+        anchorCenter: Pair<Int, Int>,
+        alpha: Float,
+        items: List<MenuItem>,
+        onDismiss: () -> Unit
+    ): DragRadialMenuSession? {
+        try {
+            val root = android.widget.FrameLayout(context).apply {
+                setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                isClickable = true
+                isFocusable = true
+                isFocusableInTouchMode = true
+                setOnClickListener {
+                    try { windowManager.removeView(this) } catch (e: Throwable) {
+                        Log.e(TAG, "Failed to remove drag radial root on blank click", e)
+                    }
+                    onDismiss()
+                }
+            }
+            root.alpha = 1.0f
+            try { root.requestFocus() } catch (e: Throwable) { Log.w(TAG, "Failed to request focus for drag radial root", e) }
+
+            val (centerX, centerY) = anchorCenter
+            val isLeft = centerX < (context.resources.displayMetrics.widthPixels / 2)
+
+            val container = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
+                background = ContextCompat.getDrawable(context, R.drawable.bg_panel_round)
+                val pad = dp(8)
+                setPadding(pad, pad, pad, pad)
+            }
+
+            val rows = ArrayList<View>(items.size)
+            val actions = ArrayList<() -> Unit>(items.size)
+
+            items.forEachIndexed { index, item ->
+                val row = buildCapsule(item.iconRes, item.label, item.contentDescription) {
+                    // 点击备用：也允许直接轻触选择
+                    try { item.onClick() } catch (e: Throwable) { Log.e(TAG, "Drag radial item action failed", e) }
+                    try { windowManager.removeView(root) } catch (e: Throwable) { Log.e(TAG, "Failed to remove drag radial root on item click", e) }
+                    onDismiss()
+                }
+                rows.add(row)
+                actions.add(item.onClick)
+
+                val lpRow = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                if (index > 0) lpRow.topMargin = dp(6)
+                container.addView(row, lpRow)
+            }
+
+            container.alpha = 0f
+            container.translationX = if (isLeft) dp(8).toFloat() else -dp(8).toFloat()
+            val paramsContainer = android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+            )
+            root.addView(container, paramsContainer)
+
+            container.post {
+                try {
+                    positionContainer(container, centerX, centerY, isLeft)
+                    container.animate().alpha(1f).translationX(0f).setDuration(160).start()
+                } catch (e: Throwable) {
+                    Log.e(TAG, "Failed to position container (drag)", e)
+                }
+            }
+
+            val params = WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                0,
+                PixelFormat.TRANSLUCENT
+            )
+            params.gravity = Gravity.TOP or Gravity.START
+
+            windowManager.addView(root, params)
+            return DragRadialMenuSession(context, windowManager, root, container, rows, actions, onDismiss)
+        } catch (e: Throwable) {
+            Log.e(TAG, "Failed to show radial menu (drag)", e)
             return null
         }
     }

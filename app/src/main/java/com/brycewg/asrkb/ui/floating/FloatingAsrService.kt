@@ -76,6 +76,7 @@ class FloatingAsrService : Service(),
     // 菜单状态
     private var radialMenuView: View? = null
     private var vendorMenuView: View? = null
+    private var radialDragSession: FloatingMenuHelper.DragRadialMenuSession? = null
     private var touchActiveGuard: Boolean = false
 
     // 本地模型预加载标记
@@ -505,7 +506,94 @@ class FloatingAsrService : Service(),
     }
 
     override fun onLongPress() {
-        showRadialMenu()
+        // 新交互：不在长按瞬间弹出面板，等待左右滑动开始再弹出。
+    }
+
+    override fun onLongPressDragStart(initialRawX: Float, initialRawY: Float) {
+        touchActiveGuard = true
+        try { viewManager.animateRevealFromEdgeIfNeeded() } catch (_: Throwable) {}
+
+        if (radialDragSession != null) return
+
+        val center = viewManager.getBallCenterSnapshot()
+        val alpha = try { prefs.floatingSwitcherAlpha } catch (_: Throwable) { 1.0f }
+
+        val items = listOf(
+            FloatingMenuHelper.MenuItem(
+                R.drawable.article,
+                getString(R.string.label_radial_switch_prompt),
+                getString(R.string.label_radial_switch_prompt)
+            ) { onPickPromptPresetFromMenu() },
+            FloatingMenuHelper.MenuItem(
+                R.drawable.waveform,
+                getString(R.string.label_radial_switch_asr),
+                getString(R.string.label_radial_switch_asr)
+            ) { onPickAsrVendor() },
+            FloatingMenuHelper.MenuItem(
+                R.drawable.keyboard,
+                getString(R.string.label_radial_switch_ime),
+                getString(R.string.label_radial_switch_ime)
+            ) { invokeImePickerFromMenu() },
+            FloatingMenuHelper.MenuItem(
+                R.drawable.arrows_out_cardinal,
+                getString(R.string.label_radial_move),
+                getString(R.string.label_radial_move)
+            ) { enableMoveModeFromMenu() },
+            FloatingMenuHelper.MenuItem(
+                if (try { prefs.autoStopOnSilenceEnabled } catch (_: Throwable) { false }) {
+                    R.drawable.hand_palm_fill
+                } else {
+                    R.drawable.hand_palm
+                },
+                getString(R.string.label_radial_toggle_silence_autostop),
+                getString(R.string.label_radial_toggle_silence_autostop)
+            ) { toggleAutoStopSilenceFromMenu() },
+            FloatingMenuHelper.MenuItem(
+                if (try { prefs.postProcessEnabled } catch (_: Throwable) { false }) {
+                    R.drawable.magic_wand_fill
+                } else {
+                    R.drawable.magic_wand
+                },
+                getString(R.string.label_radial_postproc),
+                getString(R.string.label_radial_postproc)
+            ) { togglePostprocFromMenu() },
+            FloatingMenuHelper.MenuItem(
+                R.drawable.textbox,
+                getString(R.string.label_radial_open_history),
+                getString(R.string.label_radial_open_history)
+            ) { showHistoryPanelFromMenu() },
+            FloatingMenuHelper.MenuItem(
+                R.drawable.cloud_arrow_up,
+                getString(R.string.label_radial_clipboard_upload),
+                getString(R.string.label_radial_clipboard_upload)
+            ) { uploadClipboardOnceFromMenu() },
+            FloatingMenuHelper.MenuItem(
+                R.drawable.cloud_arrow_down,
+                getString(R.string.label_radial_clipboard_pull),
+                getString(R.string.label_radial_clipboard_pull)
+            ) { pullClipboardOnceFromMenu() }
+        )
+
+        radialDragSession = menuHelper.showRadialMenuForDrag(center, alpha, items) {
+            radialMenuView = null
+            radialDragSession = null
+            touchActiveGuard = false
+            updateVisibilityByPref()
+        }
+        radialMenuView = radialDragSession?.root
+        updateVisibilityByPref()
+        // 初始位置也更新一次高亮（若用户已滑动）
+        radialDragSession?.updateHover(initialRawX, initialRawY)
+    }
+
+    override fun onLongPressDragMove(rawX: Float, rawY: Float) {
+        radialDragSession?.updateHover(rawX, rawY)
+    }
+
+    override fun onLongPressDragRelease(rawX: Float, rawY: Float) {
+        radialDragSession?.performSelectionAt(rawX, rawY)
+        radialDragSession = null
+        // onDismiss 已重置 touchActiveGuard 和 radialMenuView
     }
 
     override fun onMoveStarted() {
@@ -527,6 +615,8 @@ class FloatingAsrService : Service(),
     }
 
     override fun onDragCancelled() {
+        radialDragSession?.dismiss()
+        radialDragSession = null
         touchActiveGuard = false
         updateVisibilityByPref()
     }
