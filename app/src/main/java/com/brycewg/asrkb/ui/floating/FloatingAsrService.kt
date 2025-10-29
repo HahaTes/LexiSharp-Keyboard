@@ -239,8 +239,11 @@ class FloatingAsrService : Service(),
         val completionActive = try {
             viewManager.isCompletionTickActive()
         } catch (_: Throwable) { false }
+        // 交互保护：长按/拖拽选中/移动模式/打开面板期间，即使 IME 隐藏也保持可见
+        val forceVisible = (radialMenuView != null || vendorMenuView != null ||
+                radialDragSession != null || stateMachine.isMoveMode || touchActiveGuard)
         if (prefs.floatingSwitcherOnlyWhenImeVisible && !imeVisible &&
-            !stateMachine.isRecording && !stateMachine.isProcessing && !completionActive) {
+            !stateMachine.isRecording && !stateMachine.isProcessing && !completionActive && !forceVisible) {
             Log.d(TAG, "Pref requires IME visible; hiding for now")
             DebugLogManager.log("float", "show_skip", mapOf("reason" to "ime_not_visible"))
             hideBall()
@@ -292,7 +295,7 @@ class FloatingAsrService : Service(),
 
     private fun updateVisibilityByPref(src: String = "update_visibility") {
         val forceVisible = (radialMenuView != null || vendorMenuView != null ||
-                           stateMachine.isMoveMode || touchActiveGuard)
+                           radialDragSession != null || stateMachine.isMoveMode || touchActiveGuard)
         if (!prefs.floatingAsrEnabled) {
             hideBall()
             return
@@ -507,6 +510,9 @@ class FloatingAsrService : Service(),
 
     override fun onLongPress() {
         // 新交互：不在长按瞬间弹出面板，等待左右滑动开始再弹出。
+        // 但此时先设置可见保护，避免 IME 隐藏导致悬浮球被系统收起从而丢失触摸事件链。
+        touchActiveGuard = true
+        updateVisibilityByPref()
     }
 
     override fun onLongPressDragStart(initialRawX: Float, initialRawY: Float) {

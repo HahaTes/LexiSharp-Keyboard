@@ -185,7 +185,8 @@ class FloatingBallTouchHandler(
             // 拖拽选择释放
             listener.onLongPressDragRelease(e.rawX, e.rawY)
         } else if (longActionFired) {
-            // 已触发长按但未进入拖拽选择：不处理点击或吸附
+            // 已触发长按但未进入拖拽选择：通知取消以清理可见性保护
+            listener.onDragCancelled()
         } else if (isDragging) {
             // 移动模式下：若未移动则视为点击（用于退出移动模式）；若已移动则吸附
             if (!moved) {
