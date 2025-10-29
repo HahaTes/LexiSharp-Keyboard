@@ -91,13 +91,8 @@ class LlmPostProcessor(private val client: OkHttpClient? = null) {
     // 如果已直接指向 chat/completions 或 responses，则原样使用
     if (b.endsWith("/chat/completions")) return b
 
-    // 若以 /v1 结尾，自动补全到 chat/completions
-    if (b.endsWith("/v1", true)) return "$b/chat/completions"
-
-    // 其他情况：要求至少包含 /v1 或已是完整的 chat 路径
-    if (b.contains("/v1/")) return b // 允许自定义 /v1/* 完整路径
-
-    throw IllegalArgumentException("Endpoint must include /v1 or end with /chat/completions")
+    // 其他情况：直接补全 /chat/completions
+    return "$b/chat/completions"
   }
 
   /**
