@@ -48,6 +48,28 @@ android {
         }
     }
 
+    // 构建开源版(oss) 与 商店专业版(pro)
+    flavorDimensions += "edition"
+    productFlavors {
+        create("oss") {
+            dimension = "edition"
+            // 开源版包名沿用主包
+            applicationId = "com.brycewg.asrkb"
+            // 版本常量：供代码中区分功能
+            buildConfigField("boolean", "IS_PRO", "false")
+            buildConfigField("String", "EDITION", "\"OSS\"")
+        }
+        create("pro") {
+            dimension = "edition"
+            // 专业版单独包名，便于并行安装与单独上架
+            applicationId = "com.brycewg.asrkb.pro"
+            buildConfigField("boolean", "IS_PRO", "true")
+            buildConfigField("String", "EDITION", "\"PRO\"")
+            // 覆盖应用名，避免在仓库内新增 pro 资源文件
+            resValue("string", "app_name", "言犀键盘 Pro")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -55,6 +77,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     // 由于应用在运行时支持手动切换语言，禁用 App Bundle 的按语言拆分，
@@ -110,4 +133,7 @@ dependencies {
 
     // AAR 本地依赖占位：将 sherpa-onnx Kotlin API AAR 放入 app/libs/ 后自动识别
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
+
+    // Pro 变体：后台任务（自动备份）
+    add("proImplementation", "androidx.work:work-runtime-ktx:2.9.1")
 }

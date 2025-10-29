@@ -14,3 +14,6 @@ dev_docs/
 .crush
 tools/
 dist/
+app/src/pro/
+app/oss
+app/pro
