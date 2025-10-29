@@ -1,8 +1,8 @@
 {
-  "version": "3.4.0",
-  "version_code": 86,
-  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.4.0",
-  "release_notes": "本次更新包含 5 个提交:\n- feat(floating): 为悬浮球菜单实现长按滑动选择交互\n- feat(floating): 添加悬浮球识别历史查看面板\n- feat(ui/history): 增强历史记录筛选功能并优化操作界面\n- feat(history): 添加识别历史记录功能和管理界面\n- feat(floatingball): 悬浮球长按菜单显示固定为完全不透明",
+  "version": "3.4.1",
+  "version_code": 87,
+  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.4.1",
+  "release_notes": "本次更新包含 3 个提交:\n- fix(llm-post): 简化 llm 端点规范化，提高兼容性\n- feat(build): 引入 OSS/Pro 产品变体并升级 CI 环境\n- fix(floating): 增强悬浮球可见性控制",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-29T04:24:46Z"
+  "update_time": "2025-10-29T11:50:01Z"
 }
