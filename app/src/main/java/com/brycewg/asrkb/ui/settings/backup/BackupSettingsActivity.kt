@@ -87,7 +87,7 @@ class BackupSettingsActivity : AppCompatActivity() {
     private fun exportSettings(uri: Uri) {
         try {
             contentResolver.openOutputStream(uri)?.use { os ->
-                val jsonString = prefs.exportJsonString()
+                val jsonString = com.brycewg.asrkb.ProUiInjector.buildBackupJson(this, prefs)
                 os.write(jsonString.toByteArray(Charsets.UTF_8))
                 os.flush()
             }
@@ -108,6 +108,7 @@ class BackupSettingsActivity : AppCompatActivity() {
 
             val success = prefs.importJsonString(json)
             if (success) {
+                try { com.brycewg.asrkb.ProUiInjector.applyProImport(this, json) } catch (e: Exception) { Log.e(TAG, "Failed to apply pro import", e) }
                 // 导入完成后，通知 IME 即时刷新（包含高度与按钮交换等）
                 try {
                     sendBroadcast(android.content.Intent(com.brycewg.asrkb.ime.AsrKeyboardService.ACTION_REFRESH_IME_UI))
@@ -154,7 +155,7 @@ class BackupSettingsActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val ok = WebDavBackupHelper.uploadSettings(prefs)
+            val ok = WebDavBackupHelper.uploadSettings(this@BackupSettingsActivity, prefs)
             withContext(Dispatchers.Main) {
                 if (ok) {
                     Toast.makeText(this@BackupSettingsActivity, getString(R.string.toast_webdav_upload_success), Toast.LENGTH_SHORT).show()
@@ -177,6 +178,7 @@ class BackupSettingsActivity : AppCompatActivity() {
             val ok = text != null && prefs.importJsonString(text)
             withContext(Dispatchers.Main) {
                 if (ok) {
+                    try { com.brycewg.asrkb.ProUiInjector.applyProImport(this@BackupSettingsActivity, text!!) } catch (e: Exception) { Log.e(TAG, "Failed to apply pro import", e) }
                     try { sendBroadcast(android.content.Intent(com.brycewg.asrkb.ime.AsrKeyboardService.ACTION_REFRESH_IME_UI)) } catch (e: Exception) { Log.e(TAG, "Failed to send refresh broadcast", e) }
                     Toast.makeText(this@BackupSettingsActivity, getString(R.string.toast_webdav_download_success), Toast.LENGTH_SHORT).show()
                 } else {

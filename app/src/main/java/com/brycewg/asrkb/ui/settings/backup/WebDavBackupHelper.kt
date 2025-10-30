@@ -29,7 +29,7 @@ object WebDavBackupHelper {
    * 将当前偏好（含密钥）导出为 JSON 并通过 WebDAV 上传到固定路径。
    * @return true 表示上传成功；false 表示参数不全或 HTTP 非 2xx。
    */
-  suspend fun uploadSettings(prefs: Prefs, http: OkHttpClient = OkHttpClient()): Boolean =
+  suspend fun uploadSettings(context: android.content.Context, prefs: Prefs, http: OkHttpClient = OkHttpClient()): Boolean =
     withContext(Dispatchers.IO) {
       val rawUrl = prefs.webdavUrl.trim()
       if (rawUrl.isEmpty()) return@withContext false
@@ -39,7 +39,8 @@ object WebDavBackupHelper {
         ensureDirectoryExists(prefs, baseUrl, http)
 
         val fileUrl = buildFileUrl(baseUrl)
-        val body: RequestBody = prefs.exportJsonString().toRequestBody(JSON_MEDIA)
+        val payload = try { com.brycewg.asrkb.ProUiInjector.buildBackupJson(context, prefs) } catch (_: Throwable) { prefs.exportJsonString() }
+        val body: RequestBody = payload.toRequestBody(JSON_MEDIA)
         val reqBuilder = Request.Builder().url(fileUrl).put(body)
         addBasicAuthIfNeeded(reqBuilder, prefs)
         http.newCall(reqBuilder.build()).execute().use { resp ->

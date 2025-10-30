@@ -99,4 +99,58 @@ object ProUiInjector {
       if (BuildConfig.DEBUG) Log.d(TAG, "skip pro ui inject(asr): ${t.message}")
     }
   }
+
+  /**
+   * 构建备份 JSON（包含 Pro 变体的额外键）。
+   * - OSS：直接返回 Prefs.exportJsonString()
+   * - Pro：在不引用 Pro 源集类的前提下，直接从同名 SP 读取并合并额外键
+   */
+  fun buildBackupJson(context: android.content.Context, prefs: com.brycewg.asrkb.store.Prefs): String {
+    val base = try { prefs.exportJsonString() } catch (_: Throwable) { "{}" }
+    if (!Edition.isPro) return base
+    return try {
+      val sp = context.getSharedPreferences("asr_prefs", android.content.Context.MODE_PRIVATE)
+      val o = org.json.JSONObject(base)
+      // Pro: 个性化 ASR 上下文与热词
+      val ctx = sp.getString("asr_context_text", null)
+      val hot = sp.getString("asr_hotwords", null)
+      if (!ctx.isNullOrEmpty()) o.put("asr_context_text", ctx)
+      if (!hot.isNullOrEmpty()) o.put("asr_hotwords", hot)
+      // Pro: 自动备份配置（可选）
+      if (sp.contains("pro_auto_backup_enabled")) o.put("pro_auto_backup_enabled", sp.getBoolean("pro_auto_backup_enabled", false))
+      if (sp.contains("pro_auto_backup_interval_hours")) o.put("pro_auto_backup_interval_hours", sp.getInt("pro_auto_backup_interval_hours", 24))
+      o.toString()
+    } catch (t: Throwable) {
+      if (BuildConfig.DEBUG) Log.d(TAG, "buildBackupJson merge(pro) failed: ${t.message}")
+      base
+    }
+  }
+
+  /**
+   * 应用导入的 JSON 中的 Pro 额外键（若存在）。
+   * 不依赖 Pro 源集类，直接写入统一的 asr_prefs。
+   */
+  fun applyProImport(context: android.content.Context, json: String) {
+    if (!Edition.isPro) return
+    try {
+      val o = org.json.JSONObject(json)
+      val sp = context.getSharedPreferences("asr_prefs", android.content.Context.MODE_PRIVATE)
+      val edit = sp.edit()
+      if (o.has("asr_context_text")) edit.putString("asr_context_text", o.optString("asr_context_text"))
+      if (o.has("asr_hotwords")) edit.putString("asr_hotwords", o.optString("asr_hotwords"))
+      if (o.has("pro_auto_backup_enabled")) edit.putBoolean("pro_auto_backup_enabled", o.optBoolean("pro_auto_backup_enabled"))
+      if (o.has("pro_auto_backup_interval_hours")) edit.putInt("pro_auto_backup_interval_hours", o.optInt("pro_auto_backup_interval_hours", 24))
+      edit.apply()
+
+      // 触发 Pro 侧自动备份调度刷新（仅 Pro 变体会有接收者）
+      try {
+        val intent = android.content.Intent("com.brycewg.asrkb.pro.REFRESH_AUTO_BACKUP")
+        context.sendBroadcast(intent)
+      } catch (t: Throwable) {
+        if (BuildConfig.DEBUG) Log.d(TAG, "broadcast pro refresh failed: ${t.message}")
+      }
+    } catch (t: Throwable) {
+      if (BuildConfig.DEBUG) Log.d(TAG, "applyProImport failed: ${t.message}")
+    }
+  }
 }
