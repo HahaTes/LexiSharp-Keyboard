@@ -244,12 +244,16 @@ class InputSettingsActivity : AppCompatActivity() {
         val options = listOf(
             getString(R.string.lang_follow_system),
             getString(R.string.lang_zh_cn),
+            getString(R.string.lang_zh_tw),
+            getString(R.string.lang_ja),
             getString(R.string.lang_en)
         )
 
         fun getLanguageIndex(tag: String): Int = when (tag) {
             "zh", "zh-CN", "zh-Hans" -> 1
-            "en" -> 2
+            "zh-TW", "zh-Hant" -> 2
+            "ja" -> 3
+            "en" -> 4
             else -> 0
         }
 
@@ -268,7 +272,9 @@ class InputSettingsActivity : AppCompatActivity() {
                 onSelected = { selectedIndex ->
                     val newTag = when (selectedIndex) {
                         1 -> "zh-CN"
-                        2 -> "en"
+                        2 -> "zh-TW"
+                        3 -> "ja"
+                        4 -> "en"
                         else -> ""
                     }
                     if (newTag != prefs.appLanguageTag) {

@@ -1,0 +1,530 @@
+<resources>
+<string name="app_name">LexiSharp キーボード</string>
+
+    <string name="cd_mic">マイク</string>
+    <string name="cd_settings">設定</string>
+    <string name="cd_enter">Enter</string>
+    <string name="cd_backspace">Backspace</string>
+    <string name="cd_switch_ime">入力メソッドを切り替え</string>
+    <string name="cd_postproc_toggle">AI後処理</string>
+    <string name="cd_ai_edit">AI編集</string>
+    <string name="cd_hide">キーボードを非表示</string>
+    <string name="cd_prompt_picker">後処理プロンプトを切り替え</string>
+    <string name="cd_numpad_back">編集パネルに戻る</string>
+    <string name="cd_space">スペース</string>
+    <string name="cd_punct_lang_toggle">中/英句読点を切り替え</string>
+    <string name="cd_punct_btn_1">カスタムキー1</string>
+    <string name="cd_punct_btn_2">カスタムキー2</string>
+    <string name="cd_punct_btn_3">カスタムキー3</string>
+    <string name="cd_punct_btn_4">カスタムキー4</string>
+
+    <string name="status_idle">準備完了</string>
+    <string name="status_listening">聞いています…</string>
+    <string name="status_recognizing">認識中…</string>
+    <string name="status_ai_processing">AI後処理中…</string>
+    <string name="status_ai_edit_listening">編集指示を話してください…</string>
+    <string name="status_ai_editing">AI編集中…</string>
+    <string name="status_cancelled">キャンセルしました</string>
+    <string name="status_reverted_to_raw">生のテキストに戻しました</string>
+    <string name="status_undone">最後の変更を元に戻しました</string>
+    <string name="status_llm_empty_result">AI編集失敗：結果がありません</string>
+    <string name="status_last_asr_not_found">最後のASR結果が見つかりませんでした。キャンセルしました</string>
+    <string name="hint_need_llm_keys">まずAI後処理を設定してください</string>
+    <string name="hint_cannot_read_text">現在のアプリのテキストが読み取れません</string>
+    <string name="status_llm_failed_used_raw">AI後処理失敗；生テキストを使用しました</string>
+    <string name="status_llm_edit_failed">AI編集失敗。もう一度お試しください</string>
+    <string name="hint_need_permission">音声入力にはマイク権限が必要です</string>
+    <string name="status_postproc">AI後処理：%1$s</string>
+    <string name="toggle_on">ON</string>
+    <string name="toggle_off">OFF</string>
+    <string name="label_ai_edit_default_use_last_asr">AI編集デフォルト範囲：最後のテキストを使用</string>
+    <string name="label_mic_swipe_up_auto_enter">リリース時に上にスワイプして送信</string>
+    <string name="btn_retry">接続失敗、再試行しますか？</string>
+
+    <!-- Edit panel content descriptions -->
+    <string name="cd_return_main">メインキーボードに戻る</string>
+    <string name="cd_apply_preset_prompt">プリセットプロンプトを適用</string>
+    <string name="cd_cursor_left">カーソルを左に移動</string>
+    <string name="cd_cursor_right">カーソルを右に移動</string>
+    <string name="cd_numpad">数字パッド</string>
+    <string name="cd_select_toggle">選択モードを切り替え</string>
+    <string name="cd_select_all">すべて選択</string>
+    <string name="cd_copy">コピー</string>
+    <string name="cd_paste">貼り付け</string>
+    <string name="cd_move_home">先頭に移動</string>
+    <string name="cd_move_end">末尾に移動</string>
+    <string name="cd_undo">元に戻す</string>
+
+    <string name="settings_instructions">初回設定:\n1.「キーボードを有効化」をタップし、システム設定でLexiSharpキーボードを有効にします\n2.「キーボードを選択」をタップしてLexiSharpキーボードに切り替えます\n3.マイク権限を許可し、キーボードのマイクボタンを長押しして試してください</string>
+    <string name="btn_one_click_setup">ワンクリック設定</string>
+    <string name="btn_show_guide">クイックガイドを見る</string>
+    <string name="btn_check_update">更新を確認</string>
+    <!-- Material UI additions -->
+    <string name="settings_title">LexiSharpキーボード設定</string>
+    <string name="btn_open_asr_history">履歴</string>
+    <string name="title_input_settings">入力設定</string>
+    <string name="title_asr_settings">ASR設定</string>
+    <string name="title_ai_settings">AI後処理設定</string>
+    <string name="title_other_settings">その他の設定</string>
+    <string name="title_floating_settings">フローティング設定</string>
+    <string name="volc_section_title">Volcano Engine認証情報</string>
+    <string name="sf_section_title">SiliconFlow認証情報</string>
+    <string name="label_app_key">X-Api-App-Key</string>
+    <string name="label_access_key">X-Api-Access-Key</string>
+    <string name="label_asr_vendor">ASRプロバイダー</string>
+    <string name="vendor_volc">Volcano Engine</string>
+    <string name="vendor_sf">SiliconFlow</string>
+    <string name="vendor_dashscope">Alibaba Cloud DashScope</string>
+    <string name="vendor_soniox">Soniox</string>
+    <string name="vendor_sensevoice">SenseVoice（ローカル）</string>
+    <string name="label_sf_api_key">APIキー（Bearer）</string>
+    <string name="label_sf_model">モデル名（例：FunAudioLLM/SenseVoiceSmall）</string>
+    <string name="label_sf_use_omni">音声マルチモーダルモデルを使用（Qwen3-Omni）</string>
+    <string name="label_sf_omni_prompt">マルチモーダル文字起こしプロンプト（オプション）</string>
+    <string name="dash_section_title">Alibaba Cloud DashScope ASRパラメータ</string>
+    <string name="soniox_section_title">Soniox認証情報</string>
+    <string name="sensevoice_section_title">SenseVoiceローカルASR</string>
+    <string name="label_dash_api_key">DashScope APIキー（Bearer）</string>
+    <string name="label_dash_model">モデル（例：qwen3-asr-flash）</string>
+    <string name="label_dash_prompt">カスタムプロンプト/コンテキスト（オプション）</string>
+    <string name="label_dash_language">認識言語（オプション。既知の場合は精度向上）</string>
+    <string name="dash_lang_auto">自動（言語識別を有効化）</string>
+    <string name="dash_lang_zh">中国語（zh）</string>
+    <string name="dash_lang_en">英語（en）</string>
+    <string name="dash_lang_ja">日本語（ja）</string>
+    <string name="dash_lang_de">ドイツ語（de）</string>
+    <string name="dash_lang_ko">韓国語（ko）</string>
+    <string name="dash_lang_ru">ロシア語（ru）</string>
+    <string name="dash_lang_fr">フランス語（fr）</string>
+    <string name="dash_lang_pt">ポルトガル語（pt）</string>
+    <string name="dash_lang_ar">アラビア語（ar）</string>
+    <string name="dash_lang_it">イタリア語（it）</string>
+    <string name="dash_lang_es">スペイン語（es）</string>
+    <string name="label_volc_streaming">ストリーミング認識を使用（WebSocket）</string>
+    <string name="label_volc_ddc">セマンティックスムージングを有効化（実験的）</string>
+    <string name="label_volc_vad">VADセグメンテーションを有効化（実験的）</string>
+    <string name="label_volc_nonstream">2パス認識を有効化（実験的）</string>
+    <string name="label_volc_first_char_accel">最初のトークン加速（実験的）</string>
+    <string name="label_volc_language">認識言語（非ストリーミング用）</string>
+    <string name="volc_lang_auto">自動（中国語/英語+方言）</string>
+    <string name="volc_lang_en_us">英語（en-US）</string>
+    <string name="volc_lang_ja_jp">日本語（ja-JP）</string>
+    <string name="volc_lang_id_id">インドネシア語（id-ID）</string>
+    <string name="volc_lang_es_mx">スペイン語（es-MX）</string>
+    <string name="volc_lang_pt_br">ポルトガル語（pt-BR）</string>
+    <string name="volc_lang_de_de">ドイツ語（de-DE）</string>
+    <string name="volc_lang_fr_fr">フランス語（fr-FR）</string>
+    <string name="volc_lang_ko_kr">韓国語（ko-KR）</string>
+    <string name="volc_lang_fil_ph">フィリピン語（fil-PH）</string>
+    <string name="volc_lang_ms_my">マレー語（ms-MY）</string>
+    <string name="volc_lang_th_th">タイ語（th-TH）</string>
+    <string name="volc_lang_ar_sa">アラビア語（ar-SA）</string>
+    <string name="label_soniox_streaming">Sonioxストリーミングを使用（WebSocket）</string>
+    <string name="label_soniox_language">認識言語（言語ヒント）</string>
+    <string name="soniox_lang_auto">自動（多言語）</string>
+    <string name="soniox_lang_en">英語（en）</string>
+    <string name="soniox_lang_zh">中国語（zh）</string>
+    <string name="soniox_lang_ja">日本語（ja）</string>
+    <string name="soniox_lang_ko">韓国語（ko）</string>
+    <string name="soniox_lang_es">スペイン語（es）</string>
+    <string name="soniox_lang_pt">ポルトガル語（pt）</string>
+    <string name="soniox_lang_de">ドイツ語（de）</string>
+    <string name="soniox_lang_fr">フランス語（fr）</string>
+    <string name="soniox_lang_id">インドネシア語（id）</string>
+    <string name="soniox_lang_ru">ロシア語（ru）</string>
+    <string name="soniox_lang_ar">アラビア語（ar）</string>
+    <string name="soniox_lang_hi">ヒンディー語（hi）</string>
+    <string name="soniox_lang_vi">ベトナム語（vi）</string>
+    <string name="soniox_lang_th">タイ語（th）</string>
+    <string name="soniox_lang_ms">マレー語（ms）</string>
+    <string name="soniox_lang_fil">フィリピン語（fil）</string>
+    <string name="status_last_request_ms">最後のリクエスト時間：%1$d ms</string>
+
+    <!-- Local ASR (placeholder) -->
+    <string name="error_local_asr_not_ready">ローカルASRが準備できていません。後でsherpa‑onnxとモデルファイルを統合してください。</string>
+    <string name="error_sensevoice_model_missing">SenseVoiceモデルがありません。設定で後で設定またはダウンロードしてください。</string>
+
+    <string name="btn_close">閉じる</string>
+    <string name="title_quick_guide">クイックスタートガイド</string>
+    <string name="label_trim_trailing_punct">終了時に末尾の句読点と絵文字を削除</string>
+    <string name="label_mic_haptic">キーとフローティングボールの触覚フィードバック</string>
+    <string name="label_mic_tap_toggle">タップで録音を制御</string>
+    <string name="label_floating_only_when_ime_visible">キーボード表示時のみフローティングボールを表示</string>
+    <string name="label_floating_alpha">フローティングボールの透明度</string>
+    <string name="label_floating_size">フローティングボールのサイズ</string>
+    <string name="toast_need_overlay_perm">フローティングボールを有効にするには、システム設定で「他のアプリの上に表示」を許可してください</string>
+    <string name="toast_need_accessibility_perm">この機能をサポートするには、システム設定でアクセシビリティサービスを有効にしてください</string>
+    <string name="label_floating_asr">フローティングボールで音声認識を使用</string>
+    <string name="label_floating_write_compat">フローティング書き込みテキスト互換モード</string>
+    <string name="desc_floating_write_compat">一部のアプリはアクセシビリティに背景プレースホルダーテキストを公開し、最終的な挿入を汚染します。有効にすると、ターゲットアプリでフローティングボールが全選択+貼り付けに切り替わり、プレースホルダーの問題を回避します。クリップボードが一時的に使用される場合があります（最善の努力で復元）。Telegram、Douyinなどで動作します。</string>
+    <string name="label_floating_write_compat_pkgs">ターゲットパッケージ名（1行に1つ）</string>
+    <string name="hint_floating_write_compat_pkgs">パッケージまたはプレフィックスを入力（例：org.telegram）。末尾の*はプレフィックス一致を意味します（例：org.telegram.*）。</string>
+    <string name="label_floating_write_paste">認識結果をクリップボードにのみコピー</string>
+    <string name="desc_floating_write_paste">以下のパッケージにのみ適用：これらのアプリでフローティング音声入力を使用する場合、アクセシビリティAPI経由で挿入する代わりに結果をクリップボードにコピーします。行にallが含まれている場合、グローバルに適用されます。</string>
+    <string name="label_floating_write_paste_pkgs">ターゲットパッケージ（1行に1つ）</string>
+    <string name="hint_floating_write_paste_pkgs">正確なパッケージ名を入力（例：com.tencent.mm）。グローバルに適用するには、allを含む行を1つ追加してください。</string>
+    <string name="cd_floating_asr">フローティングボール音声認識</string>
+    <string name="toast_setup_all_done">すべて設定完了</string>
+    <string name="toast_setup_enable_keyboard_first">システム設定でキーボードを有効にしてから戻ってください</string>
+    <string name="toast_setup_choose_keyboard">現在の入力メソッドとして「LexiSharpキーボード」を選択してください</string>
+    <string name="toast_vad_sensitivity_applied">VAD感度が更新されました。次回の録音に適用されます</string>
+
+    <!-- Floating ASR status messages -->
+    <string name="floating_asr_error">認識失敗：%1$s</string>
+    <string name="floating_asr_copied">クリップボードにコピーしました</string>
+
+    <!-- LLM settings -->
+    <string name="label_llm_endpoint">OpenAIエンドポイント（例：https://api.openai.com/v1 または /chat/completionsを含む）</string>
+    <string name="label_llm_api_key">APIキー</string>
+    <string name="label_llm_model">モデル名（例：gpt-4o-mini）</string>
+    <string name="label_llm_temperature">温度（0.0 – 2.0）</string>
+    <string name="label_llm_prompt">後処理プロンプト（処理されたテキストのみ出力）</string>
+    <string name="label_llm_prompt_title">プロンプトプリセットタイトル</string>
+    <string name="label_llm_prompt_presets">プロンプトプリセットを選択</string>
+    <string name="btn_add_preset">プリセットとして追加/保存</string>
+    <string name="btn_delete_preset">プリセットを削除</string>
+    <string name="label_llm_choose_profile">後処理モデルを選択</string>
+    <string name="label_llm_profile_name">プロファイル名</string>
+    <string name="btn_llm_add_profile">プロファイルを追加</string>
+    <string name="btn_llm_delete_profile">プロファイルを削除</string>
+    <string name="toast_llm_profile_added">プロファイルが追加されました</string>
+    <string name="toast_llm_profile_deleted">プロファイルが削除されました</string>
+    <string name="untitled_profile">無題のプロファイル</string>
+
+    <!-- Floating radial menu -->
+    <string name="label_radial_switch_asr">ASRプロバイダーを切り替え</string>
+    <string name="label_radial_switch_ime">入力メソッドを切り替え</string>
+    <string name="label_radial_move">フローティングボールを移動</string>
+    <string name="label_radial_postproc">AI後処理を切り替え</string>
+    <string name="label_radial_switch_prompt">AI後処理プロンプトを切り替え</string>
+    <string name="label_radial_clipboard_upload">クリップボードをアップロード</string>
+    <string name="label_radial_clipboard_pull">クリップボードをプル</string>
+    <string name="label_radial_toggle_silence_autostop">無音時自動停止を切り替え</string>
+    <string name="label_radial_open_history">ASR履歴</string>
+    <string name="label_choose_asr_vendor">ASRプロバイダーを選択</string>
+    <string name="toast_move_mode_on">移動モードが有効になりました。ボールをタップして終了します。</string>
+
+    <!-- Custom punctuation settings -->
+    <string name="custom_punct_section_title">カスタム句読点ボタン</string>
+    <string name="label_custom_punct_1">ボタン1（文字または句読点）</string>
+    <string name="label_custom_punct_2">ボタン2（文字または句読点）</string>
+    <string name="label_custom_punct_3">ボタン3（文字または句読点）</string>
+    <string name="label_custom_punct_4">ボタン4（文字または句読点）</string>
+    <string name="label_auto_switch_password">パスワードフィールドで自動的に戻る</string>
+
+    <!-- Speech Presets -->
+    <string name="label_speech_preset_section">音声プリセット</string>
+    <string name="speech_preset_empty_placeholder">まだプリセットがありません</string>
+    <string name="speech_preset_untitled">無題のプリセット</string>
+    <string name="hint_speech_preset_name">プリセット名</string>
+    <string name="hint_speech_preset_content">プリセット内容</string>
+    <string name="btn_speech_preset_add">プリセットを追加</string>
+    <string name="btn_speech_preset_delete">プリセットを削除</string>
+    <string name="speech_preset_default_name">プリセット%1$d</string>
+    <string name="toast_speech_preset_added">プリセットが追加されました</string>
+    <string name="toast_speech_preset_deleted">プリセットが削除されました</string>
+    <string name="dialog_speech_preset_delete_title">プリセットを削除</string>
+    <string name="dialog_speech_preset_delete_message">「%1$s」を削除しますか？</string>
+    <string name="speech_preset_intro">ASR結果がプリセット名と完全に一致する場合、その内容に置き換えられます。クイックフレーズ、署名、住所、IDに便利です。マッチング：最初に大文字小文字を区別、一致しない場合は大文字小文字を区別しない；テキスト全体が名前と一致する場合のみトリガー。末尾の句読点をトリミングする必要がある場合があります。</string>
+
+    <!-- Language & misc -->
+    <string name="label_language">アプリ言語</string>
+    <string name="lang_follow_system">システムに従う</string>
+    <string name="lang_zh_cn">簡体字中国語</string>
+    <string name="lang_zh_tw">繁体字中国語</string>
+    <string name="lang_ja">日本語</string>
+    <string name="lang_en">英語</string>
+
+    <string name="toast_preset_added">プリセットが追加されました</string>
+    <string name="toast_preset_deleted">プリセットが削除されました</string>
+    <string name="untitled_preset">無題のプリセット</string>
+    <string name="switched_preset">切り替え：%1$s</string>
+    <string name="toast_export_success">エクスポート：%1$s</string>
+    <string name="toast_export_failed">エクスポート失敗</string>
+    <string name="toast_import_success">正常にインポートして適用しました</string>
+    <string name="toast_import_failed">インポート失敗または形式が正しくありません</string>
+
+    <!-- Backup settings -->
+    <string name="title_backup_settings">バックアップと同期</string>
+    <string name="btn_open_backup_settings">バックアップと同期</string>
+    <string name="section_file_backup">ファイルバックアップ</string>
+    <string name="btn_export_to_file">ファイルにエクスポート</string>
+    <string name="btn_import_from_file">ファイルからインポート</string>
+    <string name="section_webdav_sync">WebDAV同期</string>
+
+    <!-- Debug logging -->
+    <string name="about_debug_title">デバッグログ</string>
+    <string name="about_debug_desc">状態とエラーのみを記録し、ASRテキスト、入力内容、クリップボードデータは含みません。開始すると以前のログがクリアされます。停止して共有してエクスポートします。</string>
+    <string name="btn_debug_start_recording">デバッグ記録を開始</string>
+    <string name="btn_debug_stop_recording">記録を停止</string>
+    <string name="btn_debug_export">デバッグログを共有</string>
+    <string name="toast_debug_recording_started">記録開始（以前のログをクリア）</string>
+    <string name="toast_debug_recording_stopped">記録停止</string>
+    <string name="toast_debug_no_log">エクスポートするログがありません</string>
+    <string name="toast_debug_stop_before_export">エクスポート前に記録を停止してください</string>
+    <string name="toast_debug_failed">操作失敗。再試行してください</string>
+    <string name="toast_debug_export_failed">共有失敗</string>
+    <string name="hint_webdav_url">WebDAV URL（例：https://dav.example.com）</string>
+    <string name="hint_webdav_username">ユーザー名（オプション）</string>
+    <string name="hint_webdav_password">パスワード（オプション）</string>
+    <string name="btn_webdav_upload">WebDAVにアップロード</string>
+    <string name="btn_webdav_download">WebDAVから復元</string>
+    <string name="toast_webdav_upload_success">WebDAVにアップロードしました</string>
+    <string name="toast_webdav_upload_failed">アップロード失敗：%1$s</string>
+    <string name="toast_webdav_download_success">WebDAVからインポートしました</string>
+    <string name="toast_webdav_download_failed">ダウンロード/インポート失敗：%1$s</string>
+    <string name="toast_webdav_url_required">WebDAVベースURLを入力してください</string>
+    <string name="toast_webdav_directory_created">LexiSharpディレクトリが作成されました</string>
+    <string name="tip_backup_contains_secrets">注：バックアップにはキーと認証情報が含まれています。プライベートに保ってください。</string>
+    <string name="toast_silence_autostop_on">無音時自動停止が有効になりました</string>
+    <string name="toast_silence_autostop_off">無音時自動停止が無効になりました</string>
+
+    <!-- Stats -->
+    <string name="label_asr_total_chars">音声認識からの総文字数：%1$d</string>
+
+    <!-- Errors (ASR engines) -->
+    <string name="error_record_permission_denied">録音権限が許可されていません</string>
+    <string name="error_audio_init_failed">録音初期化失敗</string>
+    <string name="error_audio_error">録音エラー：%1$s</string>
+    <string name="error_audio_empty">空の音声</string>
+    <string name="error_missing_gemini_key">Gemini APIキーが設定されていません</string>
+    <string name="error_missing_dashscope_key">DashScope APIキーが設定されていません</string>
+    <string name="error_missing_siliconflow_key">SiliconFlow APIキーが設定されていません</string>
+    <string name="error_missing_eleven_key">ElevenLabs APIキーが設定されていません</string>
+    <string name="error_missing_soniox_key">Soniox APIキーが設定されていません</string>
+    <string name="error_missing_eleven_model_id">ElevenLabsモデルIDが設定されていません（必須）</string>
+    <string name="error_request_failed_http">認識リクエスト失敗：HTTP %1$d%2$s</string>
+    <string name="error_asr_request_failed_http">ASRリクエスト失敗：HTTP %1$d%2$s</string>
+    <string name="error_dash_getpolicy_failed_http">getPolicy失敗：HTTP %1$d%2$s</string>
+    <string name="error_dash_no_data">getPolicyレスポンスにデータがありません</string>
+    <string name="error_dash_missing_upload_host">getPolicyレスポンスにupload_hostがありません</string>
+    <string name="error_oss_upload_failed_http">OSSアップロード失敗：%1$d%2$s</string>
+    <string name="error_asr_empty_result">空のASR結果</string>
+    <string name="error_recognize_failed_with_reason">認識失敗：%1$s</string>
+    <string name="label_soniox_api_key">APIキー（Bearer）</string>
+
+    <!-- User-facing ASR error toasts (floating + keyboard) -->
+    <string name="asr_error_empty_result">音声が認識されませんでした。もう一度お試しください。</string>
+    <string name="asr_error_network_unavailable">ネットワーク接続失敗。接続を確認して再試行してください。</string>
+    <string name="asr_error_network_handshake">接続ハンドシェイク失敗。もう一度お試しいただくか、ネットワークを切り替えてください。</string>
+    <string name="asr_error_mic_permission_denied">マイク権限が必要です。設定で有効にしてください。</string>
+    <string name="asr_error_mic_in_use">マイクが他のアプリで使用されています。後でもう一度お試しください。</string>
+    <string name="asr_error_auth_invalid">認証失敗。認証情報が無効または期限切れです。設定で更新してください。</string>
+    <string name="asr_error_auth_forbidden">禁止されています。サービス権限を確認してください。</string>
+
+    <!-- Enhanced Quick Guide -->
+    <string name="guide_subtitle">音声入力をよりシンプルで効率的に</string>
+    <string name="guide_main_keyboard_title">メインキーボードレイアウト</string>
+    <string name="guide_main_keyboard_desc">マイク、後処理トグル、編集パネルエントリなどを持つメインキーボードインターフェース</string>
+    <string name="guide_edit_panel_title">編集パネル</string>
+    <string name="guide_edit_panel_desc">カーソル移動、テキスト選択、コピー/貼り付け、AI処理など、強力なテキスト編集機能</string>
+    <string name="guide_numpad_title">数字と記号キーボード</string>
+    <string name="guide_numpad_desc">中/英句読点トグル付き数字と句読点入力パネル</string>
+    <string name="guide_core_features_title">コア機能</string>
+    <string name="guide_long_press_title">長押しして録音</string>
+    <string name="guide_long_press_desc">マイクボタンを長押しして録音を開始、リリースしてテキストに変換</string>
+    <string name="guide_ai_processing_title">AIスマート後処理</string>
+    <string name="guide_ai_processing_desc">複数のプリセットテンプレートをサポートし、認識結果をより正確に</string>
+    <string name="guide_floating_title">フローティングボール機能</string>
+    <string name="guide_floating_desc">入力メソッドを素早く切り替えるか、フローティングボール音声認識を実行</string>
+    <string name="guide_detailed_features_title">詳細な機能説明</string>
+    <string name="guide_detailed_features_content">【メインキーボード機能】\n• マイクボタン（中央）：長押しして録音、リリースして音声をテキストに変換\n• 編集パネルエントリ（左上）：タップして編集パネルに入る\n• 後処理を有効化：AI後処理のオン/オフを切り替え\n• キーボードを非表示：キーボードインターフェースを最小化\n• Backspace：上/左にスワイプしてすべて削除、下にスワイプして最後の変更を元に戻す\n• 設定：アプリ設定を開く\n• 入力メソッドを切り替え：他のキーボードに素早く切り替え\n• Enter：改行を送信\n• カスタム句読点：下部に4つのカスタマイズ可能な句読点キー\n\n【編集パネル機能】\n• マイクボタン（中央）：長押しして音声コマンドを録音、LLMがコマンドに基づいて内容を変更（AI編集機能）\n• メインに戻る：編集パネルを終了\n• プリセットプロンプトを適用：AIテンプレートを選択して現在のテキストを処理\n• カーソル移動：カーソルを左右に移動、長押しで連続移動\n• 先頭/末尾に移動：テキストの先頭/末尾に素早くジャンプ\n• 選択モード：カーソル移動中にテキストを選択するために有効化\n• すべて選択：すべてのテキストを選択\n• コピー/貼り付け：テキストコピーと貼り付け機能\n• Backspace：文字を削除、ジェスチャーをサポート（メインキーボードと同じ）\n• 数字と記号キーボード：数字/記号入力パネルに切り替え\n\n【数字と記号キーボード】\n• 数字行：数字0-9の素早い入力\n• 句読点記号：一般的な句読点の2行\n• 中/英トグル：中/英句読点を切り替え\n• スペース/Enter/Backspace：基本的な入力機能\n• 編集パネルに戻る：数字キーボードを終了</string>
+    <string name="guide_first_time_title">初回使用</string>
+    <string name="guide_mic_icon_desc">マイクアイコン</string>
+    <string name="guide_ai_icon_desc">AI処理アイコン</string>
+    <string name="guide_floating_icon_desc">フローティングボールアイコン</string>
+
+    <!-- Legacy Quick guide (image + text) -->
+    <string name="accessibility_service_description">フローティングボールがASR結果を現在の入力フィールドに挿入できるようにします。データは収集またはアップロードされません。</string>
+
+    <!-- Update check -->
+    <string name="update_checking">更新を確認中…</string>
+    <string name="update_no_update">最新バージョンを使用しています</string>
+    <string name="update_check_failed">更新確認失敗：%1$s</string>
+    <string name="update_dialog_title">新しいバージョンが利用可能</string>
+    <string name="update_dialog_message">現在のバージョン：%1$s\n最新バージョン：%2$s\n\nダウンロードしますか？</string>
+    <string name="btn_download">ダウンロード</string>
+    <string name="btn_manual_check">手動確認</string>
+    <string name="btn_cancel">キャンセル</string>
+    <string name="download_source_title">ダウンロードソースを選択</string>
+    <string name="download_source_github_official">GitHub（公式）</string>
+    <string name="download_source_mirror_ghproxy">GitHubミラー（ghproxy.net）</string>
+    <string name="download_source_mirror_gitmirror">GitHubミラー（hub.gitmirror.com）</string>
+    <string name="download_source_mirror_gh_proxynet">GitHubミラー（gh-proxy.net）</string>
+    <string name="update_timestamp_label">リリース時間：%1$s</string>
+    <string name="update_release_notes_label">リリースノート：\n%1$s</string>
+    <string name="error_open_browser">ブラウザを開けません</string>
+
+    <!-- Generic toasts -->
+    <string name="toast_accessibility_enabled">アクセシビリティサービスが有効になりました。自動挿入が利用可能になりました。</string>
+
+    <!-- ASR History -->
+    <string name="title_asr_history">ASR履歴</string>
+    <string name="hint_search_history">テキストを検索…</string>
+    <string name="history_section_2h">2時間以内</string>
+    <string name="history_section_today">今日</string>
+    <string name="history_section_7d">過去7日間</string>
+    <string name="history_section_30d">過去30日間</string>
+    <string name="history_section_older">それ以前</string>
+    <string name="label_vendor">ベンダー</string>
+    <string name="label_source">ソース</string>
+    <string name="source_ime">キーボード</string>
+    <string name="source_floating">フローティング</string>
+    <string name="source_ime_full">キーボード入力</string>
+    <string name="source_floating_full">フローティング入力</string>
+    <string name="label_ai_processed">AI処理済み</string>
+    <string name="label_chars_count">テキスト：%1$d</string>
+    <string name="label_audio_duration_s">時間：%1$.1f秒</string>
+    <string name="meta_cost_seconds">%1$.1f秒かかりました</string>
+    <string name="ai_processed_yes">後処理済み</string>
+    <string name="ai_processed_no">未処理</string>
+    <string name="label_timestamp">時間</string>
+    <string name="label_time">時間範囲</string>
+    <string name="filter_time_all">すべて</string>
+    <string name="filter_all">すべて</string>
+    <string name="btn_copy">コピー</string>
+    <string name="toast_copied">コピーしました</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="menu_filter">フィルター</string>
+    <string name="menu_select_all">すべて選択</string>
+    <string name="menu_clear_selection">選択をクリア</string>
+    <string name="menu_delete_selected">選択項目を削除</string>
+    <string name="dialog_filter_title">フィルター</string>
+    <string name="dialog_filter_ok">OK</string>
+    <string name="dialog_filter_cancel">キャンセル</string>
+    <string name="dialog_filter_reset">リセット</string>
+    <string name="dialog_delete_selected_title">削除の確認</string>
+    <string name="dialog_delete_selected_msg">%1$d個の選択項目を削除しますか？この操作は元に戻せません。</string>
+    <string name="toast_deleted">%1$d個のアイテムを削除しました</string>
+    <string name="empty_history">まだ履歴がありません</string>
+
+    <!-- About -->
+    <string name="btn_about">について</string>
+    <string name="about_title">について</string>
+    <string name="about_app_name">アプリ名：%1$s</string>
+    <string name="about_version">バージョン：%1$s</string>
+    <string name="about_package">パッケージ：%1$s</string>
+    <string name="about_open_github">プロジェクトページを開く</string>
+    <string name="about_project_url">https://github.com/BryceWG/LexiSharp-Keyboard</string>
+    <string name="about_desc">マルチベンダーASRとLLM後処理付きの軽量音声入力IME</string>
+
+    <!-- Settings test input -->
+    <string name="label_test_input">テスト入力（ここでIMEを試してください）</string>
+    <string name="btn_test_input">テスト入力</string>
+
+    <!-- LLM test call -->
+    <string name="btn_llm_test_call">LLM呼び出しをテスト</string>
+    <string name="llm_test_running">LLM呼び出しをテスト中…</string>
+    <string name="llm_test_success_title">テスト成功</string>
+    <string name="llm_test_success_preview">レスポンスプレビュー：%1$s</string>
+    <string name="llm_test_failed_title">テスト失敗</string>
+    <string name="llm_test_failed_reason">理由：%1$s</string>
+    <string name="llm_test_failed_generic">呼び出し失敗</string>
+    <string name="llm_test_missing_params">APIエンドポイントとモデル名を入力してください</string>
+
+    <!-- Common button: open API key guide -->
+    <string name="btn_get_api_key_guide">APIキーを取得</string>
+
+    <!-- Keyboard height -->
+    <string name="label_keyboard_height">キーボードスケール</string>
+    <string name="keyboard_height_small">小</string>
+    <string name="keyboard_height_medium">中</string>
+    <string name="keyboard_height_large">大</string>
+
+    <!-- Keyboard bottom padding -->
+    <string name="label_keyboard_bottom_padding">キーボード下部パディング</string>
+    <string name="keyboard_bottom_padding_value">%d dp</string>
+
+    <!-- Keyboard layout option -->
+    <string name="label_fcitx5_return_on_switcher">IME切り替えキーが前の入力メソッドに戻る</string>
+    <string name="label_hide_recent_task_card">最近のタスクプレビューを非表示</string>
+
+    <!-- Model download notifications -->
+    <string name="notif_channel_model_download">モデルダウンロード</string>
+    <string name="notif_channel_model_download_desc">ローカルモデルダウンロードと展開の進行状況</string>
+    <string name="notif_model_summary_title">モデルダウンロード</string>
+    <string name="notif_model_summary_text">バックグラウンドでモデルをダウンロード/展開中</string>
+    <string name="notif_model_title_int8">SenseVoiceモデル（Small int8）</string>
+    <string name="notif_model_title_full">SenseVoiceモデル（Small full）</string>
+
+    <!-- Silence auto-stop (ASR) -->
+    <string name="section_silence_autostop">無音時自動停止</string>
+    <string name="label_auto_stop_silence">音声がない時に自動停止</string>
+    <string name="label_silence_window_ms">停止ウィンドウ（ms）</string>
+    <string name="label_silence_sensitivity">感度（1-10；高いほど敏感）</string>
+    <!-- SenseVoice local settings -->
+    <string name="btn_sv_download_model">SenseVoiceモデルをワンクリックでダウンロード</string>
+    <string name="btn_sv_download_model_int8">SenseVoice（small int8、約160MB）をワンクリックでダウンロード</string>
+    <string name="btn_sv_download_model_full">SenseVoice（small full、約850MB）をワンクリックでダウンロード</string>
+    <string name="btn_sv_clear_model">ダウンロードしたモデルをクリア</string>
+    <string name="sv_download_status_downloading">ダウンロード中…%1$d%%</string>
+    <string name="sv_download_status_extracting">展開中…お待ちください</string>
+    <string name="sv_download_status_done">モデルがインストールされました</string>
+    <string name="sv_download_status_failed">ダウンロードまたは展開失敗</string>
+    <string name="sv_download_started_in_bg">バックグラウンドダウンロードを開始しました。進行状況は通知で確認してください。</string>
+    <string name="sv_clear_confirm_title">モデルクリアの確認</string>
+    <string name="sv_clear_confirm_message">ダウンロードしたモデルファイルが削除されます。後で再ダウンロードできます。続行しますか？</string>
+    <string name="sv_clear_done">モデルがクリアされました</string>
+    <string name="sv_clear_failed">クリア失敗</string>
+    <string name="label_sv_model_variant">モデルバージョン</string>
+    <string name="sv_model_small_int8">Small（int8、約160MB）</string>
+    <string name="sv_model_small_full">Small（full、約850MB）</string>
+    <string name="sv_loading_model">ローカルモデルを読み込み中…</string>
+    <string name="sv_loading_model_while_listening">聞いています…バックグラウンドでローカルモデルを読み込み中…</string>
+    <string name="sv_model_ready">ローカルモデルが読み込まれました</string>
+    <string name="label_sv_preload">初回表示時にモデルを読み込み</string>
+    <string name="label_sv_keep_alive">モデルキープアライブ期間</string>
+    <string name="sv_keep_alive_immediate">キープアライブなし（認識後にアンロード）</string>
+    <string name="sv_keep_alive_5m">5分</string>
+    <string name="sv_keep_alive_15m">15分</string>
+    <string name="sv_keep_alive_30m">30分</string>
+    <string name="sv_keep_alive_always">常に保持（パラメータが変更されるまで）</string>
+    <string name="label_sv_pseudo_streaming">疑似ストリーミング（録音中にリアルタイム）</string>
+    <string name="label_sv_threads">スレッド（1-8）</string>
+    <string name="label_sv_language">認識言語</string>
+    <string name="sv_lang_auto">自動</string>
+    <string name="sv_lang_zh">中国語（zh）</string>
+    <string name="sv_lang_en">英語（en）</string>
+    <string name="sv_lang_ja">日本語（ja）</string>
+    <string name="sv_lang_ko">韓国語（ko）</string>
+    <string name="sv_lang_yue">広東語（yue）</string>
+    <string name="label_sv_use_itn">ITNを有効化（逆テキスト正規化）</string>
+    <!-- SyncClipboard settings -->
+    <string name="section_sync_clipboard">クリップボード同期</string>
+    <string name="label_enable_sync_clipboard">SyncClipboardプロジェクトを使用してクリップボードを同期</string>
+    <string name="label_sc_server_base">サーバーベースURL（/SyncClipboard.jsonを追加）</string>
+    <string name="label_sc_username">ユーザー名</string>
+    <string name="label_sc_password">パスワード</string>
+    <string name="label_sc_auto_pull">定期的にクリップボードを自動プル（IME表示時のみ）</string>
+    <string name="label_sc_pull_interval">プル間隔（秒、1-600）</string>
+    <string name="btn_sc_test_pull">検証</string>
+    <string name="sc_test_success">プル成功</string>
+    <string name="sc_test_failed">プル失敗。URLと認証情報を確認してください。</string>
+    <string name="sc_status_uploaded">クリップボードが正常にアップロードされました</string>
+    <string name="btn_sc_project_home">プロジェクトホーム</string>
+    <string name="sc_open_browser_failed">ブラウザを開けません</string>
+    <string name="hint_sc_server_base_placeholder">https://your-server.com/path</string>
+
+    <!-- Audio -->
+    <string name="label_audio_ducking_on_record">録音中のオーディオダッキング</string>
+    <string name="label_headset_mic_priority">ヘッドセットマイクを優先（実験的）</string>
+    <string name="label_return_prev_ime_on_hide">非表示時に前のIMEに切り替える</string>
+    <string name="toast_bt_connect_permission_required">ヘッドセットマイクを使用するにはBluetooth接続権限が必要です</string>
+    <string name="toast_bt_connect_permission_denied">Bluetooth接続権限が拒否されました。ヘッドセット優先が無効になりました。</string>
+
+    <!-- About: Usage stats -->
+    <string name="about_stats_title">使用統計</string>
+    <string name="about_days_with_you">LexiSharpは%1$d日間あなたと一緒にいました</string>
+    <string name="about_total_audio">総音声時間：%1$s</string>
+    <string name="about_avg_line">平均音声：%1$s・平均文字：%2$d・平均速度：%3$s文字/分</string>
+    <string name="about_daily_weekly_avg">日平均（過去7日間）：%1$d文字、%2$s；週平均（過去4週間）：%3$d文字、%4$s</string>
+    <string name="about_by_vendor">プロバイダー別</string>
+    <string name="about_last_7_days">過去7日間（文字）</string>
+    <string name="about_empty_stats_placeholder">まだデータがありません</string>
+    <string name="unit_chars">文字</string>
+    <string name="unit_0_min">0分</string>
+    <string name="fmt_h_m">%1$d時間%2$d分</string>
+    <string name="fmt_m_s">%1$d分%2$d秒</string>
+    <string name="fmt_s">%1$d秒</string>
+</resources>

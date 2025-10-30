@@ -1,0 +1,8 @@
+<resources>
+    <string name="vendor_gemini">Google Gemini</string>
+    <string name="gemini_section_title">Gemini 音訊理解</string>
+    <string name="label_gemini_api_key">Gemini API 金鑰</string>
+    <string name="label_gemini_model">模型（例如：gemini-2.5-flash）</string>
+    <string name="label_gemini_prompt">轉錄提示詞</string>
+    <string name="label_gemini_disable_thinking">停用思考模式（降低延遲）</string>
+</resources>

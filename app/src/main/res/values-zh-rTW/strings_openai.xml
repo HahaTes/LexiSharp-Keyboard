@@ -1,0 +1,10 @@
+<resources>
+    <string name="vendor_openai">OpenAI</string>
+    <string name="openai_section_title">OpenAI 語音轉文字</string>
+    <string name="label_openai_asr_endpoint">ASR 端點（例如：https://api.openai.com/v1/audio/transcriptions）</string>
+    <string name="label_openai_api_key">API 金鑰（Bearer）</string>
+    <string name="label_openai_model">模型（例如：gpt-4o-mini-transcribe 或 whisper-1）</string>
+    <string name="label_openai_use_prompt">使用自定義提示詞（某些模型不支援）</string>
+    <string name="label_openai_prompt">自定義提示詞（可選）</string>
+    <string name="label_openai_language">語言（可選）</string>
+</resources>

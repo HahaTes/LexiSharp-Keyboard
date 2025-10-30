@@ -1,0 +1,18 @@
+<resources>
+    <string name="vendor_eleven">ElevenLabs</string>
+    <string name="eleven_section_title">ElevenLabs 憑證</string>
+    <string name="label_eleven_api_key">xi-api-key</string>
+    <string name="label_eleven_model">模型 ID（必需）</string>
+    <string name="label_eleven_language">語言（可選，空白 = 自動）</string>
+    <string name="eleven_lang_auto">自動（啟用語言識別）</string>
+    <string name="eleven_lang_zh">中文（zh）</string>
+    <string name="eleven_lang_en">英文（en）</string>
+    <string name="eleven_lang_ja">日文（ja）</string>
+    <string name="eleven_lang_ko">韓文（ko）</string>
+    <string name="eleven_lang_de">德文（de）</string>
+    <string name="eleven_lang_fr">法文（fr）</string>
+    <string name="eleven_lang_es">西班牙文（es）</string>
+    <string name="eleven_lang_pt">葡萄牙文（pt）</string>
+    <string name="eleven_lang_ru">俄文（ru）</string>
+    <string name="eleven_lang_it">義大利文（it）</string>
+</resources>

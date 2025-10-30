@@ -1,0 +1,530 @@
+<resources>
+<string name="app_name">LexiSharp 鍵盤</string>
+
+    <string name="cd_mic">麥克風</string>
+    <string name="cd_settings">設定</string>
+    <string name="cd_enter">輸入</string>
+    <string name="cd_backspace">退格鍵</string>
+    <string name="cd_switch_ime">切換輸入法</string>
+    <string name="cd_postproc_toggle">AI 後處理</string>
+    <string name="cd_ai_edit">AI 編輯</string>
+    <string name="cd_hide">隱藏鍵盤</string>
+    <string name="cd_prompt_picker">切換後處理提示詞</string>
+    <string name="cd_numpad_back">返回編輯面板</string>
+    <string name="cd_space">空格</string>
+    <string name="cd_punct_lang_toggle">切換中/英文標點</string>
+    <string name="cd_punct_btn_1">自定義按鍵 1</string>
+    <string name="cd_punct_btn_2">自定義按鍵 2</string>
+    <string name="cd_punct_btn_3">自定義按鍵 3</string>
+    <string name="cd_punct_btn_4">自定義按鍵 4</string>
+
+    <string name="status_idle">就緒</string>
+    <string name="status_listening">聆聽中…</string>
+    <string name="status_recognizing">識別中…</string>
+    <string name="status_ai_processing">AI 後處理中…</string>
+    <string name="status_ai_edit_listening">請說出您的編輯指令…</string>
+    <string name="status_ai_editing">AI 編輯中…</string>
+    <string name="status_cancelled">已取消</string>
+    <string name="status_reverted_to_raw">已還原為原始轉錄</string>
+    <string name="status_undone">已復原上次變更</string>
+    <string name="status_llm_empty_result">AI 編輯失敗：無結果</string>
+    <string name="status_last_asr_not_found">未找到上次 ASR 結果；已取消</string>
+    <string name="hint_need_llm_keys">請先設定 AI 後處理</string>
+    <string name="hint_cannot_read_text">目前應用程式文字無法讀取</string>
+    <string name="status_llm_failed_used_raw">AI 後處理失敗；使用原始文字</string>
+    <string name="status_llm_edit_failed">AI 編輯失敗。請再試一次</string>
+    <string name="hint_need_permission">語音輸入需要麥克風權限</string>
+    <string name="status_postproc">AI 後處理：%1$s</string>
+    <string name="toggle_on">開</string>
+    <string name="toggle_off">關</string>
+    <string name="label_ai_edit_default_use_last_asr">AI 編輯預設範圍：使用上次轉錄</string>
+    <string name="label_mic_swipe_up_auto_enter">釋放時向上滑動以發送</string>
+    <string name="btn_retry">連線失敗，重試？</string>
+
+    <!-- Edit panel content descriptions -->
+    <string name="cd_return_main">返回主鍵盤</string>
+    <string name="cd_apply_preset_prompt">套用預設提示詞</string>
+    <string name="cd_cursor_left">游標左移</string>
+    <string name="cd_cursor_right">游標右移</string>
+    <string name="cd_numpad">數字鍵盤</string>
+    <string name="cd_select_toggle">切換選擇模式</string>
+    <string name="cd_select_all">全選</string>
+    <string name="cd_copy">複製</string>
+    <string name="cd_paste">貼上</string>
+    <string name="cd_move_home">移至開頭</string>
+    <string name="cd_move_end">移至結尾</string>
+    <string name="cd_undo">復原</string>
+
+    <string name="settings_instructions">首次設定：\n1. 點擊「啟用鍵盤」並在系統設定中啟用 LexiSharp 鍵盤\n2. 點擊「選擇鍵盤」切換至 LexiSharp 鍵盤\n3. 授予麥克風權限，然後長按鍵盤上的麥克風按鈕試用</string>
+    <string name="btn_one_click_setup">一鍵設定</string>
+    <string name="btn_show_guide">檢視快速指南</string>
+    <string name="btn_check_update">檢查更新</string>
+    <!-- Material UI additions -->
+    <string name="settings_title">LexiSharp 鍵盤設定</string>
+    <string name="btn_open_asr_history">歷史記錄</string>
+    <string name="title_input_settings">輸入設定</string>
+    <string name="title_asr_settings">ASR 設定</string>
+    <string name="title_ai_settings">AI 後處理設定</string>
+    <string name="title_other_settings">其他設定</string>
+    <string name="title_floating_settings">懸浮設定</string>
+    <string name="volc_section_title">火山引擎憑證</string>
+    <string name="sf_section_title">SiliconFlow 憑證</string>
+    <string name="label_app_key">X-Api-App-Key</string>
+    <string name="label_access_key">X-Api-Access-Key</string>
+    <string name="label_asr_vendor">ASR 供應商</string>
+    <string name="vendor_volc">火山引擎</string>
+    <string name="vendor_sf">SiliconFlow</string>
+    <string name="vendor_dashscope">阿里雲百煉</string>
+    <string name="vendor_soniox">Soniox</string>
+    <string name="vendor_sensevoice">SenseVoice（本地）</string>
+    <string name="label_sf_api_key">API 金鑰（Bearer）</string>
+    <string name="label_sf_model">模型名稱（例如：FunAudioLLM/SenseVoiceSmall）</string>
+    <string name="label_sf_use_omni">使用語音多模態模型（Qwen3-Omni）</string>
+    <string name="label_sf_omni_prompt">多模態轉錄提示詞（可選）</string>
+    <string name="dash_section_title">阿里雲百煉 ASR 參數</string>
+    <string name="soniox_section_title">Soniox 憑證</string>
+    <string name="sensevoice_section_title">SenseVoice 本地 ASR</string>
+    <string name="label_dash_api_key">DashScope API Key (Bearer)</string>
+    <string name="label_dash_model">模型 (例如：qwen3-asr-flash)</string>
+    <string name="label_dash_prompt">自定義提示詞 / 上下文 (可選)</string>
+    <string name="label_dash_language">識別語言 (可選；若已知可提高準確性)</string>
+    <string name="dash_lang_auto">自動 (啟用語言識別)</string>
+    <string name="dash_lang_zh">中文 (zh)</string>
+    <string name="dash_lang_en">英文 (en)</string>
+    <string name="dash_lang_ja">日文 (ja)</string>
+    <string name="dash_lang_de">德文 (de)</string>
+    <string name="dash_lang_ko">韓文 (ko)</string>
+    <string name="dash_lang_ru">俄文 (ru)</string>
+    <string name="dash_lang_fr">法文 (fr)</string>
+    <string name="dash_lang_pt">葡萄牙文 (pt)</string>
+    <string name="dash_lang_ar">阿拉伯文 (ar)</string>
+    <string name="dash_lang_it">義大利文 (it)</string>
+    <string name="dash_lang_es">西班牙文 (es)</string>
+    <string name="label_volc_streaming">使用串流識別 (WebSocket)</string>
+    <string name="label_volc_ddc">啟用語義平滑 (實驗性)</string>
+    <string name="label_volc_vad">啟用 VAD 分割 (實驗性)</string>
+    <string name="label_volc_nonstream">啟用雙通道識別 (實驗性)</string>
+    <string name="label_volc_first_char_accel">首字元加速 (實驗性)</string>
+    <string name="label_volc_language">識別語言 (非串流模式)</string>
+    <string name="volc_lang_auto">自動 (中文/英文 + 方言)</string>
+    <string name="volc_lang_en_us">英文 (en-US)</string>
+    <string name="volc_lang_ja_jp">日文 (ja-JP)</string>
+    <string name="volc_lang_id_id">印尼文 (id-ID)</string>
+    <string name="volc_lang_es_mx">西班牙文 (es-MX)</string>
+    <string name="volc_lang_pt_br">葡萄牙文 (pt-BR)</string>
+    <string name="volc_lang_de_de">德文 (de-DE)</string>
+    <string name="volc_lang_fr_fr">法文 (fr-FR)</string>
+    <string name="volc_lang_ko_kr">韓文 (ko-KR)</string>
+    <string name="volc_lang_fil_ph">菲律賓文 (fil-PH)</string>
+    <string name="volc_lang_ms_my">馬來文 (ms-MY)</string>
+    <string name="volc_lang_th_th">泰文 (th-TH)</string>
+    <string name="volc_lang_ar_sa">阿拉伯文 (ar-SA)</string>
+    <string name="label_soniox_streaming">使用 Soniox 串流 (WebSocket)</string>
+    <string name="label_soniox_language">識別語言 (語言提示)</string>
+    <string name="soniox_lang_auto">自動 (多語言)</string>
+    <string name="soniox_lang_en">英文 (en)</string>
+    <string name="soniox_lang_zh">中文 (zh)</string>
+    <string name="soniox_lang_ja">日文 (ja)</string>
+    <string name="soniox_lang_ko">韓文 (ko)</string>
+    <string name="soniox_lang_es">西班牙文 (es)</string>
+    <string name="soniox_lang_pt">葡萄牙文 (pt)</string>
+    <string name="soniox_lang_de">德文 (de)</string>
+    <string name="soniox_lang_fr">法文 (fr)</string>
+    <string name="soniox_lang_id">印尼文 (id)</string>
+    <string name="soniox_lang_ru">俄文 (ru)</string>
+    <string name="soniox_lang_ar">阿拉伯文 (ar)</string>
+    <string name="soniox_lang_hi">印地文 (hi)</string>
+    <string name="soniox_lang_vi">越南文 (vi)</string>
+    <string name="soniox_lang_th">泰文 (th)</string>
+    <string name="soniox_lang_ms">馬來文 (ms)</string>
+    <string name="soniox_lang_fil">菲律賓文 (fil)</string>
+    <string name="status_last_request_ms">上次請求時間：%1$d 毫秒</string>
+
+    <!-- Local ASR (placeholder) -->
+    <string name="error_local_asr_not_ready">本機 ASR 未就緒。請稍後整合 sherpa-onnx 和模型檔案。</string>
+    <string name="error_sensevoice_model_missing">SenseVoice 模型遺失。請稍後在設定中配置或下載。</string>
+
+    <string name="btn_close">關閉</string>
+    <string name="title_quick_guide">快速入門指南</string>
+    <string name="label_trim_trailing_punct">結束時移除尾部標點和表情符號</string>
+    <string name="label_mic_haptic">按鍵和浮動球觸覺回饋</string>
+    <string name="label_mic_tap_toggle">使用點擊控制錄音</string>
+    <string name="label_floating_only_when_ime_visible">僅在鍵盤可見時顯示浮動球</string>
+    <string name="label_floating_alpha">浮動球透明度</string>
+    <string name="label_floating_size">浮動球大小</string>
+    <string name="toast_need_overlay_perm">請在系統設定中授予「在其他應用程式上層顯示」權限以啟用浮動球</string>
+    <string name="toast_need_accessibility_perm">請在系統設定中啟用無障礙服務以支援此功能</string>
+    <string name="label_floating_asr">使用浮動球進行語音識別</string>
+    <string name="label_floating_write_compat">浮動寫入相容性模式</string>
+    <string name="desc_floating_write_compat">部分應用程式會向無障礙服務暴露背景預留位置文字，這會污染最終插入。啟用後，在目標應用程式中，浮動球會切換為全選 + 貼上並使用不可見標記來避免預留位置問題。剪貼簿可能會暫時被使用（盡力恢復）。適用於 Telegram、抖音等。</string>
+    <string name="label_floating_write_compat_pkgs">目標套件名稱 (每行一個)</string>
+    <string name="hint_floating_write_compat_pkgs">輸入套件或前綴 (例如：org.telegram)。結尾的 * 表示前綴匹配 (例如：org.telegram.*)。</string>
+    <string name="label_floating_write_paste">僅將識別結果複製到剪貼簿</string>
+    <string name="desc_floating_write_paste">僅適用於以下套件：在這些應用程式中，使用浮動語音輸入時，將結果複製到剪貼簿而非透過無障礙 API 插入。如果某行包含 all，則全域適用。</string>
+    <string name="label_floating_write_paste_pkgs">目標套件 (每行一個)</string>
+    <string name="hint_floating_write_paste_pkgs">輸入確切的套件名稱 (例如：com.tencent.mm)。要全域適用，請新增單行 all。</string>
+    <string name="cd_floating_asr">浮動球語音識別</string>
+    <string name="toast_setup_all_done">全部設定完成</string>
+    <string name="toast_setup_enable_keyboard_first">請先在系統設定中啟用鍵盤，然後再回來</string>
+    <string name="toast_setup_choose_keyboard">請選擇「LexiSharp 鍵盤」作為目前輸入法</string>
+    <string name="toast_vad_sensitivity_applied">VAD 靈敏度已更新；將在下一次錄音時生效</string>
+
+    <!-- Floating ASR status messages -->
+    <string name="floating_asr_error">識別失敗：%1$s</string>
+    <string name="floating_asr_copied">已複製到剪貼簿</string>
+
+    <!-- LLM settings -->
+    <string name="label_llm_endpoint">OpenAI 端點 (例如 https://api.openai.com/v1 或包含 /chat/completions)</string>
+    <string name="label_llm_api_key">API Key</string>
+    <string name="label_llm_model">模型名稱 (例如：gpt-4o-mini)</string>
+    <string name="label_llm_temperature">溫度 (0.0 – 2.0)</string>
+    <string name="label_llm_prompt">後處理提示詞 (僅輸出處理後的文字)</string>
+    <string name="label_llm_prompt_title">提示詞預設標題</string>
+    <string name="label_llm_prompt_presets">選擇提示詞預設</string>
+    <string name="btn_add_preset">新增/儲存為預設</string>
+    <string name="btn_delete_preset">刪除預設</string>
+    <string name="label_llm_choose_profile">選擇後處理模型</string>
+    <string name="label_llm_profile_name">設定檔名稱</string>
+    <string name="btn_llm_add_profile">新增設定檔</string>
+    <string name="btn_llm_delete_profile">刪除設定檔</string>
+    <string name="toast_llm_profile_added">設定檔已新增</string>
+    <string name="toast_llm_profile_deleted">設定檔已刪除</string>
+    <string name="untitled_profile">未命名設定檔</string>
+
+    <!-- Floating radial menu -->
+    <string name="label_radial_switch_asr">切換 ASR 供應商</string>
+    <string name="label_radial_switch_ime">切換輸入法</string>
+    <string name="label_radial_move">移動浮動球</string>
+    <string name="label_radial_postproc">切換 AI 後處理</string>
+    <string name="label_radial_switch_prompt">切換 AI 後處理提示詞</string>
+    <string name="label_radial_clipboard_upload">上傳剪貼簿</string>
+    <string name="label_radial_clipboard_pull">拉取剪貼簿</string>
+    <string name="label_radial_toggle_silence_autostop">切換靜音自動停止</string>
+    <string name="label_radial_open_history">ASR 歷史記錄</string>
+    <string name="label_choose_asr_vendor">選擇 ASR 供應商</string>
+    <string name="toast_move_mode_on">移動模式已啟用。點擊球體退出。</string>
+
+    <!-- Custom punctuation settings -->
+    <string name="custom_punct_section_title">自定義標點按鈕</string>
+    <string name="label_custom_punct_1">按鈕 1 (字元或標點)</string>
+    <string name="label_custom_punct_2">按鈕 2 (字元或標點)</string>
+    <string name="label_custom_punct_3">按鈕 3 (字元或標點)</string>
+    <string name="label_custom_punct_4">按鈕 4 (字元或標點)</string>
+    <string name="label_auto_switch_password">密碼欄位自動切換回</string>
+
+    <!-- Speech Presets -->
+    <string name="label_speech_preset_section">語音預設</string>
+    <string name="speech_preset_empty_placeholder">尚無預設</string>
+    <string name="speech_preset_untitled">未命名預設</string>
+    <string name="hint_speech_preset_name">預設名稱</string>
+    <string name="hint_speech_preset_content">預設內容</string>
+    <string name="btn_speech_preset_add">新增預設</string>
+    <string name="btn_speech_preset_delete">刪除預設</string>
+    <string name="speech_preset_default_name">預設 %1$d</string>
+    <string name="toast_speech_preset_added">預設已新增</string>
+    <string name="toast_speech_preset_deleted">預設已刪除</string>
+    <string name="dialog_speech_preset_delete_title">刪除預設</string>
+    <string name="dialog_speech_preset_delete_message">刪除「%1$s」？</string>
+    <string name="speech_preset_intro">當 ASR 結果完全等於預設名稱時，將被其內容取代。適用於快速語句、簽名、地址、身分證號等。匹配：先區分大小寫，若未匹配則不區分大小寫；僅在整個文字等於名稱時觸發。可能需要啟用移除尾部標點。</string>
+
+    <!-- Language & misc -->
+    <string name="label_language">應用程式語言</string>
+    <string name="lang_follow_system">跟隨系統</string>
+    <string name="lang_zh_cn">簡體中文</string>
+    <string name="lang_zh_tw">繁體中文</string>
+    <string name="lang_ja">日語</string>
+    <string name="lang_en">英文</string>
+
+    <string name="toast_preset_added">預設已新增</string>
+    <string name="toast_preset_deleted">預設已刪除</string>
+    <string name="untitled_preset">未命名預設</string>
+    <string name="switched_preset">已切換：%1$s</string>
+    <string name="toast_export_success">已匯出：%1$s</string>
+    <string name="toast_export_failed">匯出失敗</string>
+    <string name="toast_import_success">匯入成功並已套用</string>
+    <string name="toast_import_failed">匯入失敗或格式不正確</string>
+
+    <!-- Backup settings -->
+    <string name="title_backup_settings">備份與同步</string>
+    <string name="btn_open_backup_settings">備份與同步</string>
+    <string name="section_file_backup">檔案備份</string>
+    <string name="btn_export_to_file">匯出到檔案</string>
+    <string name="btn_import_from_file">從檔案匯入</string>
+    <string name="section_webdav_sync">WebDAV 同步</string>
+
+    <!-- Debug logging -->
+    <string name="about_debug_title">除錯日誌</string>
+    <string name="about_debug_desc">僅記錄狀態和錯誤，不包含 ASR 文字、輸入內容或剪貼簿資料。開始將清除先前日誌。停止並分享以匯出。</string>
+    <string name="btn_debug_start_recording">開始除錯錄製</string>
+    <string name="btn_debug_stop_recording">停止錄製</string>
+    <string name="btn_debug_export">分享除錯日誌</string>
+    <string name="toast_debug_recording_started">已開始錄製 (先前日誌已清除)</string>
+    <string name="toast_debug_recording_stopped">已停止錄製</string>
+    <string name="toast_debug_no_log">無日誌可匯出</string>
+    <string name="toast_debug_stop_before_export">請在匯出前停止錄製</string>
+    <string name="toast_debug_failed">操作失敗。請重試</string>
+    <string name="toast_debug_export_failed">分享失敗</string>
+    <string name="hint_webdav_url">WebDAV URL (例如：https://dav.example.com)</string>
+    <string name="hint_webdav_username">使用者名稱 (可選)</string>
+    <string name="hint_webdav_password">密碼 (可選)</string>
+    <string name="btn_webdav_upload">上傳到 WebDAV</string>
+    <string name="btn_webdav_download">從 WebDAV 還原</string>
+    <string name="toast_webdav_upload_success">已上傳到 WebDAV</string>
+    <string name="toast_webdav_upload_failed">上傳失敗：%1$s</string>
+    <string name="toast_webdav_download_success">已從 WebDAV 匯入</string>
+    <string name="toast_webdav_download_failed">下載/匯入失敗：%1$s</string>
+    <string name="toast_webdav_url_required">請輸入 WebDAV 基礎 URL</string>
+    <string name="toast_webdav_directory_created">LexiSharp 目錄已建立</string>
+    <string name="tip_backup_contains_secrets">注意：備份包含金鑰和憑證。請保持私密。</string>
+    <string name="toast_silence_autostop_on">靜音自動停止已啟用</string>
+    <string name="toast_silence_autostop_off">靜音自動停止已停用</string>
+
+    <!-- Stats -->
+    <string name="label_asr_total_chars">語音識別總字元數：%1$d</string>
+
+    <!-- Errors (ASR engines) -->
+    <string name="error_record_permission_denied">未授予錄音權限</string>
+    <string name="error_audio_init_failed">錄音初始化失敗</string>
+    <string name="error_audio_error">錄音錯誤：%1$s</string>
+    <string name="error_audio_empty">空白音訊</string>
+    <string name="error_missing_gemini_key">未設定 Gemini API Key</string>
+    <string name="error_missing_dashscope_key">未設定 DashScope API Key</string>
+    <string name="error_missing_siliconflow_key">未設定 SiliconFlow API Key</string>
+    <string name="error_missing_eleven_key">未設定 ElevenLabs API Key</string>
+    <string name="error_missing_soniox_key">未設定 Soniox API Key</string>
+    <string name="error_missing_eleven_model_id">未設定 ElevenLabs Model ID (必需)</string>
+    <string name="error_request_failed_http">識別請求失敗：HTTP %1$d%2$s</string>
+    <string name="error_asr_request_failed_http">ASR 請求失敗：HTTP %1$d%2$s</string>
+    <string name="error_dash_getpolicy_failed_http">getPolicy 失敗：HTTP %1$d%2$s</string>
+    <string name="error_dash_no_data">getPolicy 回應缺少資料</string>
+    <string name="error_dash_missing_upload_host">getPolicy 回應缺少 upload_host</string>
+    <string name="error_oss_upload_failed_http">OSS 上傳失敗：%1$d%2$s</string>
+    <string name="error_asr_empty_result">空白 ASR 結果</string>
+    <string name="error_recognize_failed_with_reason">識別失敗：%1$s</string>
+    <string name="label_soniox_api_key">API Key (Bearer)</string>
+
+    <!-- User-facing ASR error toasts (floating + keyboard) -->
+    <string name="asr_error_empty_result">未識別到語音。請重試。</string>
+    <string name="asr_error_network_unavailable">網路連線失敗。請檢查連線並重試。</string>
+    <string name="asr_error_network_handshake">連線握手失敗。請重試或切換網路。</string>
+    <string name="asr_error_mic_permission_denied">需要麥克風權限。請在設定中啟用。</string>
+    <string name="asr_error_mic_in_use">麥克風正被其他應用程式使用。請稍後重試。</string>
+    <string name="asr_error_auth_invalid">驗證失敗。憑證無效或已過期。請在設定中更新。</string>
+    <string name="asr_error_auth_forbidden">禁止存取。請檢查您的服務權限。</string>
+
+    <!-- Enhanced Quick Guide -->
+    <string name="guide_subtitle">讓語音輸入更簡單、更高效</string>
+    <string name="guide_main_keyboard_title">主鍵盤佈局</string>
+    <string name="guide_main_keyboard_desc">包含麥克風、後處理切換、編輯面板入口等功能的主鍵盤介面</string>
+    <string name="guide_edit_panel_title">編輯面板</string>
+    <string name="guide_edit_panel_desc">強大的文字編輯功能，包括游標移動、文字選擇、複製/貼上、AI 處理等</string>
+    <string name="guide_numpad_title">數字/符號鍵盤</string>
+    <string name="guide_numpad_desc">帶有中/英文標點切換的數字和標點符號輸入面板</string>
+    <string name="guide_core_features_title">核心功能</string>
+    <string name="guide_long_press_title">長按錄音</string>
+    <string name="guide_long_press_desc">長按麥克風按鈕開始錄音，釋放進行轉錄</string>
+    <string name="guide_ai_processing_title">AI 智慧後處理</string>
+    <string name="guide_ai_processing_desc">支援多種預設模板，使識別結果更準確</string>
+    <string name="guide_floating_title">浮動球功能</string>
+    <string name="guide_floating_desc">快速切換輸入法或進行浮動球語音識別</string>
+    <string name="guide_detailed_features_title">詳細功能說明</string>
+    <string name="guide_detailed_features_content">【主鍵盤功能】\n• 麥克風按鈕 (中央)：長按錄音，釋放將語音轉為文字\n• 編輯面板入口 (左上)：點擊進入編輯面板\n• 啟用後處理：切換 AI 後處理開關\n• 隱藏鍵盤：最小化鍵盤介面\n• 退格鍵：向上/左滑動刪除全部，向下滑動復原上次變更\n• 設定：開啟應用程式設定\n• 切換輸入法：快速切換到其他鍵盤\n• 輸入：發送換行\n• 自定義標點：底部四個可自定義標點鍵\n\n【編輯面板功能】\n• 麥克風按鈕 (中央)：長按錄音語音指令，LLM 將根據指令修改內容 (AI 編輯功能)\n• 返回主鍵盤：退出編輯面板\n• 套用預設提示詞：選擇 AI 模板並處理目前文字\n• 游標移動：向左/右移動游標，長按連續移動\n• 移至開頭/結尾：快速跳至文字開頭/結尾\n• 選擇模式：啟用後在移動游標時選擇文字\n• 全選：選擇所有文字\n• 複製/貼上：文字複製和貼上功能\n• 退格鍵：刪除字元，支援手勢 (同主鍵盤)\n• 數字/符號鍵盤：切換到數字/符號輸入面板\n\n【數字/符號鍵盤】\n• 數字列：快速輸入 0-9\n• 標點符號：兩行常用標點符號\n• 中/英文切換：切換中/英文標點\n• 空格/輸入/退格：基本輸入功能\n• 返回編輯面板：退出數字鍵盤</string>
+    <string name="guide_first_time_title">首次使用</string>
+    <string name="guide_mic_icon_desc">麥克風圖示</string>
+    <string name="guide_ai_icon_desc">AI 處理圖示</string>
+    <string name="guide_floating_icon_desc">浮動球圖示</string>
+
+    <!-- Legacy Quick guide (image + text) -->
+    <string name="accessibility_service_description">允許浮動球將 ASR 結果插入目前輸入欄位。不會收集或上傳任何資料。</string>
+
+    <!-- Update check -->
+    <string name="update_checking">檢查更新中…</string>
+    <string name="update_no_update">您正在使用最新版本</string>
+    <string name="update_check_failed">檢查更新失敗：%1$s</string>
+    <string name="update_dialog_title">新版本可用</string>
+    <string name="update_dialog_message">目前版本：%1$s\n最新版本：%2$s\n\n是否要下載？</string>
+    <string name="btn_download">下載</string>
+    <string name="btn_manual_check">手動檢查</string>
+    <string name="btn_cancel">取消</string>
+    <string name="download_source_title">選擇下載來源</string>
+    <string name="download_source_github_official">GitHub (官方)</string>
+    <string name="download_source_mirror_ghproxy">GitHub 鏡像 (ghproxy.net)</string>
+    <string name="download_source_mirror_gitmirror">GitHub 鏡像 (hub.gitmirror.com)</string>
+    <string name="download_source_mirror_gh_proxynet">GitHub 鏡像 (gh-proxy.net)</string>
+    <string name="update_timestamp_label">發布時間：%1$s</string>
+    <string name="update_release_notes_label">發布說明：\n%1$s</string>
+    <string name="error_open_browser">無法開啟瀏覽器</string>
+
+    <!-- Generic toasts -->
+    <string name="toast_accessibility_enabled">無障礙服務已啟用。自動插入現已可用。</string>
+
+    <!-- ASR History -->
+    <string name="title_asr_history">ASR 歷史記錄</string>
+    <string name="hint_search_history">搜尋轉錄…</string>
+    <string name="history_section_2h">2 小時內</string>
+    <string name="history_section_today">今天</string>
+    <string name="history_section_7d">最近 7 天</string>
+    <string name="history_section_30d">最近 30 天</string>
+    <string name="history_section_older">更早</string>
+    <string name="label_vendor">供應商</string>
+    <string name="label_source">來源</string>
+    <string name="source_ime">鍵盤</string>
+    <string name="source_floating">浮動</string>
+    <string name="source_ime_full">鍵盤輸入</string>
+    <string name="source_floating_full">浮動輸入</string>
+    <string name="label_ai_processed">AI 已處理</string>
+    <string name="label_chars_count">文字：%1$d</string>
+    <string name="label_audio_duration_s">時長：%1$.1f 秒</string>
+    <string name="meta_cost_seconds">耗時 %1$.1f 秒</string>
+    <string name="ai_processed_yes">已後處理</string>
+    <string name="ai_processed_no">未後處理</string>
+    <string name="label_timestamp">時間</string>
+    <string name="label_time">時間範圍</string>
+    <string name="filter_time_all">全部</string>
+    <string name="filter_all">全部</string>
+    <string name="btn_copy">複製</string>
+    <string name="toast_copied">已複製</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="menu_filter">篩選</string>
+    <string name="menu_select_all">全選</string>
+    <string name="menu_clear_selection">清除選擇</string>
+    <string name="menu_delete_selected">刪除所選</string>
+    <string name="dialog_filter_title">篩選</string>
+    <string name="dialog_filter_ok">確定</string>
+    <string name="dialog_filter_cancel">取消</string>
+    <string name="dialog_filter_reset">重設</string>
+    <string name="dialog_delete_selected_title">確認刪除</string>
+    <string name="dialog_delete_selected_msg">刪除 %1$d 個所選項目？此操作無法復原。</string>
+    <string name="toast_deleted">已刪除 %1$d 個項目</string>
+    <string name="empty_history">尚無歷史記錄</string>
+
+    <!-- About -->
+    <string name="btn_about">關於</string>
+    <string name="about_title">關於</string>
+    <string name="about_app_name">應用程式名稱：%1$s</string>
+    <string name="about_version">版本：%1$s</string>
+    <string name="about_package">套件：%1$s</string>
+    <string name="about_open_github">開啟專案頁面</string>
+    <string name="about_project_url">https://github.com/BryceWG/LexiSharp-Keyboard</string>
+    <string name="about_desc">輕量級語音輸入法，支援多供應商 ASR 和 LLM 後處理</string>
+
+    <!-- Settings test input -->
+    <string name="label_test_input">測試輸入 (在此嘗試輸入法)</string>
+    <string name="btn_test_input">測試輸入</string>
+
+    <!-- LLM test call -->
+    <string name="btn_llm_test_call">測試 LLM 呼叫</string>
+    <string name="llm_test_running">測試 LLM 呼叫中…</string>
+    <string name="llm_test_success_title">測試成功</string>
+    <string name="llm_test_success_preview">回應預覽：%1$s</string>
+    <string name="llm_test_failed_title">測試失敗</string>
+    <string name="llm_test_failed_reason">原因：%1$s</string>
+    <string name="llm_test_failed_generic">呼叫失敗</string>
+    <string name="llm_test_missing_params">請填寫 API 端點和模型名稱</string>
+
+    <!-- Common button: open API key guide -->
+    <string name="btn_get_api_key_guide">取得 API Key</string>
+
+    <!-- Keyboard height -->
+    <string name="label_keyboard_height">鍵盤縮放</string>
+    <string name="keyboard_height_small">小</string>
+    <string name="keyboard_height_medium">中</string>
+    <string name="keyboard_height_large">大</string>
+
+    <!-- Keyboard bottom padding -->
+    <string name="label_keyboard_bottom_padding">鍵盤底部填充</string>
+    <string name="keyboard_bottom_padding_value">%d dp</string>
+
+    <!-- Keyboard layout option -->
+    <string name="label_fcitx5_return_on_switcher">輸入法切換鍵返回上個輸入法</string>
+    <string name="label_hide_recent_task_card">隱藏最近任務預覽</string>
+
+    <!-- Model download notifications -->
+    <string name="notif_channel_model_download">模型下載</string>
+    <string name="notif_channel_model_download_desc">本機模型下載和解壓縮進度</string>
+    <string name="notif_model_summary_title">模型下載</string>
+    <string name="notif_model_summary_text">在背景下載/解壓縮模型</string>
+    <string name="notif_model_title_int8">SenseVoice 模型 (Small int8)</string>
+    <string name="notif_model_title_full">SenseVoice 模型 (Small full)</string>
+
+    <!-- Silence auto-stop (ASR) -->
+    <string name="section_silence_autostop">靜音自動停止</string>
+    <string name="label_auto_stop_silence">無語音時自動停止</string>
+    <string name="label_silence_window_ms">停止視窗 (毫秒)</string>
+    <string name="label_silence_sensitivity">靈敏度 (1-10；越高越靈敏)</string>
+    <!-- SenseVoice local settings -->
+    <string name="btn_sv_download_model">一鍵下載 SenseVoice 模型</string>
+    <string name="btn_sv_download_model_int8">一鍵下載 SenseVoice (small int8, ~160MB)</string>
+    <string name="btn_sv_download_model_full">一鍵下載 SenseVoice (small full, ~850MB)</string>
+    <string name="btn_sv_clear_model">清除已下載模型</string>
+    <string name="sv_download_status_downloading">下載中… %1$d%%</string>
+    <string name="sv_download_status_extracting">解壓縮中…請稍候</string>
+    <string name="sv_download_status_done">模型已安裝</string>
+    <string name="sv_download_status_failed">下載或解壓縮失敗</string>
+    <string name="sv_download_started_in_bg">已開始背景下載。請檢查通知查看進度。</string>
+    <string name="sv_clear_confirm_title">確認清除模型？</string>
+    <string name="sv_clear_confirm_message">這將刪除已下載的模型檔案。您可以稍後重新下載。是否繼續？</string>
+    <string name="sv_clear_done">模型已清除</string>
+    <string name="sv_clear_failed">清除失敗</string>
+    <string name="label_sv_model_variant">模型版本</string>
+    <string name="sv_model_small_int8">Small (int8, ~160MB)</string>
+    <string name="sv_model_small_full">Small (full, ~850MB)</string>
+    <string name="sv_loading_model">載入本機模型中…</string>
+    <string name="sv_loading_model_while_listening">聆聽中…背景載入本機模型中…</string>
+    <string name="sv_model_ready">本機模型已載入</string>
+    <string name="label_sv_preload">首次顯示時載入模型</string>
+    <string name="label_sv_keep_alive">模型保持存活時間</string>
+    <string name="sv_keep_alive_immediate">不保持 (識別後卸載)</string>
+    <string name="sv_keep_alive_5m">5 分鐘</string>
+    <string name="sv_keep_alive_15m">15 分鐘</string>
+    <string name="sv_keep_alive_30m">30 分鐘</string>
+    <string name="sv_keep_alive_always">永遠保持 (直到參數變更)</string>
+    <string name="label_sv_pseudo_streaming">擬串流 (錄音時即時處理)</string>
+    <string name="label_sv_threads">執行緒數 (1-8)</string>
+    <string name="label_sv_language">識別語言</string>
+    <string name="sv_lang_auto">自動</string>
+    <string name="sv_lang_zh">中文 (zh)</string>
+    <string name="sv_lang_en">英文 (en)</string>
+    <string name="sv_lang_ja">日文 (ja)</string>
+    <string name="sv_lang_ko">韓文 (ko)</string>
+    <string name="sv_lang_yue">粵語 (yue)</string>
+    <string name="label_sv_use_itn">啟用 ITN (反向文字正規化)</string>
+    <!-- SyncClipboard settings -->
+    <string name="section_sync_clipboard">剪貼簿同步</string>
+    <string name="label_enable_sync_clipboard">使用 SyncClipboard 專案同步剪貼簿</string>
+    <string name="label_sc_server_base">伺服器基礎 URL (將附加 /SyncClipboard.json)</string>
+    <string name="label_sc_username">使用者名稱</string>
+    <string name="label_sc_password">密碼</string>
+    <string name="label_sc_auto_pull">定期自動拉取剪貼簿 (僅在輸入法可見時)</string>
+    <string name="label_sc_pull_interval">拉取間隔 (秒, 1-600)</string>
+    <string name="btn_sc_test_pull">驗證</string>
+    <string name="sc_test_success">拉取成功</string>
+    <string name="sc_test_failed">拉取失敗。請檢查 URL 和憑證。</string>
+    <string name="sc_status_uploaded">剪貼簿上傳成功</string>
+    <string name="btn_sc_project_home">專案首頁</string>
+    <string name="sc_open_browser_failed">無法開啟瀏覽器</string>
+    <string name="hint_sc_server_base_placeholder">https://your-server.com/path</string>
+
+    <!-- Audio -->
+    <string name="label_audio_ducking_on_record">錄音期間音訊降低</string>
+    <string name="label_headset_mic_priority">優先使用耳機麥克風 (實驗性)</string>
+    <string name="label_return_prev_ime_on_hide">隱藏時切換回上個輸入法</string>
+    <string name="toast_bt_connect_permission_required">需要藍牙連線權限才能使用耳機麥克風</string>
+    <string name="toast_bt_connect_permission_denied">藍牙連線權限被拒絕；耳機優先權已停用</string>
+
+    <!-- About: Usage stats -->
+    <string name="about_stats_title">使用統計</string>
+    <string name="about_days_with_you">LexiSharp 已陪伴您 %1$d 天</string>
+    <string name="about_total_audio">總音訊時間：%1$s</string>
+    <string name="about_avg_line">平均音訊：%1$s  ·  平均字元：%2$d  ·  平均速度：%3$s 字元/分鐘</string>
+    <string name="about_daily_weekly_avg">日均 (最近 7 天)：%1$d 字元, %2$s；週均 (最近 4 週)：%3$d 字元, %4$s</string>
+    <string name="about_by_vendor">按供應商</string>
+    <string name="about_last_7_days">最近 7 天 (字元)</string>
+    <string name="about_empty_stats_placeholder">尚無資料</string>
+    <string name="unit_chars">字元</string>
+    <string name="unit_0_min">0 分鐘</string>
+    <string name="fmt_h_m">%1$d 小時 %2$d 分鐘</string>
+    <string name="fmt_m_s">%1$d 分鐘 %2$d 秒</string>
+    <string name="fmt_s">%1$d 秒</string>
+</resources>

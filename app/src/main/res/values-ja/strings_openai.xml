@@ -1,0 +1,10 @@
+<resources>
+    <string name="vendor_openai">OpenAI</string>
+    <string name="openai_section_title">OpenAI 音声認識</string>
+    <string name="label_openai_asr_endpoint">ASRエンドポイント（例：https://api.openai.com/v1/audio/transcriptions）</string>
+    <string name="label_openai_api_key">APIキー（Bearer）</string>
+    <string name="label_openai_model">モデル（例：gpt-4o-mini-transcribe または whisper-1）</string>
+    <string name="label_openai_use_prompt">カスタムプロンプトを使用（一部のモデルでは非対応）</string>
+    <string name="label_openai_prompt">カスタムプロンプト（オプション）</string>
+    <string name="label_openai_language">言語（オプション）</string>
+</resources>
