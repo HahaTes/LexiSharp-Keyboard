@@ -1,8 +1,8 @@
 {
-  "version": "3.4.1",
-  "version_code": 87,
-  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.4.1",
-  "release_notes": "本次更新包含 3 个提交:\n- fix(llm-post): 简化 llm 端点规范化，提高兼容性\n- feat(build): 引入 OSS/Pro 产品变体并升级 CI 环境\n- fix(floating): 增强悬浮球可见性控制",
+  "version": "3.4.2",
+  "version_code": 88,
+  "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.4.2",
+  "release_notes": "本次更新包含 7 个提交:\n- feat(asr): 修复 SenseVoice 在悬浮球下的伪流式识别功能\n- feat(i18n): 添加日语和繁体中文应用语言支持\n- refactor(i18n): 移除 zh-rCN 资源文件，整合中文翻译\n- pro(feat(backup)): 支持在配置备份中包含 Pro 专属设置\n- pro(feat(asr)): 引入 ASR 设置页 Pro UI 注入机制\n- feat(util): 增强句末清理功能以去除标点和 emoji\n- pro(refactor(backup)): 提取 webdav 逻辑并设置 pro ui 注入点",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-29T11:50:01Z"
+  "update_time": "2025-10-30T14:01:41Z"
 }
