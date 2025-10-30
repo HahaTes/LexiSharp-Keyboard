@@ -557,6 +557,10 @@ SharedPreferences (数据存储)
 Apache 2.0 License - 自由使用、修改、分发，需保留版权声明
 ```
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=BryceWG/LexiSharp-Keyboard&type=date&legend=top-left)](https://www.star-history.com/#BryceWG/LexiSharp-Keyboard&type=date&legend=top-left)
+
 ## 👥 贡献者
 
 感谢所有为本项目做出贡献的开发者！

@@ -561,6 +561,10 @@ This project is licensed under the **Apache 2.0 License**, see the [LICENSE](LIC
 Apache 2.0 License - Free to use, modify, distribute, must retain copyright notice
 ```
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=BryceWG/LexiSharp-Keyboard&type=date&legend=top-left)](https://www.star-history.com/#BryceWG/LexiSharp-Keyboard&type=date&legend=top-left)
+
 ## 👥 Contributors
 
 Thanks to all the developers who have contributed to this project!
