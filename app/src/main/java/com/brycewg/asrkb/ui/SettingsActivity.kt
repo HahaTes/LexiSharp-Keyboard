@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.brycewg.asrkb.R
@@ -109,6 +110,9 @@ class SettingsActivity : AppCompatActivity() {
 
         // 若处于一键设置流程中，返回后继续推进
         advanceSetupIfInProgress()
+
+        // 首次进入时自动展示快速上手指南（首次需等待 5s 才能关闭）
+        maybeAutoShowQuickGuideOnFirstOpen()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -594,13 +598,61 @@ class SettingsActivity : AppCompatActivity() {
     /**
      * 显示快速指南对话框
      */
-    private fun showQuickGuide() {
+    private fun showQuickGuide(minCloseDelayMs: Long = 0L) {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_guide, null, false)
-        MaterialAlertDialogBuilder(this)
+        val dialog = MaterialAlertDialogBuilder(this)
             .setTitle(R.string.title_quick_guide)
             .setView(view)
             .setPositiveButton(R.string.btn_close, null)
-            .show()
+            .create()
+
+        var countdownJob: kotlinx.coroutines.Job? = null
+
+        dialog.setOnShowListener {
+            val positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            if (minCloseDelayMs > 0L) {
+                dialog.setCancelable(false)
+                dialog.setCanceledOnTouchOutside(false)
+                positive.isEnabled = false
+
+                val totalSeconds = (minCloseDelayMs / 1000L).toInt().coerceAtLeast(1)
+                countdownJob = lifecycleScope.launch(Dispatchers.Main) {
+                    var remain = totalSeconds
+                    while (remain > 0 && dialog.isShowing) {
+                        positive.text = getString(R.string.btn_close_with_seconds, remain)
+                        kotlinx.coroutines.delay(1000)
+                        remain -= 1
+                    }
+                    positive.text = getString(R.string.btn_close)
+                    positive.isEnabled = true
+                    dialog.setCancelable(true)
+                    dialog.setCanceledOnTouchOutside(true)
+                }
+            }
+        }
+
+        dialog.setOnDismissListener {
+            try {
+                countdownJob?.cancel()
+            } catch (t: Throwable) {
+                Log.w(TAG, "Failed to cancel countdown job", t)
+            }
+        }
+
+        dialog.show()
+    }
+
+    private fun maybeAutoShowQuickGuideOnFirstOpen() {
+        try {
+            val prefs = Prefs(this)
+            if (!prefs.hasShownQuickGuideOnce) {
+                // 记录为已展示，避免重复弹出
+                prefs.hasShownQuickGuideOnce = true
+                showQuickGuide(minCloseDelayMs = 5000L)
+            }
+        } catch (t: Throwable) {
+            Log.w(TAG, "Failed to maybe auto show quick guide", t)
+        }
     }
 
     /**

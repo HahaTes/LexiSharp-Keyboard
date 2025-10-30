@@ -145,6 +145,7 @@
     <string name="error_sensevoice_model_missing">SenseVoice 模型遺失。請稍後在設定中配置或下載。</string>
 
     <string name="btn_close">關閉</string>
+    <string name="btn_close_with_seconds">關閉(%1$ds)</string>
     <string name="title_quick_guide">快速入門指南</string>
     <string name="label_trim_trailing_punct">結束時移除尾部標點和表情符號</string>
     <string name="label_mic_haptic">按鍵和浮動球觸覺回饋</string>

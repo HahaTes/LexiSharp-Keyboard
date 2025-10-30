@@ -145,6 +145,7 @@
     <string name="error_sensevoice_model_missing">SenseVoice model is missing. Configure or download it later in Settings.</string>
     
     <string name="btn_close">Close</string>
+    <string name="btn_close_with_seconds">Close (%1$ds)</string>
     <string name="title_quick_guide">Quick Start Guide</string>
     <string name="label_trim_trailing_punct">Remove trailing punctuation and emoji on finish</string>
     <string name="label_mic_haptic">Haptic feedback for keys and floating ball</string>

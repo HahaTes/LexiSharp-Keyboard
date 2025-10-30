@@ -145,6 +145,7 @@
     <string name="error_sensevoice_model_missing">SenseVoiceモデルがありません。設定で後で設定またはダウンロードしてください。</string>
 
     <string name="btn_close">閉じる</string>
+    <string name="btn_close_with_seconds">閉じる（%1$ds）</string>
     <string name="title_quick_guide">クイックスタートガイド</string>
     <string name="label_trim_trailing_punct">終了時に末尾の句読点と絵文字を削除</string>
     <string name="label_mic_haptic">キーとフローティングボールの触覚フィードバック</string>

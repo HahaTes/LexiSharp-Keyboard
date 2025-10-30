@@ -694,6 +694,11 @@ class Prefs(context: Context) {
         get() = sp.getLong(KEY_TOTAL_ASR_CHARS, 0L).coerceAtLeast(0L)
         set(value) = sp.edit { putLong(KEY_TOTAL_ASR_CHARS, value.coerceAtLeast(0L)) }
 
+    // 首次启动引导是否已展示
+    var hasShownQuickGuideOnce: Boolean
+        get() = sp.getBoolean(KEY_SHOWN_QUICK_GUIDE_ONCE, false)
+        set(value) = sp.edit { putBoolean(KEY_SHOWN_QUICK_GUIDE_ONCE, value) }
+
     fun addAsrChars(delta: Int) {
         if (delta <= 0) return
         val cur = totalAsrChars
@@ -979,6 +984,7 @@ class Prefs(context: Context) {
         // ASR 历史（JSON 数组字符串），用于备份/恢复
         private const val KEY_ASR_HISTORY_JSON = "asr_history"
         private const val KEY_FIRST_USE_DATE = "first_use_date"
+        private const val KEY_SHOWN_QUICK_GUIDE_ONCE = "shown_quick_guide_once"
 
         // SyncClipboard keys
         private const val KEY_SC_ENABLED = "syncclip_enabled"

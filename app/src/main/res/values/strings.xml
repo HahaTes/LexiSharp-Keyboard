@@ -140,6 +140,7 @@
     <string name="soniox_lang_fil">菲律宾语 (fil)</string>
     
     <string name="btn_close">关闭</string>
+    <string name="btn_close_with_seconds">关闭(%1$ds)</string>
     <string name="title_quick_guide">快速上手教程</string>
     <string name="label_trim_trailing_punct">完成后去除句末标点与 emoji</string>
     <string name="label_mic_haptic">按键与悬浮球振动反馈</string>
