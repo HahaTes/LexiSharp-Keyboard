@@ -79,6 +79,8 @@
     <string name="vendor_sensevoice">SenseVoice (Local)</string>
     <string name="label_sf_api_key">API Key (Bearer)</string>
     <string name="label_sf_model">Model Name (e.g., FunAudioLLM/SenseVoiceSmall)</string>
+    <string name="label_sf_model_select">Choose model</string>
+    <string name="sf_model_default_display">FunAudioLLM/SenseVoiceSmall</string>
     <string name="label_sf_use_omni">Use voice multimodal model (Qwen3-Omni)</string>
     <string name="label_sf_omni_prompt">Multimodal transcription prompt (optional)</string>
     <string name="dash_section_title">Alibaba Cloud DashScope ASR Parameters</string>

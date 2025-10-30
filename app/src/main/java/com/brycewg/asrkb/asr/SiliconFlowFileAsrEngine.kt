@@ -58,10 +58,12 @@ class SiliconFlowFileAsrEngine(
             val wav = pcmToWav(pcm)
             val apiKey = prefs.sfApiKey
             val t0 = System.nanoTime()
-            if (prefs.sfUseOmni) {
+            val selectedModel = prefs.sfModel.ifBlank { Prefs.DEFAULT_SF_MODEL }
+            val isOmni = selectedModel.startsWith("Qwen/Qwen3-Omni-30B-A3B-")
+            if (isOmni) {
                 val b64 = Base64.encodeToString(wav, Base64.NO_WRAP)
-                // 仅由开关决定走 chat/completions，但模型使用用户填写的值（为空回退默认）
-                val model = prefs.sfModel.ifBlank { Prefs.DEFAULT_SF_OMNI_MODEL }
+                // Qwen3-Omni 通过 chat/completions，支持提示词
+                val model = if (selectedModel.isNotBlank()) selectedModel else Prefs.DEFAULT_SF_OMNI_MODEL
                 val prompt = prefs.sfOmniPrompt.ifBlank { Prefs.DEFAULT_SF_OMNI_PROMPT }
                 val body = buildSfChatCompletionsBody(model, b64, prompt)
                 val request = Request.Builder()
@@ -92,8 +94,8 @@ class SiliconFlowFileAsrEngine(
             } else {
                 val tmp = File.createTempFile("asr_", ".wav", context.cacheDir)
                 FileOutputStream(tmp).use { it.write(wav) }
-                // 仅由开关决定走 transcriptions，但模型使用用户填写的值（为空回退默认）
-                val model = prefs.sfModel.ifBlank { Prefs.DEFAULT_SF_MODEL }
+                // 其他模型走 transcriptions
+                val model = selectedModel
                 val multipart = MultipartBody.Builder().setType(MultipartBody.FORM)
                     .addFormDataPart("model", model)
                     .addFormDataPart(

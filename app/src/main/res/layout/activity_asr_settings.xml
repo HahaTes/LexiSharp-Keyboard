@@ -260,27 +260,28 @@
             android:textColorHint="?attr/colorOnSurfaceVariant" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:boxBackgroundMode="outline"
-          android:hint="@string/label_sf_model">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etSfModel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textColor="?attr/colorOnSurface"
-            android:textColorHint="?attr/colorOnSurfaceVariant" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-          android:id="@+id/switchSfUseOmni"
+        <TextView
+          android:id="@+id/tvSfModelLabel"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
-          android:text="@string/label_sf_use_omni" />
+          android:textColor="?attr/colorOnSurface"
+          android:text="@string/label_sf_model_select" />
+        <TextView
+          android:id="@+id/tvSfModelValue"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingTop="8dp"
+          android:paddingBottom="8dp"
+          android:clickable="true"
+          android:focusable="true"
+          android:foreground="?attr/selectableItemBackground"
+          android:textColor="?attr/colorOnSurfaceVariant"
+          android:text="@string/sf_model_default_display" />
+        <Spinner
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
           android:id="@+id/tilSfOmniPrompt"

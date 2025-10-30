@@ -317,21 +317,49 @@ class AsrSettingsActivity : AppCompatActivity() {
             setText(prefs.sfApiKey)
             bindString { prefs.sfApiKey = it }
         }
-        findViewById<EditText>(R.id.etSfModel).apply {
-            setText(prefs.sfModel)
-            bindString { prefs.sfModel = it }
+        // 模型选项：提供四种可用模型
+        val tvSfModelValue = findViewById<TextView>(R.id.tvSfModelValue)
+        val sfModels = listOf(
+            "Qwen/Qwen3-Omni-30B-A3B-Instruct",
+            "Qwen/Qwen3-Omni-30B-A3B-Thinking",
+            "TeleAI/TeleSpeechASR",
+            "FunAudioLLM/SenseVoiceSmall"
+        )
+        fun isOmni(model: String): Boolean {
+            return model.startsWith("Qwen/Qwen3-Omni-30B-A3B-")
         }
+        fun ensureValidModel(current: String): String {
+            // 若现有值不在可选列表内，则根据是否可能是旧 Omni 开关选择合适默认
+            return if (current in sfModels) current else {
+                if (prefs.sfUseOmni) Prefs.DEFAULT_SF_OMNI_MODEL else Prefs.DEFAULT_SF_MODEL
+            }
+        }
+        // 初始化显示与容错
+        val initialModel = ensureValidModel(prefs.sfModel.ifBlank { Prefs.DEFAULT_SF_MODEL })
+        if (initialModel != prefs.sfModel) prefs.sfModel = initialModel
+        tvSfModelValue.text = initialModel
+
+        tvSfModelValue.setOnClickListener { v ->
+            hapticTapIfEnabled(v)
+            val curIdx = sfModels.indexOf(prefs.sfModel).coerceAtLeast(0)
+            showSingleChoiceDialog(
+                titleResId = R.string.label_sf_model_select,
+                items = sfModels.toTypedArray(),
+                currentIndex = curIdx
+            ) { which ->
+                val selected = sfModels.getOrNull(which) ?: Prefs.DEFAULT_SF_MODEL
+                if (selected != prefs.sfModel) {
+                    prefs.sfModel = selected
+                    tvSfModelValue.text = selected
+                    // 根据模型自动决定是否显示 Omni 提示词框
+                    viewModel.updateSfUseOmni(isOmni(selected))
+                }
+            }
+        }
+
         findViewById<EditText>(R.id.etSfOmniPrompt).apply {
             setText(prefs.sfOmniPrompt)
             bindString { prefs.sfOmniPrompt = it }
-        }
-
-        findViewById<MaterialSwitch>(R.id.switchSfUseOmni).apply {
-            isChecked = prefs.sfUseOmni
-            setOnCheckedChangeListener { btn, isChecked ->
-                hapticTapIfEnabled(btn)
-                viewModel.updateSfUseOmni(isChecked)
-            }
         }
 
         // Key guide link

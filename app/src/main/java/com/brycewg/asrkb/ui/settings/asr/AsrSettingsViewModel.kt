@@ -32,6 +32,9 @@ class AsrSettingsViewModel : ViewModel() {
     }
 
     private fun loadInitialState() {
+        fun isQwenOmniModel(model: String): Boolean {
+            return model.startsWith("Qwen/Qwen3-Omni-30B-A3B-")
+        }
         _uiState.value = AsrSettingsUiState(
             selectedVendor = prefs.asrVendor,
             autoStopSilenceEnabled = prefs.autoStopOnSilenceEnabled,
@@ -46,7 +49,7 @@ class AsrSettingsViewModel : ViewModel() {
             volcFirstCharAccelEnabled = prefs.volcFirstCharAccelEnabled,
             volcLanguage = prefs.volcLanguage,
             // SiliconFlow settings
-            sfUseOmni = prefs.sfUseOmni,
+            sfUseOmni = isQwenOmniModel(prefs.sfModel.ifBlank { com.brycewg.asrkb.store.Prefs.DEFAULT_SF_MODEL }),
             // OpenAI settings
             oaAsrUsePrompt = prefs.oaAsrUsePrompt,
             // Soniox settings

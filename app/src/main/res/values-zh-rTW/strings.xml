@@ -79,6 +79,8 @@
     <string name="vendor_sensevoice">SenseVoice（本地）</string>
     <string name="label_sf_api_key">API 金鑰（Bearer）</string>
     <string name="label_sf_model">模型名稱（例如：FunAudioLLM/SenseVoiceSmall）</string>
+    <string name="label_sf_model_select">選擇模型</string>
+    <string name="sf_model_default_display">FunAudioLLM/SenseVoiceSmall</string>
     <string name="label_sf_use_omni">使用語音多模態模型（Qwen3-Omni）</string>
     <string name="label_sf_omni_prompt">多模態轉錄提示詞（可選）</string>
     <string name="dash_section_title">阿里雲百煉 ASR 參數</string>
