@@ -47,5 +47,56 @@ object ProUiInjector {
       if (BuildConfig.DEBUG) Log.d(TAG, "skip pro ui inject: ${t.message}")
     }
   }
-}
 
+  /**
+   * ASR 设置页注入：
+   * - main 布局提供 ViewStub：@id/pro_inject_stub_asr
+   * - pro 侧提供布局：res/layout/pro_asr_settings_extra.xml（包含入口按钮）
+   * - 按钮 ID 约定：@id/btn_pro_asr_context，点击触发隐式 Action：com.brycewg.asrkb.pro.SHOW_ASR_CONTEXT
+   */
+  fun injectIntoAsrSettings(activity: Activity, root: View) {
+    if (!Edition.isPro) return
+    val res = activity.resources
+    val pkg = activity.packageName
+    try {
+      val layoutId = res.getIdentifier("pro_asr_settings_extra", "layout", pkg)
+      if (layoutId == 0) return
+
+      val stubId = res.getIdentifier("pro_inject_stub_asr", "id", pkg)
+      val stub = if (stubId != 0) root.findViewById<ViewStub?>(stubId) else null
+      val inflater = LayoutInflater.from(activity)
+
+      val inflatedRoot: View? = if (stub != null) {
+        stub.layoutResource = layoutId
+        stub.inflate()
+      } else {
+        val containerId = res.getIdentifier("pro_inject_slot_asr", "id", pkg)
+        val container = if (containerId != 0) root.findViewById<ViewGroup?>(containerId) else null
+        if (container != null) {
+          inflater.inflate(layoutId, container, true)
+          container
+        } else if (root is ViewGroup) {
+          inflater.inflate(layoutId, root, true)
+          root
+        } else {
+          null
+        }
+      }
+
+      // 绑定按钮点击 -> 隐式跳转至 Pro 页面
+      val btnId = res.getIdentifier("btn_pro_asr_context", "id", pkg)
+      val host = inflatedRoot ?: root
+      val btn = if (btnId != 0) host.findViewById<View?>(btnId) else null
+      btn?.setOnClickListener {
+        try {
+          val intent = android.content.Intent("com.brycewg.asrkb.pro.SHOW_ASR_CONTEXT")
+          activity.startActivity(intent)
+        } catch (t: Throwable) {
+          if (BuildConfig.DEBUG) Log.d(TAG, "Failed to start pro ASR context activity: ${t.message}")
+        }
+      }
+    } catch (t: Throwable) {
+      if (BuildConfig.DEBUG) Log.d(TAG, "skip pro ui inject(asr): ${t.message}")
+    }
+  }
+}

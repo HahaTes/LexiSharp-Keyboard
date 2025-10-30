@@ -23,8 +23,17 @@
       android:layout_height="wrap_content"
       android:orientation="vertical"
       android:padding="16dp">
+      <!-- Pro 注入插槽：ASR 个性化热词/上下文入口按钮（仅 Pro 变体注入） -->
+      <ViewStub
+        android:id="@+id/pro_inject_stub_asr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-      
+      <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
 
       <!-- Silence auto-stop section -->
       <TextView

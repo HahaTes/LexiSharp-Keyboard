@@ -87,6 +87,14 @@ class AsrSettingsActivity : AppCompatActivity() {
         setupSilenceDetection()
         setupVendorSpecificSettings()
         observeViewModel()
+
+        // Pro：注入“个性化识别热词管理”入口
+        try {
+            val root = findViewById<android.view.View>(android.R.id.content)
+            com.brycewg.asrkb.ProUiInjector.injectIntoAsrSettings(this, root)
+        } catch (e: Exception) {
+            android.util.Log.e(TAG, "Failed to inject pro UI (ASR)", e)
+        }
     }
 
     override fun onResume() {
