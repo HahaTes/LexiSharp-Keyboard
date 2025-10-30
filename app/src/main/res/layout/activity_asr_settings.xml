@@ -295,7 +295,6 @@
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:minLines="2"
-            android:maxLines="6"
             android:gravity="top|start"
             android:textColor="?attr/colorOnSurface"
             android:textColorHint="?attr/colorOnSurfaceVariant" />
@@ -468,7 +467,6 @@
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:minLines="2"
-            android:maxLines="6"
             android:gravity="top|start"
             android:textColor="?attr/colorOnSurface"
           android:textColorHint="?attr/colorOnSurfaceVariant" />
@@ -564,7 +562,6 @@
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:minLines="2"
-            android:maxLines="6"
             android:gravity="top|start"
             android:textColor="?attr/colorOnSurface"
             android:textColorHint="?attr/colorOnSurfaceVariant" />
@@ -663,7 +660,6 @@
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:minLines="2"
-            android:maxLines="6"
             android:gravity="top|start"
             android:textColor="?attr/colorOnSurface"
             android:textColorHint="?attr/colorOnSurfaceVariant" />

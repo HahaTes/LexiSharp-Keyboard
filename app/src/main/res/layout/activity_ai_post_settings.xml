@@ -208,10 +208,10 @@
         <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/etLlmPrompt"
           android:layout_width="match_parent"
-          android:layout_height="120dp"
-          android:gravity="top|start"
+          android:layout_height="wrap_content"
           android:inputType="textMultiLine"
-          android:maxLines="6"
+          android:minLines="2"
+          android:gravity="top|start"
           android:overScrollMode="ifContentScrolls"
           android:scrollbars="vertical"
           android:textColor="?attr/colorOnSurface"
