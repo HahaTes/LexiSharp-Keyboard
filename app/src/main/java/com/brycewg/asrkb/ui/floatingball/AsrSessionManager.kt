@@ -416,7 +416,12 @@ class AsrSessionManager(
                 }
             } else null
             AsrVendor.SenseVoice -> {
-                com.brycewg.asrkb.asr.SenseVoiceFileAsrEngine(context, serviceScope, prefs, this) {}
+                // 本地 SenseVoice：根据用户开关选择伪流式或非流式文件识别
+                if (prefs.svPseudoStreamingEnabled) {
+                    LocalModelPseudoStreamAsrEngine(context, serviceScope, prefs, this)
+                } else {
+                    SenseVoiceFileAsrEngine(context, serviceScope, prefs, this) {}
+                }
             }
         }
     }
