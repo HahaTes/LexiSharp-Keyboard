@@ -291,7 +291,7 @@ class AsrSettingsActivity : AppCompatActivity() {
         // Key guide link
         findViewById<com.google.android.material.button.MaterialButton>(R.id.btnVolcGetKey).setOnClickListener { v ->
             hapticTapIfEnabled(v)
-            openUrlSafely("https://console.volcengine.com/iam/keymanage/")
+            openUrlSafely("https://brycewg.notion.site/lexisharp-keyboard-providers-guide")
         }
     }
 
@@ -381,7 +381,7 @@ class AsrSettingsActivity : AppCompatActivity() {
         // Key guide link
         findViewById<com.google.android.material.button.MaterialButton>(R.id.btnSfGetKey).setOnClickListener { v ->
             hapticTapIfEnabled(v)
-            openUrlSafely("https://siliconflow.cn/console/api-keys")
+            openUrlSafely("https://brycewg.notion.site/lexisharp-keyboard-providers-guide")
         }
     }
 
@@ -400,7 +400,7 @@ class AsrSettingsActivity : AppCompatActivity() {
         // Key guide link
         findViewById<com.google.android.material.button.MaterialButton>(R.id.btnElevenGetKey).setOnClickListener { v ->
             hapticTapIfEnabled(v)
-            openUrlSafely("https://elevenlabs.io/app/settings/api-keys")
+            openUrlSafely("https://brycewg.notion.site/lexisharp-keyboard-providers-guide")
         }
     }
 
@@ -464,7 +464,7 @@ class AsrSettingsActivity : AppCompatActivity() {
         // Key guide link
         findViewById<com.google.android.material.button.MaterialButton>(R.id.btnOpenAiGetKey).setOnClickListener { v ->
             hapticTapIfEnabled(v)
-            openUrlSafely("https://platform.openai.com/api-keys")
+            openUrlSafely("https://brycewg.notion.site/lexisharp-keyboard-providers-guide")
         }
     }
 
@@ -520,7 +520,7 @@ class AsrSettingsActivity : AppCompatActivity() {
         // Key guide link
         findViewById<com.google.android.material.button.MaterialButton>(R.id.btnDashGetKey).setOnClickListener { v ->
             hapticTapIfEnabled(v)
-            openUrlSafely("https://dashscope.console.aliyun.com/apiKeys")
+            openUrlSafely("https://brycewg.notion.site/lexisharp-keyboard-providers-guide")
         }
     }
 
@@ -578,7 +578,7 @@ class AsrSettingsActivity : AppCompatActivity() {
         // Key guide link
         findViewById<com.google.android.material.button.MaterialButton>(R.id.btnGeminiGetKey).setOnClickListener { v ->
             hapticTapIfEnabled(v)
-            openUrlSafely("https://aistudio.google.com/app/apikey")
+            openUrlSafely("https://brycewg.notion.site/lexisharp-keyboard-providers-guide")
         }
     }
 
@@ -601,7 +601,7 @@ class AsrSettingsActivity : AppCompatActivity() {
         // Key guide link
         findViewById<com.google.android.material.button.MaterialButton>(R.id.btnSonioxGetKey).setOnClickListener { v ->
             hapticTapIfEnabled(v)
-            openUrlSafely("https://soniox.com/account/api-keys")
+            openUrlSafely("https://brycewg.notion.site/lexisharp-keyboard-providers-guide")
         }
     }
 

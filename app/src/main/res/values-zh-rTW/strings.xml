@@ -431,7 +431,7 @@
     <string name="llm_test_missing_params">請填寫 API 端點和模型名稱</string>
 
     <!-- Common button: open API key guide -->
-    <string name="btn_get_api_key_guide">取得 API Key</string>
+    <string name="btn_get_api_key_guide">查看配置教學</string>
 
     <!-- Keyboard height -->
     <string name="label_keyboard_height">鍵盤縮放</string>

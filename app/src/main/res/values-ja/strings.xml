@@ -431,7 +431,7 @@
     <string name="llm_test_missing_params">APIエンドポイントとモデル名を入力してください</string>
 
     <!-- Common button: open API key guide -->
-    <string name="btn_get_api_key_guide">APIキーを取得</string>
+    <string name="btn_get_api_key_guide">設定ガイドを表示</string>
 
     <!-- Keyboard height -->
     <string name="label_keyboard_height">キーボードスケール</string>

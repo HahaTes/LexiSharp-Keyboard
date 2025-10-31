@@ -431,7 +431,7 @@
     <string name="llm_test_missing_params">Please fill API endpoint and model name</string>
 
     <!-- Common button: open API key guide -->
-    <string name="btn_get_api_key_guide">Get API Key</string>
+    <string name="btn_get_api_key_guide">View Configuration Guide</string>
 
     <!-- Keyboard height -->
     <string name="label_keyboard_height">Keyboard scale</string>
