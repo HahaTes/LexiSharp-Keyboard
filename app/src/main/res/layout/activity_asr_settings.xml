@@ -535,20 +535,7 @@
             android:textColorHint="?attr/colorOnSurfaceVariant" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:boxBackgroundMode="outline"
-          android:hint="@string/label_dash_model">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDashModel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textColor="?attr/colorOnSurface"
-            android:textColorHint="?attr/colorOnSurfaceVariant" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <!-- 移除模型ID输入：固定使用 qwen3-asr-flash / qwen3-asr-flash-realtime -->
 
         <com.google.android.material.textfield.TextInputLayout
           android:layout_width="match_parent"

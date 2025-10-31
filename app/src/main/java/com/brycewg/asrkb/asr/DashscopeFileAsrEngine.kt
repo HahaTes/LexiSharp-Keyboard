@@ -55,7 +55,8 @@ class DashscopeFileAsrEngine(
             FileOutputStream(tmp).use { it.write(wav) }
 
             val apiKey = prefs.dashApiKey
-            val model = prefs.dashModel.ifBlank { Prefs.DEFAULT_DASH_MODEL }
+            // 固定使用非流式模型：qwen3-asr-flash
+            val model = Prefs.DEFAULT_DASH_MODEL
 
             val policyUrl = "https://dashscope.aliyuncs.com/api/v1/uploads?action=getPolicy&model=" +
                 java.net.URLEncoder.encode(model, "UTF-8")

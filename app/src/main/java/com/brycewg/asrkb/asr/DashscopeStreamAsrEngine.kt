@@ -111,8 +111,8 @@ class DashscopeStreamAsrEngine(
         startCaptureAndSendAudio()
 
         val apiKey = prefs.dashApiKey
-        val modelRaw = prefs.dashModel.ifBlank { Prefs.DEFAULT_DASH_MODEL }
-        val modelParam = if (modelRaw.endsWith("-realtime")) modelRaw else (modelRaw + "-realtime")
+        // 固定使用流式模型：qwen3-asr-flash-realtime
+        val modelParam = "qwen3-asr-flash-realtime"
         val url = "$DEFAULT_WS_BASE?model=" + java.net.URLEncoder.encode(modelParam, "UTF-8")
 
         val req = Request.Builder()

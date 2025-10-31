@@ -486,10 +486,6 @@ class AsrSettingsActivity : AppCompatActivity() {
             setText(prefs.dashApiKey)
             bindString { prefs.dashApiKey = it }
         }
-        findViewById<EditText>(R.id.etDashModel).apply {
-            setText(prefs.dashModel)
-            bindString { prefs.dashModel = it }
-        }
         findViewById<EditText>(R.id.etDashPrompt).apply {
             setText(prefs.dashPrompt)
             bindString { prefs.dashPrompt = it }
