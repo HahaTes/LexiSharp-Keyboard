@@ -402,6 +402,19 @@ class VolcStreamAsrEngine(
                 put("force_to_speech_time", 1000)
                 // 说明：配置 end_window_size 后 vad_segment_duration 不生效，这里不再冗余设置
             }
+
+            // Pro功能：动态注入个性化热词和上下文信息
+            try {
+                val volcContext = com.brycewg.asrkb.asr.ProAsrHelper.buildVolcContext(context)
+                if (volcContext != null) {
+                    val corpus = JSONObject().apply {
+                        put("context", volcContext)
+                    }
+                    put("corpus", corpus)
+                }
+            } catch (t: Throwable) {
+                Log.e(TAG, "Failed to inject Volc context", t)
+            }
         }
         return JSONObject().apply {
             put("user", user)

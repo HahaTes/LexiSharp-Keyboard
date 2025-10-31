@@ -2,6 +2,7 @@ package com.brycewg.asrkb.asr
 
 import android.content.Context
 import android.util.Base64
+import android.util.Log
 import com.brycewg.asrkb.R
 import com.brycewg.asrkb.store.Prefs
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +29,7 @@ class VolcFileAsrEngine(
 
     companion object {
         private const val DEFAULT_FILE_RESOURCE = "volc.bigasr.auc_turbo"
+        private const val TAG = "VolcFileAsrEngine"
     }
 
     // 火山引擎非流式：服务端上限 2h，本地稳妥限制为 1h
@@ -99,6 +101,19 @@ class VolcFileAsrEngine(
             put("enable_itn", true)
             put("enable_punc", true)
             put("enable_ddc", prefs.volcDdcEnabled)
+
+            // Pro功能：动态注入个性化热词和上下文信息
+            try {
+                val volcContext = com.brycewg.asrkb.asr.ProAsrHelper.buildVolcContext(context)
+                if (volcContext != null) {
+                    val corpus = JSONObject().apply {
+                        put("context", volcContext)
+                    }
+                    put("corpus", corpus)
+                }
+            } catch (t: Throwable) {
+                Log.e(TAG, "Failed to inject Volc context", t)
+            }
         }
         return JSONObject().apply {
             put("user", user)
