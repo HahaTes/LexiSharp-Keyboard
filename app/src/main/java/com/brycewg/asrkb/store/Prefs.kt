@@ -421,6 +421,11 @@ class Prefs(context: Context) {
         get() = sp.getString(KEY_DASH_LANGUAGE, "") ?: ""
         set(value) = sp.edit { putString(KEY_DASH_LANGUAGE, value.trim()) }
 
+    // DashScope: streaming toggle
+    var dashStreamingEnabled: Boolean
+        get() = sp.getBoolean(KEY_DASH_STREAMING_ENABLED, false)
+        set(value) = sp.edit { putBoolean(KEY_DASH_STREAMING_ENABLED, value) }
+
     // ElevenLabs凭证
     var elevenApiKey: String by stringPref(KEY_ELEVEN_API_KEY, "")
 
@@ -951,6 +956,7 @@ class Prefs(context: Context) {
         private const val KEY_GEM_PROMPT = "gem_prompt"
         private const val KEY_GEMINI_DISABLE_THINKING = "gemini_disable_thinking"
         private const val KEY_VOLC_STREAMING_ENABLED = "volc_streaming_enabled"
+        private const val KEY_DASH_STREAMING_ENABLED = "dash_streaming_enabled"
         private const val KEY_VOLC_DDC_ENABLED = "volc_ddc_enabled"
         private const val KEY_VOLC_VAD_ENABLED = "volc_vad_enabled"
         private const val KEY_VOLC_NONSTREAM_ENABLED = "volc_nonstream_enabled"
@@ -1121,6 +1127,8 @@ class Prefs(context: Context) {
         o.put(KEY_OA_ASR_USE_PROMPT, oaAsrUsePrompt)
         // Volcano streaming toggle
         o.put(KEY_VOLC_STREAMING_ENABLED, volcStreamingEnabled)
+        // DashScope streaming toggle
+        o.put(KEY_DASH_STREAMING_ENABLED, dashStreamingEnabled)
         // Volcano extras
         o.put(KEY_VOLC_DDC_ENABLED, volcDdcEnabled)
         o.put(KEY_VOLC_VAD_ENABLED, volcVadEnabled)
@@ -1237,6 +1245,7 @@ class Prefs(context: Context) {
             // OpenAI ASR：Prompt 开关
             optBool(KEY_OA_ASR_USE_PROMPT)?.let { oaAsrUsePrompt = it }
             optBool(KEY_VOLC_STREAMING_ENABLED)?.let { volcStreamingEnabled = it }
+            optBool(KEY_DASH_STREAMING_ENABLED)?.let { dashStreamingEnabled = it }
             optBool(KEY_VOLC_DDC_ENABLED)?.let { volcDdcEnabled = it }
             optBool(KEY_VOLC_VAD_ENABLED)?.let { volcVadEnabled = it }
             optBool(KEY_VOLC_NONSTREAM_ENABLED)?.let { volcNonstreamEnabled = it }

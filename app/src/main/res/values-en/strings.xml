@@ -90,6 +90,7 @@
     <string name="label_dash_model">Model (e.g., qwen3-asr-flash)</string>
     <string name="label_dash_prompt">Custom prompt / context (optional)</string>
     <string name="label_dash_language">Recognition language (optional; improves accuracy if known)</string>
+    <string name="label_dash_streaming">Use DashScope streaming (WebSocket)</string>
     <string name="dash_lang_auto">Auto (enable language ID)</string>
     <string name="dash_lang_zh">Chinese (zh)</string>
     <string name="dash_lang_en">English (en)</string>

@@ -132,7 +132,11 @@ class AsrSessionManager(
             } else null
 
             AsrVendor.DashScope -> if (prefs.hasDashKeys()) {
-                DashscopeFileAsrEngine(context, scope, prefs, this, ::onRequestDuration)
+                if (prefs.dashStreamingEnabled) {
+                    DashscopeStreamAsrEngine(context, scope, prefs, this)
+                } else {
+                    DashscopeFileAsrEngine(context, scope, prefs, this, ::onRequestDuration)
+                }
             } else null
 
             AsrVendor.Gemini -> if (prefs.hasGeminiKeys()) {
@@ -175,7 +179,11 @@ class AsrSessionManager(
             AsrVendor.SiliconFlow -> if (current is SiliconFlowFileAsrEngine) current else null
             AsrVendor.ElevenLabs -> if (current is ElevenLabsFileAsrEngine) current else null
             AsrVendor.OpenAI -> if (current is OpenAiFileAsrEngine) current else null
-            AsrVendor.DashScope -> if (current is DashscopeFileAsrEngine) current else null
+            AsrVendor.DashScope -> when (current) {
+                is DashscopeFileAsrEngine -> if (!prefs.dashStreamingEnabled) current else null
+                is DashscopeStreamAsrEngine -> if (prefs.dashStreamingEnabled) current else null
+                else -> null
+            }
             AsrVendor.Gemini -> if (current is GeminiFileAsrEngine) current else null
 
             AsrVendor.Soniox -> when (current) {

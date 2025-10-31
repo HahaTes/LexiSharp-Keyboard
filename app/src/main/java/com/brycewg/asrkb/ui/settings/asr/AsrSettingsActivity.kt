@@ -497,6 +497,14 @@ class AsrSettingsActivity : AppCompatActivity() {
 
         setupDashLanguageSelection()
 
+        findViewById<com.google.android.material.materialswitch.MaterialSwitch>(R.id.switchDashStreaming).apply {
+            isChecked = prefs.dashStreamingEnabled
+            setOnCheckedChangeListener { btn, isChecked ->
+                hapticTapIfEnabled(btn)
+                viewModel.updateDashStreaming(isChecked)
+            }
+        }
+
         // Key guide link
         findViewById<com.google.android.material.button.MaterialButton>(R.id.btnDashGetKey).setOnClickListener { v ->
             hapticTapIfEnabled(v)

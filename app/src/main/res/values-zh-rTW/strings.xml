@@ -90,6 +90,7 @@
     <string name="label_dash_model">模型 (例如：qwen3-asr-flash)</string>
     <string name="label_dash_prompt">自定義提示詞 / 上下文 (可選)</string>
     <string name="label_dash_language">識別語言 (可選；若已知可提高準確性)</string>
+    <string name="label_dash_streaming">使用 DashScope 串流 (WebSocket)</string>
     <string name="dash_lang_auto">自動 (啟用語言識別)</string>
     <string name="dash_lang_zh">中文 (zh)</string>
     <string name="dash_lang_en">英文 (en)</string>

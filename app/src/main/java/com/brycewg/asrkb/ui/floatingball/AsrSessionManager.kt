@@ -403,7 +403,11 @@ class AsrSessionManager(
                 OpenAiFileAsrEngine(context, serviceScope, prefs, this, onRequestDuration = { })
             } else null
             AsrVendor.DashScope -> if (prefs.hasDashKeys()) {
-                DashscopeFileAsrEngine(context, serviceScope, prefs, this, onRequestDuration = { })
+                if (prefs.dashStreamingEnabled) {
+                    DashscopeStreamAsrEngine(context, serviceScope, prefs, this)
+                } else {
+                    DashscopeFileAsrEngine(context, serviceScope, prefs, this, onRequestDuration = { })
+                }
             } else null
             AsrVendor.Gemini -> if (prefs.hasGeminiKeys()) {
                 GeminiFileAsrEngine(context, serviceScope, prefs, this, onRequestDuration = { })

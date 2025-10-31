@@ -591,6 +591,13 @@
           android:layout_height="wrap_content"
           android:visibility="gone" />
 
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchDashStreaming"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="@string/label_dash_streaming" />
+
         <com.google.android.material.button.MaterialButton
           android:id="@+id/btnDashGetKey"
           android:layout_width="match_parent"

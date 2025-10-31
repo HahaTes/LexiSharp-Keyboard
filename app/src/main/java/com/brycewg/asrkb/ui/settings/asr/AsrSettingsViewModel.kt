@@ -48,6 +48,8 @@ class AsrSettingsViewModel : ViewModel() {
             volcNonstreamEnabled = prefs.volcNonstreamEnabled,
             volcFirstCharAccelEnabled = prefs.volcFirstCharAccelEnabled,
             volcLanguage = prefs.volcLanguage,
+            // DashScope settings
+            dashStreamingEnabled = prefs.dashStreamingEnabled,
             // SiliconFlow settings
             sfUseOmni = isQwenOmniModel(prefs.sfModel.ifBlank { com.brycewg.asrkb.store.Prefs.DEFAULT_SF_MODEL }),
             // OpenAI settings
@@ -127,6 +129,11 @@ class AsrSettingsViewModel : ViewModel() {
     fun updateVolcNonstream(enabled: Boolean) {
         prefs.volcNonstreamEnabled = enabled
         _uiState.value = _uiState.value.copy(volcNonstreamEnabled = enabled)
+    }
+
+    fun updateDashStreaming(enabled: Boolean) {
+        prefs.dashStreamingEnabled = enabled
+        _uiState.value = _uiState.value.copy(dashStreamingEnabled = enabled)
     }
 
     fun updateVolcFirstCharAccel(enabled: Boolean) {
@@ -276,6 +283,8 @@ data class AsrSettingsUiState(
     val volcNonstreamEnabled: Boolean = false,
     val volcFirstCharAccelEnabled: Boolean = false,
     val volcLanguage: String = "",
+    // DashScope settings
+    val dashStreamingEnabled: Boolean = false,
     // SiliconFlow settings
     val sfUseOmni: Boolean = false,
     // OpenAI settings
