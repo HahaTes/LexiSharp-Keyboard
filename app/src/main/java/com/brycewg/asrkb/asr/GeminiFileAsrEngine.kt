@@ -54,7 +54,13 @@ class GeminiFileAsrEngine(
             val apiKeys = prefs.getGeminiApiKeys()
             val apiKey = apiKeys.random()
             val model = prefs.gemModel.ifBlank { Prefs.DEFAULT_GEM_MODEL }
-            val prompt = prefs.gemPrompt.ifBlank { DEFAULT_GEM_PROMPT }
+            val basePrompt = prefs.gemPrompt.ifBlank { DEFAULT_GEM_PROMPT }
+            // Pro功能：动态拼接个性化热词和上下文信息
+            val prompt = try {
+                com.brycewg.asrkb.asr.ProAsrHelper.buildPromptWithContext(context, basePrompt)
+            } catch (t: Throwable) {
+                basePrompt
+            }
 
             val body = buildGeminiRequestBody(b64, prompt, model)
             val req = Request.Builder()

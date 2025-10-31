@@ -64,7 +64,13 @@ class SiliconFlowFileAsrEngine(
                 val b64 = Base64.encodeToString(wav, Base64.NO_WRAP)
                 // Qwen3-Omni 通过 chat/completions，支持提示词
                 val model = if (selectedModel.isNotBlank()) selectedModel else Prefs.DEFAULT_SF_OMNI_MODEL
-                val prompt = prefs.sfOmniPrompt.ifBlank { Prefs.DEFAULT_SF_OMNI_PROMPT }
+                val basePrompt = prefs.sfOmniPrompt.ifBlank { Prefs.DEFAULT_SF_OMNI_PROMPT }
+                // Pro功能：动态拼接个性化热词和上下文信息
+                val prompt = try {
+                    com.brycewg.asrkb.asr.ProAsrHelper.buildPromptWithContext(context, basePrompt)
+                } catch (t: Throwable) {
+                    basePrompt
+                }
                 val body = buildSfChatCompletionsBody(model, b64, prompt)
                 val request = Request.Builder()
                     .url(Prefs.SF_CHAT_COMPLETIONS_ENDPOINT)

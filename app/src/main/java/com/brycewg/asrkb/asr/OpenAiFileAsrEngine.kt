@@ -50,7 +50,13 @@ class OpenAiFileAsrEngine(
             val model = prefs.oaAsrModel.ifBlank { Prefs.DEFAULT_OA_ASR_MODEL }
 
             val usePrompt = prefs.oaAsrUsePrompt
-            val prompt = prefs.oaAsrPrompt.trim()
+            val basePrompt = prefs.oaAsrPrompt.trim()
+            // Pro功能：动态拼接个性化热词和上下文信息（使用紧凑格式以适应OpenAI的长度限制）
+            val prompt = try {
+                com.brycewg.asrkb.asr.ProAsrHelper.buildPromptWithContext(context, basePrompt, compact = true)
+            } catch (t: Throwable) {
+                basePrompt
+            }
             val multipartBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("model", model)
                 .addFormDataPart(

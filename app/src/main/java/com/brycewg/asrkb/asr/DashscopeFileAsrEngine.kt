@@ -136,7 +136,13 @@ class DashscopeFileAsrEngine(
                 if (lang.isNotEmpty()) put("language", lang)
             }
             val systemMsg = JSONObject().apply {
-                val ctx = prefs.dashPrompt.trim()
+                val baseCtx = prefs.dashPrompt.trim()
+                // Pro功能：动态拼接个性化热词和上下文信息
+                val ctx = try {
+                    com.brycewg.asrkb.asr.ProAsrHelper.buildPromptWithContext(context, baseCtx)
+                } catch (t: Throwable) {
+                    baseCtx
+                }
                 put("text", ctx)
             }
             val userMsg = JSONObject().apply { put("audio", ossUrl) }
