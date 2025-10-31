@@ -106,15 +106,19 @@ class GeminiFileAsrEngine(
                 put("data", base64Wav)
             })
         }
-        val promptPart = JSONObject().apply { put("text", prompt) }
+        val systemInstruction = JSONObject().apply {
+            put("parts", org.json.JSONArray().apply {
+                put(JSONObject().apply { put("text", prompt) })
+            })
+        }
         val user = JSONObject().apply {
             put("role", "user")
             put("parts", org.json.JSONArray().apply {
-                put(promptPart)
                 put(inlineAudio)
             })
         }
         return JSONObject().apply {
+            put("system_instruction", systemInstruction)
             put("contents", org.json.JSONArray().apply { put(user) })
             put("generation_config", JSONObject().apply {
                 put("temperature", 0)

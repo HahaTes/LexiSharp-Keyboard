@@ -156,20 +156,27 @@ class SiliconFlowFileAsrEngine(
                 put("url", "data:audio/wav;base64,$base64Wav")
             })
         }
-        val textPart = JSONObject().apply {
-            put("type", "text")
-            put("text", prompt)
+        val system = JSONObject().apply {
+            put("role", "system")
+            put("content", org.json.JSONArray().apply {
+                put(JSONObject().apply {
+                    put("type", "text")
+                    put("text", prompt)
+                })
+            })
         }
         val user = JSONObject().apply {
             put("role", "user")
             put("content", org.json.JSONArray().apply {
                 put(audioPart)
-                put(textPart)
             })
         }
         return JSONObject().apply {
             put("model", model)
-            put("messages", org.json.JSONArray().apply { put(user) })
+            put("messages", org.json.JSONArray().apply {
+                put(system)
+                put(user)
+            })
         }.toString()
     }
 
