@@ -218,7 +218,6 @@
     <string name="label_custom_punct_2">ボタン2（文字または句読点）</string>
     <string name="label_custom_punct_3">ボタン3（文字または句読点）</string>
     <string name="label_custom_punct_4">ボタン4（文字または句読点）</string>
-    <string name="label_auto_switch_password">パスワードフィールドで自動的に戻る</string>
 
     <!-- Speech Presets -->
     <string name="label_speech_preset_section">音声プリセット</string>

@@ -67,10 +67,6 @@ class Prefs(context: Context) {
 
     // 移除：键盘内“切换输入法”按钮显示开关（按钮始终显示）
 
-    // 在密码框中自动切换输入法
-    var autoSwitchOnPassword: Boolean
-        get() = sp.getBoolean(KEY_AUTO_SWITCH_ON_PASSWORD, false)
-        set(value) = sp.edit { putBoolean(KEY_AUTO_SWITCH_ON_PASSWORD, value) }
 
     // 麦克风按钮触觉反馈
     var micHapticEnabled: Boolean
@@ -898,8 +894,6 @@ class Prefs(context: Context) {
         private const val KEY_APP_KEY = "app_key"
         private const val KEY_ACCESS_KEY = "access_key"
         private const val KEY_TRIM_FINAL_TRAILING_PUNCT = "trim_final_trailing_punct"
-        // 移除：键盘内“切换输入法”按钮显示开关键
-        private const val KEY_AUTO_SWITCH_ON_PASSWORD = "auto_switch_on_password"
         private const val KEY_MIC_HAPTIC_ENABLED = "mic_haptic_enabled"
         private const val KEY_MIC_TAP_TOGGLE_ENABLED = "mic_tap_toggle_enabled"
         private const val KEY_MIC_SWIPE_UP_AUTO_ENTER_ENABLED = "mic_swipe_up_auto_enter_enabled"
@@ -1096,7 +1090,6 @@ class Prefs(context: Context) {
         o.put(KEY_APP_KEY, appKey)
         o.put(KEY_ACCESS_KEY, accessKey)
         o.put(KEY_TRIM_FINAL_TRAILING_PUNCT, trimFinalTrailingPunct)
-        o.put(KEY_AUTO_SWITCH_ON_PASSWORD, autoSwitchOnPassword)
         o.put(KEY_MIC_HAPTIC_ENABLED, micHapticEnabled)
         o.put(KEY_MIC_TAP_TOGGLE_ENABLED, micTapToggleEnabled)
         o.put(KEY_MIC_SWIPE_UP_AUTO_ENTER_ENABLED, micSwipeUpAutoEnterEnabled)
@@ -1212,7 +1205,6 @@ class Prefs(context: Context) {
             optString(KEY_APP_KEY)?.let { appKey = it }
             optString(KEY_ACCESS_KEY)?.let { accessKey = it }
             optBool(KEY_TRIM_FINAL_TRAILING_PUNCT)?.let { trimFinalTrailingPunct = it }
-            optBool(KEY_AUTO_SWITCH_ON_PASSWORD)?.let { autoSwitchOnPassword = it }
             optBool(KEY_MIC_HAPTIC_ENABLED)?.let { micHapticEnabled = it }
             optBool(KEY_MIC_TAP_TOGGLE_ENABLED)?.let { micTapToggleEnabled = it }
             optBool(KEY_MIC_SWIPE_UP_AUTO_ENTER_ENABLED)?.let { micSwipeUpAutoEnterEnabled = it }

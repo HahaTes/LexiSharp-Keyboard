@@ -218,7 +218,6 @@
     <string name="label_custom_punct_2">Button 2 (char or punctuation)</string>
     <string name="label_custom_punct_3">Button 3 (char or punctuation)</string>
     <string name="label_custom_punct_4">Button 4 (char or punctuation)</string>
-    <string name="label_auto_switch_password">Auto switch back on password fields</string>
 
     <!-- Speech Presets -->
     <string name="label_speech_preset_section">Speech Presets</string>

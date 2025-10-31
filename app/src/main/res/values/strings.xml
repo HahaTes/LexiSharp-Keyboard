@@ -213,7 +213,6 @@
     <string name="label_custom_punct_2">按钮2（字符或标点）</string>
     <string name="label_custom_punct_3">按钮3（字符或标点）</string>
     <string name="label_custom_punct_4">按钮4（字符或标点）</string>
-    <string name="label_auto_switch_password">密码框自动切换回上个输入法</string>
     
     <!-- Speech Presets -->
     <string name="label_speech_preset_section">语音预置信息</string>

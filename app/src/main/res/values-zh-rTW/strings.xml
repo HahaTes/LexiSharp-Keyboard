@@ -218,7 +218,6 @@
     <string name="label_custom_punct_2">按鈕 2 (字元或標點)</string>
     <string name="label_custom_punct_3">按鈕 3 (字元或標點)</string>
     <string name="label_custom_punct_4">按鈕 4 (字元或標點)</string>
-    <string name="label_auto_switch_password">密碼欄位自動切換回</string>
 
     <!-- Speech Presets -->
     <string name="label_speech_preset_section">語音預設</string>

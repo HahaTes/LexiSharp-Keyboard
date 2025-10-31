@@ -18,7 +18,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.view.inputmethod.InputMethodManager
 import android.view.ViewConfiguration
-import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.core.content.ContextCompat
@@ -247,7 +246,6 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
                     "inputType" to (info?.inputType ?: 0),
                     "imeOptions" to (info?.imeOptions ?: 0),
                     "icNull" to (currentInputConnection == null),
-                    "isPassword" to isPasswordEditor(info),
                     "isMultiLine" to ((info?.inputType ?: 0) and android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE != 0),
                     "actionId" to ((info?.imeOptions ?: 0) and android.view.inputmethod.EditorInfo.IME_MASK_ACTION)
                 )
@@ -259,21 +257,6 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         // 键盘面板首次出现时，按需异步预加载本地 SenseVoice
         tryPreloadSenseVoice()
 
-        // 如果当前字段是密码框且用户选择自动切换，切回上一个输入法
-        if (prefs.autoSwitchOnPassword && isPasswordEditor(info)) {
-            try {
-                suppressReturnPrevImeOnHideOnce = true
-                val ok = try { switchToPreviousInputMethod() } catch (_: Throwable) { false }
-                if (!ok) {
-                    val imm = getSystemService(InputMethodManager::class.java)
-                    imm?.showInputMethodPicker()
-                }
-            } catch (_: Throwable) { }
-            try {
-                requestHideSelf(0)
-            } catch (_: Throwable) { }
-            return
-        }
 
         // 刷新 UI
         btnImeSwitcher?.visibility = View.VISIBLE
@@ -1270,19 +1253,6 @@ class AsrKeyboardService : InputMethodService(), KeyboardActionHandler.UiListene
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun isPasswordEditor(info: EditorInfo?): Boolean {
-        if (info == null) return false
-        val it = info.inputType
-        val klass = it and InputType.TYPE_MASK_CLASS
-        val variation = it and InputType.TYPE_MASK_VARIATION
-        return when (klass) {
-            InputType.TYPE_CLASS_TEXT -> variation == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
-                    variation == InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD ||
-                    variation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            InputType.TYPE_CLASS_NUMBER -> variation == InputType.TYPE_NUMBER_VARIATION_PASSWORD
-            else -> false
-        }
-    }
 
     private fun applyPunctuationLabels() {
         btnPunct1?.text = prefs.punct1

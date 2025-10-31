@@ -35,7 +35,6 @@ class InputSettingsActivity : AppCompatActivity() {
         val prefs = Prefs(this)
 
         val switchTrimTrailingPunct = findViewById<MaterialSwitch>(R.id.switchTrimTrailingPunct)
-        val switchAutoSwitchPassword = findViewById<MaterialSwitch>(R.id.switchAutoSwitchPassword)
         val switchMicHaptic = findViewById<MaterialSwitch>(R.id.switchMicHaptic)
         val switchMicTapToggle = findViewById<MaterialSwitch>(R.id.switchMicTapToggle)
         val switchMicSwipeUpAutoEnter = findViewById<MaterialSwitch>(R.id.switchMicSwipeUpAutoEnter)
@@ -51,7 +50,6 @@ class InputSettingsActivity : AppCompatActivity() {
 
         fun applyPrefsToUi() {
             switchTrimTrailingPunct.isChecked = prefs.trimFinalTrailingPunct
-            switchAutoSwitchPassword.isChecked = prefs.autoSwitchOnPassword
             switchMicHaptic.isChecked = prefs.micHapticEnabled
             switchMicTapToggle.isChecked = prefs.micTapToggleEnabled
             switchFcitx5ReturnOnSwitcher.isChecked = prefs.fcitx5ReturnOnImeSwitch
@@ -76,10 +74,6 @@ class InputSettingsActivity : AppCompatActivity() {
         switchTrimTrailingPunct.setOnCheckedChangeListener { btn, isChecked ->
             hapticTapIfEnabled(btn)
             prefs.trimFinalTrailingPunct = isChecked
-        }
-        switchAutoSwitchPassword.setOnCheckedChangeListener { btn, isChecked ->
-            hapticTapIfEnabled(btn)
-            prefs.autoSwitchOnPassword = isChecked
         }
         switchMicHaptic.setOnCheckedChangeListener { btn, isChecked ->
             prefs.micHapticEnabled = isChecked
