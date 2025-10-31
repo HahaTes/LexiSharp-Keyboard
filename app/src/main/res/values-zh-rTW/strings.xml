@@ -3,8 +3,8 @@
 
     <string name="cd_mic">麥克風</string>
     <string name="cd_settings">設定</string>
-    <string name="cd_enter">輸入</string>
-    <string name="cd_backspace">退格鍵</string>
+    <string name="cd_enter">換行</string>
+    <string name="cd_backspace">倒退鍵</string>
     <string name="cd_switch_ime">切換輸入法</string>
     <string name="cd_postproc_toggle">AI 後處理</string>
     <string name="cd_ai_edit">AI 編輯</string>
@@ -19,13 +19,13 @@
     <string name="cd_punct_btn_4">自定義按鍵 4</string>
 
     <string name="status_idle">就緒</string>
-    <string name="status_listening">聆聽中…</string>
-    <string name="status_recognizing">識別中…</string>
+    <string name="status_listening">正在聆聽…</string>
+    <string name="status_recognizing">辨識中…</string>
     <string name="status_ai_processing">AI 後處理中…</string>
     <string name="status_ai_edit_listening">請說出您的編輯指令…</string>
     <string name="status_ai_editing">AI 編輯中…</string>
     <string name="status_cancelled">已取消</string>
-    <string name="status_reverted_to_raw">已還原為原始轉錄</string>
+    <string name="status_reverted_to_raw">已還原為原始辨識結果</string>
     <string name="status_undone">已復原上次變更</string>
     <string name="status_llm_empty_result">AI 編輯失敗：無結果</string>
     <string name="status_last_asr_not_found">未找到上次 ASR 結果；已取消</string>
@@ -37,7 +37,7 @@
     <string name="status_postproc">AI 後處理：%1$s</string>
     <string name="toggle_on">開</string>
     <string name="toggle_off">關</string>
-    <string name="label_ai_edit_default_use_last_asr">AI 編輯預設範圍：使用上次轉錄</string>
+    <string name="label_ai_edit_default_use_last_asr">AI 編輯預設範圍：使用上次辨識結果</string>
     <string name="label_mic_swipe_up_auto_enter">釋放時向上滑動以發送</string>
     <string name="btn_retry">連線失敗，重試？</string>
 
@@ -86,9 +86,9 @@
     <string name="sensevoice_section_title">SenseVoice 本地 ASR</string>
     <string name="label_dash_api_key">DashScope API Key (Bearer)</string>
     <string name="label_dash_prompt">自定義提示詞 / 上下文 (可選)</string>
-    <string name="label_dash_language">識別語言 (可選；若已知可提高準確性)</string>
+    <string name="label_dash_language">辨識語言（可選；已知語言可提升準確度）</string>
     <string name="label_dash_streaming">使用 DashScope 串流 (WebSocket)</string>
-    <string name="dash_lang_auto">自動 (啟用語言識別)</string>
+    <string name="dash_lang_auto">自動（啟用語言辨識）</string>
     <string name="dash_lang_zh">中文 (zh)</string>
     <string name="dash_lang_en">英文 (en)</string>
     <string name="dash_lang_ja">日文 (ja)</string>
@@ -100,12 +100,12 @@
     <string name="dash_lang_ar">阿拉伯文 (ar)</string>
     <string name="dash_lang_it">義大利文 (it)</string>
     <string name="dash_lang_es">西班牙文 (es)</string>
-    <string name="label_volc_streaming">使用串流識別 (WebSocket)</string>
-    <string name="label_volc_ddc">啟用語義平滑 (實驗性)</string>
-    <string name="label_volc_vad">啟用 VAD 分割 (實驗性)</string>
-    <string name="label_volc_nonstream">啟用雙通道識別 (實驗性)</string>
-    <string name="label_volc_first_char_accel">首字元加速 (實驗性)</string>
-    <string name="label_volc_language">識別語言 (非串流模式)</string>
+    <string name="label_volc_streaming">使用串流辨識（WebSocket）</string>
+    <string name="label_volc_ddc">啟用語義平滑（實驗性）</string>
+    <string name="label_volc_vad">啟用 VAD 分句（實驗性）</string>
+    <string name="label_volc_nonstream">啟用二遍辨識（實驗性）</string>
+    <string name="label_volc_first_char_accel">首字加速（實驗性）</string>
+    <string name="label_volc_language">辨識語言（用於二遍辨識）</string>
     <string name="volc_lang_auto">自動 (中文/英文 + 方言)</string>
     <string name="volc_lang_en_us">英文 (en-US)</string>
     <string name="volc_lang_ja_jp">日文 (ja-JP)</string>
@@ -119,8 +119,8 @@
     <string name="volc_lang_ms_my">馬來文 (ms-MY)</string>
     <string name="volc_lang_th_th">泰文 (th-TH)</string>
     <string name="volc_lang_ar_sa">阿拉伯文 (ar-SA)</string>
-    <string name="label_soniox_streaming">使用 Soniox 串流 (WebSocket)</string>
-    <string name="label_soniox_language">識別語言 (語言提示)</string>
+    <string name="label_soniox_streaming">使用 Soniox 串流辨識（WebSocket）</string>
+    <string name="label_soniox_language">辨識語言（Language Hints）</string>
     <string name="soniox_lang_auto">自動 (多語言)</string>
     <string name="soniox_lang_en">英文 (en)</string>
     <string name="soniox_lang_zh">中文 (zh)</string>

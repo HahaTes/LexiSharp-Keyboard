@@ -19,27 +19,27 @@
     <string name="cd_punct_btn_4">カスタムキー4</string>
 
     <string name="status_idle">準備完了</string>
-    <string name="status_listening">聞いています…</string>
+    <string name="status_listening">聴き取り中…</string>
     <string name="status_recognizing">認識中…</string>
     <string name="status_ai_processing">AI後処理中…</string>
     <string name="status_ai_edit_listening">編集指示を話してください…</string>
     <string name="status_ai_editing">AI編集中…</string>
     <string name="status_cancelled">キャンセルしました</string>
-    <string name="status_reverted_to_raw">生のテキストに戻しました</string>
-    <string name="status_undone">最後の変更を元に戻しました</string>
-    <string name="status_llm_empty_result">AI編集失敗：結果がありません</string>
-    <string name="status_last_asr_not_found">最後のASR結果が見つかりませんでした。キャンセルしました</string>
-    <string name="hint_need_llm_keys">まずAI後処理を設定してください</string>
-    <string name="hint_cannot_read_text">現在のアプリのテキストが読み取れません</string>
-    <string name="status_llm_failed_used_raw">AI後処理失敗；生テキストを使用しました</string>
-    <string name="status_llm_edit_failed">AI編集失敗。もう一度お試しください</string>
+    <string name="status_reverted_to_raw">元のテキストに戻しました</string>
+    <string name="status_undone">変更を取り消しました</string>
+    <string name="status_llm_empty_result">AI編集失敗:結果なし</string>
+    <string name="status_last_asr_not_found">前回の音声認識結果が見つかりません</string>
+    <string name="hint_need_llm_keys">AI後処理の設定が必要です</string>
+    <string name="hint_cannot_read_text">このアプリのテキストは読み取れません</string>
+    <string name="status_llm_failed_used_raw">AI後処理に失敗、元のテキストを使用</string>
+    <string name="status_llm_edit_failed">AI編集に失敗しました</string>
     <string name="hint_need_permission">音声入力にはマイク権限が必要です</string>
     <string name="status_postproc">AI後処理：%1$s</string>
     <string name="toggle_on">ON</string>
     <string name="toggle_off">OFF</string>
-    <string name="label_ai_edit_default_use_last_asr">AI編集デフォルト範囲：最後のテキストを使用</string>
-    <string name="label_mic_swipe_up_auto_enter">リリース時に上にスワイプして送信</string>
-    <string name="btn_retry">接続失敗、再試行しますか？</string>
+    <string name="label_ai_edit_default_use_last_asr">AI編集のデフォルト範囲を前回の音声認識結果にする</string>
+    <string name="label_mic_swipe_up_auto_enter">離すときに上スワイプで自動送信</string>
+    <string name="btn_retry">接続に失敗しました。再試行しますか?</string>
 
     <!-- Edit panel content descriptions -->
     <string name="cd_return_main">メインキーボードに戻る</string>
@@ -55,7 +55,7 @@
     <string name="cd_move_end">末尾に移動</string>
     <string name="cd_undo">元に戻す</string>
 
-    <string name="settings_instructions">初回設定:\n1.「キーボードを有効化」をタップし、システム設定でLexiSharpキーボードを有効にします\n2.「キーボードを選択」をタップしてLexiSharpキーボードに切り替えます\n3.マイク権限を許可し、キーボードのマイクボタンを長押しして試してください</string>
+    <string name="settings_instructions">初回セットアップ:\n1.「キーボードを有効化」をタップし、システム設定でLexiSharpキーボードを有効にします\n2.「キーボードを選択」をタップし、LexiSharpキーボードに切り替えます\n3.マイク権限を許可し、キーボードのマイクボタンを長押しして音声入力をお試しください</string>
     <string name="btn_one_click_setup">ワンクリック設定</string>
     <string name="btn_show_guide">クイックガイドを見る</string>
     <string name="btn_check_update">更新を確認</string>
@@ -147,17 +147,17 @@
     <string name="btn_close">閉じる</string>
     <string name="btn_close_with_seconds">閉じる（%1$ds）</string>
     <string name="title_quick_guide">クイックスタートガイド</string>
-    <string name="label_trim_trailing_punct">終了時に末尾の句読点と絵文字を削除</string>
-    <string name="label_mic_haptic">キーとフローティングボールの触覚フィードバック</string>
-    <string name="label_mic_tap_toggle">タップで録音を制御</string>
-    <string name="label_floating_only_when_ime_visible">キーボード表示時のみフローティングボールを表示</string>
+    <string name="label_trim_trailing_punct">確定時に末尾の句読点と絵文字を削除</string>
+    <string name="label_mic_haptic">キーとフローティングボールのバイブレーション</string>
+    <string name="label_mic_tap_toggle">タップで録音操作する</string>
+    <string name="label_floating_only_when_ime_visible">キーボード表示時のみフローティングボールを表示する</string>
     <string name="label_floating_alpha">フローティングボールの透明度</string>
     <string name="label_floating_size">フローティングボールのサイズ</string>
     <string name="toast_need_overlay_perm">フローティングボールを有効にするには、システム設定で「他のアプリの上に表示」を許可してください</string>
     <string name="toast_need_accessibility_perm">この機能をサポートするには、システム設定でアクセシビリティサービスを有効にしてください</string>
-    <string name="label_floating_asr">フローティングボールで音声認識を使用</string>
-    <string name="label_floating_write_compat">フローティング書き込みテキスト互換モード</string>
-    <string name="desc_floating_write_compat">一部のアプリはアクセシビリティに背景プレースホルダーテキストを公開し、最終的な挿入を汚染します。有効にすると、ターゲットアプリでフローティングボールが全選択+貼り付けに切り替わり、プレースホルダーの問題を回避します。クリップボードが一時的に使用される場合があります（最善の努力で復元）。Telegram、Douyinなどで動作します。</string>
+    <string name="label_floating_asr">フローティングボールで音声認識を使用する</string>
+    <string name="label_floating_write_compat">フローティングボールのテキスト挿入互換モード</string>
+    <string name="desc_floating_write_compat">一部のアプリでは背景テキストが誤認識され、無障害サービス経由でテキストを挿入する際に背景テキストも含まれてしまう場合があります。このモードを有効にすると、対象アプリでフローティングボールを使用する際、「全選択+貼り付け」で不可視文字を挿入し、背景テキストの問題を回避します。</string>
     <string name="label_floating_write_compat_pkgs">ターゲットパッケージ名（1行に1つ）</string>
     <string name="hint_floating_write_compat_pkgs">パッケージまたはプレフィックスを入力（例：org.telegram）。末尾の*はプレフィックス一致を意味します（例：org.telegram.*）。</string>
     <string name="label_floating_write_paste">認識結果をクリップボードにのみコピー</string>
