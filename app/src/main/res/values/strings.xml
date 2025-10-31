@@ -101,11 +101,18 @@
     <string name="dash_lang_it">意大利语 (it)</string>
     <string name="dash_lang_es">西班牙语 (es)</string>
     <string name="label_volc_streaming">使用流式识别（WebSocket）</string>
+    <string name="label_volc_bidi_streaming">启用双向流式</string>
     <string name="label_volc_ddc">启用语义顺滑（实验性）</string>
     <string name="label_volc_vad">启用 VAD 分句（实验性）</string>
     <string name="label_volc_nonstream">启用二遍识别（实验性）</string>
     <string name="label_volc_first_char_accel">首字加速（实验性）</string>
     <string name="label_volc_language">识别语言（用于二遍识别）</string>
+
+    <!-- Volc modes hint -->
+    <string name="volc_modes_hint">模式说明：\n
+1. 文件识别（极速版）：录完再上传，稳定，首字延迟较高；网络差时更稳。\n
+2. 流式识别（默认）：边录边传，停止后很快返回最终结果，不显示增量预览。\n
+3. 双向流式（体验最好）：边录边传并实时返回增量预览，首字与尾字时延更低，需要稳定网络。</string>
     <string name="volc_lang_auto">自动（中英文与方言）</string>
     <string name="volc_lang_en_us">英语 (en-US)</string>
     <string name="volc_lang_ja_jp">日语 (ja-JP)</string>

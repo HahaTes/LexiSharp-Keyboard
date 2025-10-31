@@ -101,11 +101,18 @@
     <string name="dash_lang_it">イタリア語（it）</string>
     <string name="dash_lang_es">スペイン語（es）</string>
     <string name="label_volc_streaming">ストリーミング認識を使用（WebSocket）</string>
+    <string name="label_volc_bidi_streaming">双方向ストリーミングを有効化</string>
     <string name="label_volc_ddc">セマンティックスムージングを有効化（実験的）</string>
     <string name="label_volc_vad">VADセグメンテーションを有効化（実験的）</string>
     <string name="label_volc_nonstream">2パス認識を有効化（実験的）</string>
     <string name="label_volc_first_char_accel">最初のトークン加速（実験的）</string>
     <string name="label_volc_language">認識言語（非ストリーミング用）</string>
+
+    <!-- Volc modes hint -->
+    <string name="volc_modes_hint">モード説明：\n
+1. ファイル認識（高速版）：録音後にアップロード。安定だが先頭トークンの遅延は大きめ。通信状態が悪い環境でも比較的安定。\n
+2. ストリーミング（既定）：録音しながら送信。停止後すぐに最終結果を返す。増分プレビューは表示しない。\n
+3. 双方向ストリーミング（最も快適）：録音しながら送信し、リアルタイムで増分プレビューを返す。先頭/末尾の遅延が小さい。安定したネットワークが必要。</string>
     <string name="volc_lang_auto">自動（中国語/英語+方言）</string>
     <string name="volc_lang_en_us">英語（en-US）</string>
     <string name="volc_lang_ja_jp">日本語（ja-JP）</string>

@@ -101,11 +101,18 @@
     <string name="dash_lang_it">義大利文 (it)</string>
     <string name="dash_lang_es">西班牙文 (es)</string>
     <string name="label_volc_streaming">使用串流辨識（WebSocket）</string>
+    <string name="label_volc_bidi_streaming">啟用雙向串流</string>
     <string name="label_volc_ddc">啟用語義平滑（實驗性）</string>
     <string name="label_volc_vad">啟用 VAD 分句（實驗性）</string>
     <string name="label_volc_nonstream">啟用二遍辨識（實驗性）</string>
     <string name="label_volc_first_char_accel">首字加速（實驗性）</string>
     <string name="label_volc_language">辨識語言（用於二遍辨識）</string>
+
+    <!-- Volc modes hint -->
+    <string name="volc_modes_hint">模式說明：\n
+1. 檔案辨識（極速版）：錄完再上傳，穩定，但首字延遲較高；網路較差時更穩。\n
+2. 串流辨識（預設）：邊錄邊傳，停止後很快回傳最終結果，不顯示增量預覽。\n
+3. 雙向串流（體驗最佳）：邊錄邊傳並即時回傳增量預覽，首字與尾字時延更低，需較為穩定的網路。</string>
     <string name="volc_lang_auto">自動 (中文/英文 + 方言)</string>
     <string name="volc_lang_en_us">英文 (en-US)</string>
     <string name="volc_lang_ja_jp">日文 (ja-JP)</string>

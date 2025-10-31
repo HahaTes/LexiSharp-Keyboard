@@ -512,8 +512,13 @@ class Prefs(context: Context) {
 
     // 火山引擎：流式识别开关（与文件模式共享凭证）
     var volcStreamingEnabled: Boolean
-        get() = sp.getBoolean(KEY_VOLC_STREAMING_ENABLED, false)
+        get() = sp.getBoolean(KEY_VOLC_STREAMING_ENABLED, true)
         set(value) = sp.edit { putBoolean(KEY_VOLC_STREAMING_ENABLED, value) }
+
+    // 火山引擎：双向流式开关（bigmodel_async vs bigmodel_nostream），默认开启
+    var volcBidiStreamingEnabled: Boolean
+        get() = sp.getBoolean(KEY_VOLC_BIDI_STREAMING_ENABLED, false)
+        set(value) = sp.edit { putBoolean(KEY_VOLC_BIDI_STREAMING_ENABLED, value) }
 
     // 火山引擎：语义顺滑开关（enable_ddc）
     var volcDdcEnabled: Boolean
@@ -954,6 +959,7 @@ class Prefs(context: Context) {
         private const val KEY_GEM_PROMPT = "gem_prompt"
         private const val KEY_GEMINI_DISABLE_THINKING = "gemini_disable_thinking"
         private const val KEY_VOLC_STREAMING_ENABLED = "volc_streaming_enabled"
+        private const val KEY_VOLC_BIDI_STREAMING_ENABLED = "volc_bidi_streaming_enabled"
         private const val KEY_DASH_STREAMING_ENABLED = "dash_streaming_enabled"
         private const val KEY_VOLC_DDC_ENABLED = "volc_ddc_enabled"
         private const val KEY_VOLC_VAD_ENABLED = "volc_vad_enabled"
@@ -1124,6 +1130,7 @@ class Prefs(context: Context) {
         o.put(KEY_OA_ASR_USE_PROMPT, oaAsrUsePrompt)
         // Volcano streaming toggle
         o.put(KEY_VOLC_STREAMING_ENABLED, volcStreamingEnabled)
+        o.put(KEY_VOLC_BIDI_STREAMING_ENABLED, volcBidiStreamingEnabled)
         // DashScope streaming toggle
         o.put(KEY_DASH_STREAMING_ENABLED, dashStreamingEnabled)
         // Volcano extras
@@ -1242,6 +1249,7 @@ class Prefs(context: Context) {
             // OpenAI ASR：Prompt 开关
             optBool(KEY_OA_ASR_USE_PROMPT)?.let { oaAsrUsePrompt = it }
             optBool(KEY_VOLC_STREAMING_ENABLED)?.let { volcStreamingEnabled = it }
+            optBool(KEY_VOLC_BIDI_STREAMING_ENABLED)?.let { volcBidiStreamingEnabled = it }
             optBool(KEY_DASH_STREAMING_ENABLED)?.let { dashStreamingEnabled = it }
             optBool(KEY_VOLC_DDC_ENABLED)?.let { volcDdcEnabled = it }
             optBool(KEY_VOLC_VAD_ENABLED)?.let { volcVadEnabled = it }

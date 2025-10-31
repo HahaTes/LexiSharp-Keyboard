@@ -170,6 +170,20 @@
           android:text="@string/label_volc_streaming" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchVolcBidiStreaming"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="@string/label_volc_bidi_streaming" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+          android:id="@+id/switchVolcNonstream"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:text="@string/label_volc_nonstream" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
           android:id="@+id/switchVolcDdc"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -182,13 +196,6 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="8dp"
           android:text="@string/label_volc_vad" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-          android:id="@+id/switchVolcNonstream"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:text="@string/label_volc_nonstream" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
           android:id="@+id/switchVolcFirstCharAccel"
@@ -219,6 +226,15 @@
             android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:visibility="gone" />
+
+        <TextView
+          android:id="@+id/tvVolcModesHint"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="4dp"
+          android:textColor="?attr/colorOnSurfaceVariant"
+          android:textSize="12sp"
+          android:text="@string/volc_modes_hint" />
 
         <com.google.android.material.button.MaterialButton
           android:id="@+id/btnVolcGetKey"

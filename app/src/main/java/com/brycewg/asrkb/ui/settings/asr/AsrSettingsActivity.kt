@@ -237,6 +237,22 @@ class AsrSettingsActivity : AppCompatActivity() {
             }
         }
 
+        findViewById<MaterialSwitch>(R.id.switchVolcBidiStreaming).apply {
+            isChecked = prefs.volcBidiStreamingEnabled
+            setOnCheckedChangeListener { btn, isChecked ->
+                hapticTapIfEnabled(btn)
+                viewModel.updateVolcBidiStreaming(isChecked)
+                // 若关闭双向流式，自动关闭并隐藏“二遍识别”
+                if (!isChecked) {
+                    try {
+                        findViewById<MaterialSwitch>(R.id.switchVolcNonstream).isChecked = false
+                    } catch (e: Throwable) {
+                        android.util.Log.e(TAG, "Failed to turn off two-pass switch when bidi disabled", e)
+                    }
+                }
+            }
+        }
+
         findViewById<MaterialSwitch>(R.id.switchVolcDdc).apply {
             isChecked = prefs.volcDdcEnabled
             setOnCheckedChangeListener { btn, isChecked ->
@@ -909,6 +925,7 @@ class AsrSettingsActivity : AppCompatActivity() {
                 updateSfOmniVisibility(state.sfUseOmni)
                 updateOpenAiPromptVisibility(state.oaAsrUsePrompt)
                 updateVolcStreamOptionsVisibility(state.volcStreamingEnabled)
+                updateVolcTwoPassVisibility(state.volcStreamingEnabled, state.volcBidiStreamingEnabled)
             }
         }
     }
@@ -972,10 +989,16 @@ class AsrSettingsActivity : AppCompatActivity() {
         val vis = if (enabled) View.VISIBLE else View.GONE
         fun setIfChanged(v: View) { if (v.visibility != vis) v.visibility = vis }
         setIfChanged(findViewById<MaterialSwitch>(R.id.switchVolcVad))
-        setIfChanged(findViewById<MaterialSwitch>(R.id.switchVolcNonstream))
         setIfChanged(findViewById<MaterialSwitch>(R.id.switchVolcFirstCharAccel))
         setIfChanged(findViewById<TextView>(R.id.tvVolcLanguageValue))
         setIfChanged(findViewById<View>(R.id.tvVolcLanguageLabel))
+        setIfChanged(findViewById<MaterialSwitch>(R.id.switchVolcBidiStreaming))
+    }
+
+    private fun updateVolcTwoPassVisibility(streamingEnabled: Boolean, bidiEnabled: Boolean) {
+        val vis = if (streamingEnabled && bidiEnabled) View.VISIBLE else View.GONE
+        val v = findViewById<View>(R.id.switchVolcNonstream)
+        if (v.visibility != vis) v.visibility = vis
     }
 
     private fun updateSvDownloadUiVisibility() {

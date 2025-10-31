@@ -43,6 +43,7 @@ class AsrSettingsViewModel : ViewModel() {
             aiEditPreferLastAsr = prefs.aiEditDefaultToLastAsr,
             // Volc settings
             volcStreamingEnabled = prefs.volcStreamingEnabled,
+            volcBidiStreamingEnabled = prefs.volcBidiStreamingEnabled,
             volcDdcEnabled = prefs.volcDdcEnabled,
             volcVadEnabled = prefs.volcVadEnabled,
             volcNonstreamEnabled = prefs.volcNonstreamEnabled,
@@ -124,6 +125,20 @@ class AsrSettingsViewModel : ViewModel() {
     fun updateVolcVad(enabled: Boolean) {
         prefs.volcVadEnabled = enabled
         _uiState.value = _uiState.value.copy(volcVadEnabled = enabled)
+    }
+
+    fun updateVolcBidiStreaming(enabled: Boolean) {
+        prefs.volcBidiStreamingEnabled = enabled
+        // 若关闭双向流式，则强制关闭二遍识别
+        if (!enabled) {
+            if (prefs.volcNonstreamEnabled) prefs.volcNonstreamEnabled = false
+            _uiState.value = _uiState.value.copy(
+                volcBidiStreamingEnabled = false,
+                volcNonstreamEnabled = false
+            )
+        } else {
+            _uiState.value = _uiState.value.copy(volcBidiStreamingEnabled = true)
+        }
     }
 
     fun updateVolcNonstream(enabled: Boolean) {
@@ -278,6 +293,7 @@ data class AsrSettingsUiState(
     val aiEditPreferLastAsr: Boolean = false,
     // Volcengine settings
     val volcStreamingEnabled: Boolean = false,
+    val volcBidiStreamingEnabled: Boolean = true,
     val volcDdcEnabled: Boolean = false,
     val volcVadEnabled: Boolean = false,
     val volcNonstreamEnabled: Boolean = false,
