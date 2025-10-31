@@ -113,6 +113,8 @@ English | [简体中文](README.md)
 
 ## 🚀 Quick Start
 
+[Provider Configuration Guide](https://brycewg.notion.site/lexisharp-keyboard-providers-guide)
+
 ### 📋 System Requirements
 
 - Android 10.0 (API 29) or higher

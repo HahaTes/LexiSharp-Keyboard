@@ -115,6 +115,8 @@
 
 ## 🚀 快速开始
 
+[供应商配置文档](https://brycewg.notion.site/lexisharp-keyboard-providers-guide)
+
 ### 📋 系统要求
 
 - Android 10.0 (API 29) 或更高版本
