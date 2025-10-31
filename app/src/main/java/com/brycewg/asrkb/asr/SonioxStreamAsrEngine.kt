@@ -258,6 +258,13 @@ class SonioxStreamAsrEngine(
                 put("language_hints", arr)
             }
             // put("enable_speaker_diarization", true) // 如需说话人区分
+            // Pro 功能：注入个性化上下文（text）与热词（terms）
+            try {
+                val proCtx = com.brycewg.asrkb.asr.ProAsrHelper.buildSonioxContext(context)
+                if (proCtx != null) put("context", proCtx)
+            } catch (t: Throwable) {
+                Log.e(TAG, "Failed to inject Soniox context", t)
+            }
         }
         return o.toString()
     }

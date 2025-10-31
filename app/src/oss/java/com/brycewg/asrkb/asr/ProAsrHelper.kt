@@ -18,5 +18,8 @@ object ProAsrHelper {
     fun buildVolcContext(context: Context): String? {
         return null
     }
-}
 
+    fun buildSonioxContext(context: Context): org.json.JSONObject? {
+        return null
+    }
+}

@@ -114,6 +114,13 @@ class SonioxFileAsrEngine(
                 langs.forEach { arr.put(it) }
                 put("language_hints", arr)
             }
+            // Pro 功能：注入个性化上下文（text）与热词（terms）
+            try {
+                val proCtx = com.brycewg.asrkb.asr.ProAsrHelper.buildSonioxContext(context)
+                if (proCtx != null) put("context", proCtx)
+            } catch (t: Throwable) {
+                Log.e(TAG, "Failed to inject Soniox context", t)
+            }
         }
         val req = Request.Builder()
             .url(Prefs.SONIOX_TRANSCRIPTIONS_ENDPOINT)
