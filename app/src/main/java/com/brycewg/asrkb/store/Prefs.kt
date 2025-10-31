@@ -411,7 +411,6 @@ class Prefs(context: Context) {
     // 阿里云百炼（DashScope）凭证
     var dashApiKey: String by stringPref(KEY_DASH_API_KEY, "")
 
-    var dashModel: String by stringPref(KEY_DASH_MODEL, DEFAULT_DASH_MODEL)
 
     // DashScope：自定义识别上下文（提示词）
     var dashPrompt: String by stringPref(KEY_DASH_PROMPT, "")
@@ -637,7 +636,6 @@ class Prefs(context: Context) {
         ),
         AsrVendor.DashScope to listOf(
             VendorField(KEY_DASH_API_KEY, required = true),
-            VendorField(KEY_DASH_MODEL, default = DEFAULT_DASH_MODEL),
             VendorField(KEY_DASH_PROMPT, default = ""),
             VendorField(KEY_DASH_LANGUAGE, default = "")
         ),
@@ -963,7 +961,6 @@ class Prefs(context: Context) {
         private const val KEY_VOLC_LANGUAGE = "volc_language"
         private const val KEY_VOLC_FIRST_CHAR_ACCEL_ENABLED = "volc_first_char_accel_enabled"
         private const val KEY_DASH_API_KEY = "dash_api_key"
-        private const val KEY_DASH_MODEL = "dash_model"
         private const val KEY_DASH_PROMPT = "dash_prompt"
         private const val KEY_DASH_LANGUAGE = "dash_language"
         private const val KEY_SONIOX_API_KEY = "soniox_api_key"

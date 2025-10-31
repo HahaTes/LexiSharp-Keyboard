@@ -410,12 +410,12 @@ The settings page supports configuration switching by vendor, showing only corre
 
 #### ☁️ Alibaba Cloud Bailian
 
-**Supported Model**: `qwen3-asr-flash`
+**Supported Models**: `qwen3-asr-flash` (non‑streaming) / `qwen3-asr-flash-realtime` (streaming)
 
 **Configuration Parameters**:
 
 - `API Key`: API key
-- `Model`: Model name
+- `Streaming`: Toggle (off = non‑streaming, on = streaming)
 - `Recognition Prompt`: Custom context guidance
 - `Recognition Language`: Manually specify language
 

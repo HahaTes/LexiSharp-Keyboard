@@ -78,16 +78,13 @@
     <string name="vendor_soniox">Soniox</string>
     <string name="vendor_sensevoice">SenseVoice（ローカル）</string>
     <string name="label_sf_api_key">APIキー（Bearer）</string>
-    <string name="label_sf_model">モデル名（例：FunAudioLLM/SenseVoiceSmall）</string>
     <string name="label_sf_model_select">モデルを選択</string>
     <string name="sf_model_default_display">FunAudioLLM/SenseVoiceSmall</string>
-    <string name="label_sf_use_omni">音声マルチモーダルモデルを使用（Qwen3-Omni）</string>
     <string name="label_sf_omni_prompt">マルチモーダル文字起こしプロンプト（オプション）</string>
     <string name="dash_section_title">Alibaba Cloud DashScope ASRパラメータ</string>
     <string name="soniox_section_title">Soniox認証情報</string>
     <string name="sensevoice_section_title">SenseVoiceローカルASR</string>
     <string name="label_dash_api_key">DashScope APIキー（Bearer）</string>
-    <string name="label_dash_model">モデル（例：qwen3-asr-flash）</string>
     <string name="label_dash_prompt">カスタムプロンプト/コンテキスト（オプション）</string>
     <string name="label_dash_language">認識言語（オプション。既知の場合は精度向上）</string>
     <string name="label_dash_streaming">DashScope ストリーミングを使用（WebSocket）</string>

@@ -78,16 +78,13 @@
     <string name="vendor_soniox">Soniox</string>
     <string name="vendor_sensevoice">SenseVoice (Local)</string>
     <string name="label_sf_api_key">API Key (Bearer)</string>
-    <string name="label_sf_model">Model Name (e.g., FunAudioLLM/SenseVoiceSmall)</string>
     <string name="label_sf_model_select">Choose model</string>
     <string name="sf_model_default_display">FunAudioLLM/SenseVoiceSmall</string>
-    <string name="label_sf_use_omni">Use voice multimodal model (Qwen3-Omni)</string>
     <string name="label_sf_omni_prompt">Multimodal transcription prompt (optional)</string>
     <string name="dash_section_title">Alibaba Cloud DashScope ASR Parameters</string>
     <string name="soniox_section_title">Soniox Credentials</string>
     <string name="sensevoice_section_title">SenseVoice Local ASR</string>
     <string name="label_dash_api_key">DashScope API Key (Bearer)</string>
-    <string name="label_dash_model">Model (e.g., qwen3-asr-flash)</string>
     <string name="label_dash_prompt">Custom prompt / context (optional)</string>
     <string name="label_dash_language">Recognition language (optional; improves accuracy if known)</string>
     <string name="label_dash_streaming">Use DashScope streaming (WebSocket)</string>

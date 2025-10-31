@@ -78,16 +78,13 @@
     <string name="vendor_soniox">Soniox</string>
     <string name="vendor_sensevoice">SenseVoice（本地）</string>
     <string name="label_sf_api_key">API 金鑰（Bearer）</string>
-    <string name="label_sf_model">模型名稱（例如：FunAudioLLM/SenseVoiceSmall）</string>
     <string name="label_sf_model_select">選擇模型</string>
     <string name="sf_model_default_display">FunAudioLLM/SenseVoiceSmall</string>
-    <string name="label_sf_use_omni">使用語音多模態模型（Qwen3-Omni）</string>
     <string name="label_sf_omni_prompt">多模態轉錄提示詞（可選）</string>
     <string name="dash_section_title">阿里雲百煉 ASR 參數</string>
     <string name="soniox_section_title">Soniox 憑證</string>
     <string name="sensevoice_section_title">SenseVoice 本地 ASR</string>
     <string name="label_dash_api_key">DashScope API Key (Bearer)</string>
-    <string name="label_dash_model">模型 (例如：qwen3-asr-flash)</string>
     <string name="label_dash_prompt">自定義提示詞 / 上下文 (可選)</string>
     <string name="label_dash_language">識別語言 (可選；若已知可提高準確性)</string>
     <string name="label_dash_streaming">使用 DashScope 串流 (WebSocket)</string>
