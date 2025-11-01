@@ -12,6 +12,7 @@ English | [简体中文](README.md)
 [![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?logo=telegram)](https://t.me/+UGFobXqi2bYzMDFl)
 [![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/BryceWG/LexiSharp-Keyboard)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/BryceWG/LexiSharp-Keyboard)
+![GitHub all releases](https://img.shields.io/github/downloads/BryceWG/LexiSharp-Keyboard/total)
 
 [Features](#-features) • [Quick Start](#-quick-start) • [User Guide](#-user-guide) • [Configuration](#-configuration)
 
@@ -28,7 +29,7 @@ English | [简体中文](README.md)
 - **Press & Hold Recording** - Simple and intuitive recording
 - **Smart Auto-Stop** - Automatically stops recording on silence
 - **Fast Recognition** - Release to upload, quick results
-- **Multi-Engine Support** - 8+ mainstream ASR services
+- **Multi-Engine Support** - 7+ mainstream ASR services
 - **Local ASR Model** - Offline voice recognition, no network required, privacy-focused
 - **AI Text Optimization** - LLM smart correction of recognition results
 
@@ -341,145 +342,9 @@ If you use Fcitx5, you can call up LexiSharp Keyboard through the voice recognit
 
 ## ⚙️ Configuration
 
-### 🎯 ASR Vendor Selection & Configuration
+### 🎤 Voice Recognition Configuration
 
-The settings page supports configuration switching by vendor, showing only corresponding parameters for the selected vendor.
-
-<table>
-<tr>
-<td width="50%">
-
-#### 🌋 Volcengine (Recommended)
-
-**Free Quota**: 20 hours
-
-**Configuration Parameters**:
-
-- `X-Api-App-Key`: Application ID
-- `X-Api-Access-Key`: Access Token
-
-**Application**: [Volcengine Console](https://console.volcengine.com/speech/app?opt=create)
-
-</td>
-<td width="50%">
-
-#### 🤖 OpenAI
-
-**Supported Models**:
-
-- `gpt-4o-mini-transcribe`
-- `gpt-4o-transcribe`
-- `whisper-1`
-
-**Configuration Parameters**:
-
-- `API Key`: Starts with `sk-`
-- `Endpoint`: Full API address
-- `Model`: Model name
-
-> ⚠️ Single upload limit: 25MB
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-#### 💎 SiliconFlow
-
-**Default Model**: `FunAudioLLM/SenseVoiceSmall`
-
-**Configuration Parameters**:
-
-- `API Key`: Bearer Token
-- `Model Name`: Model name
-
-**Mutilmodal**: Support Qwen3-Omni series
-
-</td>
-<td width="50%">
-
-#### 🎵 ElevenLabs
-
-**Configuration Parameters**:
-
-- `API Key`: API key
-- `Model ID`: Model ID
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-#### ☁️ Alibaba Cloud Bailian
-
-**Supported Models**: `qwen3-asr-flash` (non‑streaming) / `qwen3-asr-flash-realtime` (streaming)
-
-**Configuration Parameters**:
-
-- `API Key`: API key
-- `Streaming`: Toggle (off = non‑streaming, on = streaming)
-- `Recognition Prompt`: Custom context guidance
-- `Recognition Language`: Manually specify language
-
-> 📝 Uses OSS relay, slightly higher latency
-
-</td>
-<td width="50%">
-
-#### 🔮 Google Gemini
-
-**Configuration Parameters**:
-
-- `API Key`: API key
-- `Model`: Model name
-- `Transcription Prompt`: Custom transcription guidance
-
-**Feature**: Voice understanding through prompts
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-#### 🎯 Soniox
-
-**Supported Modes**:
-
-- File Recognition: `stt-async-v3`
-- Streaming Recognition: `stt-rt-v3`
-
-**Configuration Parameters**:
-
-- `API Key`: API key
-- `Recognition Language`: Multi-language support
-
-> 📝 Non-streaming mode uses official relay, slightly higher latency
-
-</td>
-<td width="50%">
-
-#### 🏠 Local ASR (SenseVoice)
-
-**Features**: Fully offline recognition, no network required, privacy-focused
-
-**Supported Models**:
-
-- `sensevoice small-int8`: Quantized model, faster, smaller size
-- `sensevoice small-full`: Full model, higher accuracy
-
-**Configuration Parameters**:
-
-- `Model Variant`: Choose model variant
-- `Thread Count`: Adjustable from 1-8 threads
-- `Recognition Language`: auto/zh/en/ja/ko/yue
-- `Use ITN`: Inverse Text Normalization
-- `Model Keep-Alive Duration`: Control model memory usage
-
-> 💡 Powered by [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)
-
-</td>
-</tr>
-</table>
+[Provider Configuration Guide](https://brycewg.notion.site/lexisharp-keyboard-providers-guide)
 
 ### 🧠 LLM Post-Processing Configuration
 
@@ -587,6 +452,15 @@ Thanks to all the developers who have contributed to this project!
     <img src="https://github.com/flyhunterl.png" width="60px;" alt="flyhunterl" />
     <br />
     <sub><b>flyhunterl</b></sub>
+  </a>
+  <br />
+  <sub>Feature Suggestions/Implementation</sub>
+</td>
+<td align="center">
+  <a href="https://github.com/kc0ed">
+    <img src="https://github.com/kc0ed.png" width="60px;" alt="kc0ed" />
+    <br />
+    <sub><b>kc0ed</b></sub>
   </a>
   <br />
   <sub>Feature Suggestions/Implementation</sub>

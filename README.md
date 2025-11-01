@@ -12,6 +12,7 @@
 [![Telegram](https://img.shields.io/badge/Telegram-Join%20Chat-blue?logo=telegram)](https://t.me/+UGFobXqi2bYzMDFl)
 [![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/BryceWG/LexiSharp-Keyboard)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/BryceWG/LexiSharp-Keyboard)
+![GitHub all releases](https://img.shields.io/github/downloads/BryceWG/LexiSharp-Keyboard/total)
 
 [功能特性](#-功能特性) • [快速开始](#-快速开始) • [使用指南](#-使用指南) • [配置说明](#-配置说明)
 
@@ -339,145 +340,9 @@ AI 编辑支持多种目标选择方式：
 
 ## ⚙️ 配置说明
 
-### 🎯 ASR 供应商选择与配置
+### 🎤 语音识别配置
 
-设置页支持按供应商切换配置，所选供应商仅显示对应参数。
-
-<table>
-<tr>
-<td width="50%">
-
-#### 🌋 火山引擎（推荐）
-
-**免费额度**: 20 小时
-
-**配置参数**:
-
-- `X-Api-App-Key`: 应用 ID
-- `X-Api-Access-Key`: Access Token
-
-**申请方式**: [火山引擎控制台](https://console.volcengine.com/speech/app?opt=create)
-
-</td>
-<td width="50%">
-
-#### 🤖 OpenAI
-
-**支持模型**:
-
-- `gpt-4o-mini-transcribe`
-- `gpt-4o-transcribe`
-- `whisper-1`
-
-**配置参数**:
-
-- `API Key`: 以 `sk-` 开头
-- `Endpoint`: 完整 API 地址
-- `Model`: 模型名称
-
-> ⚠️ 单次上传上限 25MB
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-#### 💎 SiliconFlow
-
-**默认模型**: `FunAudioLLM/SenseVoiceSmall`
-
-**配置参数**:
-
-- `API Key`: Bearer Token
-- `Model Name`: 模型名称
-
-**支持语音多模态**: 可使用 Qwen3-Omni 系列进行语音识别
-
-</td>
-<td width="50%">
-
-#### 🎵 ElevenLabs
-
-**配置参数**:
-
-- `API Key`: API 密钥
-- `Model ID`: 模型 ID
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-#### ☁️ 阿里云百炼
-
-**支持模型**: `qwen3-asr-flash`（非流） / `qwen3-asr-flash-realtime`（流式）
-
-**配置参数**:
-
-- `API Key`: API 密钥
-- `流式识别`: 开关（关闭=非流，开启=流式）
-- `识别提示词`: 自定义上下文引导
-- `识别语言`: 手动指定语种
-
-> 📝 采用 OSS 中转，延迟稍高
-
-</td>
-<td width="50%">
-
-#### 🔮 Google Gemini
-
-**配置参数**:
-
-- `API Key`: API 密钥
-- `Model`: 模型名称
-- `转录提示词`: 自定义转录指导
-
-**特点**: 通过提示词进行语音理解
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-#### 🎯 Soniox
-
-**支持模式**:
-
-- 文件识别: `stt-async-v3`
-- 流式识别: `stt-rt-v3`
-
-**配置参数**:
-
-- `API Key`: API 密钥
-- `识别语言`: 支持多语言选择
-
-> 📝 非流式识别采用官方中转，延迟稍高
-
-</td>
-<td width="50%">
-
-#### 🏠 本地 ASR (SenseVoice)
-
-**特点**: 完全离线识别，无需网络，保护隐私
-
-**支持模型**:
-
-- `sensevoice small-int8`: 量化模型，速度快，体积小
-- `sensevoice small-full`: 完整模型，精度更高
-
-**配置参数**:
-
-- `模型版本`: 选择模型变体
-- `线程数`: 1-8 线程可调
-- `识别语言`: auto/zh/en/ja/ko/yue
-- `使用 ITN`: 反向文本归一化
-- `模型保活时长`: 控制模型内存占用
-
-> 💡 基于 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx) 实现
-
-</td>
-</tr>
-</table>
+[Notion 文档](https://brycewg.notion.site/lexisharp-keyboard-providers-guide)
 
 ### 🧠 LLM 后处理配置
 
@@ -583,6 +448,15 @@ Apache 2.0 License - 自由使用、修改、分发，需保留版权声明
     <img src="https://github.com/flyhunterl.png" width="60px;" alt="flyhunterl" />
     <br />
     <sub><b>flyhunterl</b></sub>
+  </a>
+  <br />
+  <sub>功能建议/实现</sub>
+</td>
+<td align="center">
+  <a href="https://github.com/kc0ed">
+    <img src="https://github.com/kc0ed.png" width="60px;" alt="kc0ed" />
+    <br />
+    <sub><b>kc0ed</b></sub>
   </a>
   <br />
   <sub>功能建议/实现</sub>
