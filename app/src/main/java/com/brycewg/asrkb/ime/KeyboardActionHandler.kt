@@ -123,12 +123,23 @@ class KeyboardActionHandler(
         when (currentState) {
             is KeyboardState.Idle -> startNormalListening()
             is KeyboardState.Processing -> {
-                // 强制停止（长按场景）：回到 Idle 并忽略迟到回调
-                try { processingTimeoutJob?.cancel() } catch (_: Throwable) {}
+                // 强制停止：根据模式决定后续动作
+                try {
+                    processingTimeoutJob?.cancel()
+                } catch (t: Throwable) {
+                    Log.w(TAG, "Cancel processing timeout on press", t)
+                }
                 processingTimeoutJob = null
+                // 标记忽略上一会话的迟到回调
                 dropPendingFinal = true
-                transitionToIdle(keepMessage = true)
-                uiListener?.onStatusMessage(context.getString(R.string.status_cancelled))
+                if (!prefs.micTapToggleEnabled) {
+                    // 长按模式：直接开始新一轮录音
+                    startNormalListening()
+                } else {
+                    // 点按切换模式：仅取消并回到空闲
+                    transitionToIdle(keepMessage = true)
+                    uiListener?.onStatusMessage(context.getString(R.string.status_cancelled))
+                }
             }
             else -> {
                 Log.w(TAG, "handleMicPressDown: ignored in state $currentState")
@@ -582,6 +593,12 @@ class KeyboardActionHandler(
 
     override fun onAsrError(message: String) {
         scope.launch {
+            // 若在新的录音会话中（仍处于 Listening），将上一会话的错误视为迟到并忽略，避免覆盖 UI 状态
+            val stateNow = this@KeyboardActionHandler.currentState
+            if (asrManager.isRunning() && stateNow is KeyboardState.Listening) {
+                Log.w(TAG, "onAsrError ignored: new session is running; message=$message")
+                return@launch
+            }
             // 先切换到 Idle，再显示错误，避免被 Idle 文案覆盖
             transitionToIdle(keepMessage = true)
             uiListener?.onStatusMessage(message)
@@ -602,7 +619,24 @@ class KeyboardActionHandler(
         scope.launch {
             // 若强制停止，忽略迟到的 onStopped
             if (dropPendingFinal) return@launch
-            // 引擎已停止采集：统一进入 Processing，等待最终结果或兜底
+            // 若此时已经开始了新的录音（引擎运行中），则将本次 onStopped 视为上一会话的迟到事件并忽略。
+            if (asrManager.isRunning()) {
+                try { asrManager.popLastAudioMsForStats() } catch (_: Throwable) { }
+                return@launch
+            }
+            // 误触极短录音：直接取消，避免进入“识别中…”阻塞后续长按
+            val audioMs = try { asrManager.popLastAudioMsForStats() } catch (t: Throwable) {
+                Log.w(TAG, "popLastAudioMsForStats failed", t)
+                0L
+            }
+            if (audioMs in 1..250) {
+                // 将后续迟到回调丢弃并归位
+                dropPendingFinal = true
+                transitionToIdle()
+                uiListener?.onStatusMessage(context.getString(R.string.status_cancelled))
+                return@launch
+            }
+            // 正常流程：进入 Processing，等待最终结果或兜底
             transitionToState(KeyboardState.Processing)
             scheduleProcessingTimeout()
             uiListener?.onStatusMessage(context.getString(R.string.status_recognizing))
