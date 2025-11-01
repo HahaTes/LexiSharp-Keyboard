@@ -60,6 +60,8 @@ class AsrHistoryActivity : AppCompatActivity() {
 
   private var allRecords: List<AsrHistoryStore.AsrHistoryRecord> = emptyList()
   private var filtered: List<AsrHistoryStore.AsrHistoryRecord> = emptyList()
+  // 全局已选ID集合（与当前筛选结果取交集用于显示与计数）
+  private val selectedIdsGlobal: MutableSet<String> = mutableSetOf()
   private var activeVendorIds: Set<String> = emptySet() // 为空表示不过滤
   private var activeSources: Set<String> = emptySet() // "ime"/"floating"；为空表示不过滤
   private var activeTimeFilter: TimeFilter = TimeFilter.ALL
@@ -404,6 +406,11 @@ class AsrHistoryActivity : AppCompatActivity() {
       }
       okVendor && okSrc && okText && okTime
     }
+    // 变更筛选/搜索后，将全局选择与当前筛选结果取交集，避免跨筛选残留
+    run {
+      val filteredIdSet = filtered.map { it.id }.toSet()
+      selectedIdsGlobal.retainAll(filteredIdSet)
+    }
     // 搜索时不分页；未搜索时按分页限制展示
     if (q.isEmpty()) {
       // 若筛选条件变更，重置分页游标（避免显示数量与过滤后总数不协调）
@@ -412,8 +419,7 @@ class AsrHistoryActivity : AppCompatActivity() {
       renderCurrentWithLimit()
     } else {
       // 搜索：直接展示所有匹配项
-      val selectedIds = adapter.getSelectedIds()
-      val rows = buildRows(filtered, selectedIds)
+      val rows = buildRows(filtered, selectedIdsGlobal)
       adapter.submit(rows)
       tvEmpty.visibility = if (rows.isEmpty()) View.VISIBLE else View.GONE
       updateToolbarTitleWithSelection()
@@ -421,9 +427,8 @@ class AsrHistoryActivity : AppCompatActivity() {
   }
 
   private fun renderCurrentWithLimit() {
-    val selectedIds = adapter.getSelectedIds()
     val display = if (filtered.isEmpty()) emptyList() else filtered.take(currentDisplayLimit)
-    val rows = buildRows(display, selectedIds)
+    val rows = buildRows(display, selectedIdsGlobal)
     adapter.submit(rows)
     tvEmpty.visibility = if (rows.isEmpty()) View.VISIBLE else View.GONE
     updateToolbarTitleWithSelection()
@@ -516,11 +521,22 @@ class AsrHistoryActivity : AppCompatActivity() {
       result.dispatchUpdatesTo(this)
     }
 
-    fun getSelectedIds(): Set<String> = rows.mapNotNull { (it as? Row.Item)?.takeIf { it.selected }?.rec?.id }.toSet()
-    fun getSelectedCount(): Int = rows.count { (it as? Row.Item)?.selected == true }
+    fun getSelectedIds(): Set<String> = selectedIdsGlobal.toSet()
+    fun getSelectedCount(): Int {
+      if (selectedIdsGlobal.isEmpty() || filtered.isEmpty()) return 0
+      val filteredIdSet = filtered.map { it.id }.toSet()
+      return selectedIdsGlobal.count { filteredIdSet.contains(it) }
+    }
     fun hasData(): Boolean = rows.any { it is Row.Item }
     fun selectAll(flag: Boolean) {
-      rows.forEach { (it as? Row.Item)?.let { it.selected = flag } }
+      if (flag) {
+        selectedIdsGlobal.clear()
+        selectedIdsGlobal.addAll(filtered.map { it.id })
+      } else {
+        selectedIdsGlobal.clear()
+      }
+      // 同步当前已渲染行的选中态
+      rows.forEach { (it as? Row.Item)?.let { row -> row.selected = selectedIdsGlobal.contains(row.rec.id) } }
       notifyDataSetChanged()
       onSelectionChanged()
     }
@@ -584,6 +600,8 @@ class AsrHistoryActivity : AppCompatActivity() {
         itemView.setOnLongClickListener {
           val before = getSelectedCount()
           row.selected = !row.selected
+          // 更新全局选择集合
+          if (row.selected) selectedIdsGlobal.add(r.id) else selectedIdsGlobal.remove(r.id)
           val after = getSelectedCount()
           if ((before == 0 && after > 0) || (before > 0 && after == 0)) {
             notifyDataSetChanged()
@@ -598,6 +616,7 @@ class AsrHistoryActivity : AppCompatActivity() {
           if (beforeAny) {
             val before = getSelectedCount()
             row.selected = !row.selected
+            if (row.selected) selectedIdsGlobal.add(r.id) else selectedIdsGlobal.remove(r.id)
             val after = getSelectedCount()
             if ((before == 0 && after > 0) || (before > 0 && after == 0)) {
               notifyDataSetChanged()
