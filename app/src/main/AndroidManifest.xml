@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" tools:ignore="MissingPermission" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 允许从本应用安装 APK（配合未知来源安装权限引导） -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- Android 14+ 针对数据同步/下载类型前台服务权限（兼容不存在时忽略） -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" tools:ignore="NewApi" />
@@ -114,6 +116,12 @@
         <!-- 模型下载/解压前台服务（支持并发任务） -->
         <service
             android:name=".ui.settings.asr.ModelDownloadService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- APK 更新下载服务 -->
+        <service
+            android:name=".ui.update.ApkDownloadService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 

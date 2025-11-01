@@ -24,6 +24,7 @@ import com.brycewg.asrkb.store.Prefs
 import com.brycewg.asrkb.ui.setup.SetupState
 import com.brycewg.asrkb.ui.setup.SetupStateMachine
 import com.brycewg.asrkb.ui.update.UpdateChecker
+import com.brycewg.asrkb.ui.update.ApkDownloadService
 import com.brycewg.asrkb.ui.about.AboutActivity
 import com.brycewg.asrkb.ui.settings.input.InputSettingsActivity
 import com.brycewg.asrkb.ui.settings.asr.AsrSettingsActivity
@@ -363,6 +364,9 @@ class SettingsActivity : AppCompatActivity() {
     private fun checkForUpdates() {
         Log.d(TAG, "User initiated update check")
 
+        // 清理旧的安装包
+        cleanOldApkFiles()
+
         val progressDialog = MaterialAlertDialogBuilder(this)
             .setMessage(R.string.update_checking)
             .setCancelable(false)
@@ -470,6 +474,20 @@ class SettingsActivity : AppCompatActivity() {
             .setPositiveButton(R.string.btn_download) { _, _ ->
                 showDownloadSourceDialog(result.downloadUrl, result.latestVersion)
             }
+            .setNeutralButton(R.string.btn_view_release_page) { _, _ ->
+                // 跳转到 GitHub Release 页面
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(result.downloadUrl))
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to open release page", e)
+                    Toast.makeText(
+                        this,
+                        getString(R.string.error_open_browser),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
             .setNegativeButton(R.string.btn_cancel, null)
             .show()
     }
@@ -512,12 +530,12 @@ class SettingsActivity : AppCompatActivity() {
             getString(R.string.download_source_mirror_gh_proxynet)
         )
 
-        // 根据 release 页面构造 APK 直链（用于镜像站加速）；官方仍跳转 release 页面
+        // 根据 release 页面构造 APK 直链
         val directApkUrl = buildDirectApkUrl(originalUrl, version)
 
-        // 生成对应的 URL：官方使用 release 页面，镜像使用 APK 直链
+        // 生成对应的 URL：所有源都使用 APK 直链
         val downloadUrls = arrayOf(
-            originalUrl,
+            directApkUrl,
             convertToMirrorUrl(directApkUrl, "https://ghproxy.net/"),
             convertToMirrorUrl(directApkUrl, "https://hub.gitmirror.com/"),
             convertToMirrorUrl(directApkUrl, "https://gh-proxy.net/")
@@ -527,13 +545,18 @@ class SettingsActivity : AppCompatActivity() {
             .setTitle(R.string.download_source_title)
             .setItems(downloadSources) { _, which ->
                 try {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(downloadUrls[which]))
-                    startActivity(intent)
-                } catch (e: Exception) {
-                    Log.e(TAG, "Failed to open download URL", e)
+                    // 启动下载服务
+                    ApkDownloadService.startDownload(this, downloadUrls[which], version)
                     Toast.makeText(
                         this,
-                        getString(R.string.error_open_browser),
+                        getString(R.string.apk_download_started),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to start download", e)
+                    Toast.makeText(
+                        this,
+                        getString(R.string.apk_download_start_failed),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -592,6 +615,18 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+
+    /**
+     * 清理旧的 APK 安装包
+     */
+    private fun cleanOldApkFiles() {
+        try {
+            ApkDownloadService.cleanOldApks(this)
+            Log.d(TAG, "Old APK files cleaned")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to clean old APK files", e)
+        }
+    }
 
     // ==================== 其他辅助功能 ====================
 

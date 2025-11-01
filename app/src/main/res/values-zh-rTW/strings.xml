@@ -351,6 +351,7 @@
     <string name="update_dialog_title">新版本可用</string>
     <string name="update_dialog_message">目前版本：%1$s\n最新版本：%2$s\n\n是否要下載？</string>
     <string name="btn_download">下載</string>
+    <string name="btn_view_release_page">查看 Release 頁</string>
     <string name="btn_manual_check">手動檢查</string>
     <string name="btn_cancel">取消</string>
     <string name="download_source_title">選擇下載來源</string>
@@ -361,6 +362,21 @@
     <string name="update_timestamp_label">發布時間：%1$s</string>
     <string name="update_release_notes_label">發布說明：\n%1$s</string>
     <string name="error_open_browser">無法開啟瀏覽器</string>
+
+    <!-- APK 下載與安裝 -->
+    <string name="apk_download_notification_title">下載更新</string>
+    <string name="apk_download_notification_channel_name">應用程式更新下載</string>
+    <string name="apk_download_notification_channel_desc">下載應用程式更新套件並自動安裝</string>
+    <string name="apk_download_preparing">正在準備下載…</string>
+    <string name="apk_download_progress">下載中 %1$d%% (%2$d MB / %3$d MB)</string>
+    <string name="apk_download_complete">下載完成，正在準備安裝…</string>
+    <string name="apk_download_complete_click_to_install">下載完成，點擊安裝</string>
+    <string name="apk_download_failed">下載失敗：%1$s</string>
+    <string name="apk_download_started">已開始下載更新套件</string>
+    <string name="apk_download_start_failed">啟動下載失敗</string>
+    <string name="apk_install_permission_required_title">需要安裝權限</string>
+    <string name="apk_install_permission_required_message">請在系統設定中允許安裝來自此來源的應用程式</string>
+    <string name="apk_install_failed">安裝失敗，請手動安裝</string>
 
     <!-- Generic toasts -->
     <string name="toast_accessibility_enabled">無障礙服務已啟用。自動插入現已可用。</string>
