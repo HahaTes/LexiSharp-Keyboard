@@ -2,7 +2,7 @@
   "version": "3.4.3",
   "version_code": 89,
   "download_url": "https://github.com/BryceWG/LexiSharp-Keyboard/releases/tag/v3.4.3",
-  "release_notes": "本次更新包含 11 个提交:\n- feat(asr): 优化Gemini和SiliconFlow引擎prompt传递\n- pro(feat(asr)): 增强火山引擎 ASR 上下文注入\n- refactor(ime): 移除密码框识别工具和密码框自动切换功能\n- feat(volc): 添加火山引擎非双向流式识别模式支持\n- pro(feat(asr)): 为Gemini/Qwen ASR/OpenAI/Siliconflow引入ASR引擎动态提示词构建\n- fix(config): 移除dashscope和siliconflow的冗余模型配置项字符串\n- refactor(dashscope): 固定模型ID并优化设置UX\n- feat(dashscope): 为 DashScope 添加实时流式识别支持\n- refactor(asr): 优化 SiliconFlow 模型配置体验\n- feat(ui): 首次启动自动展示快速上手指南\n- refactor(ui): 允许设置页多行输入框自由扩展高度，优化编辑体验",
+  "release_notes": "首个发布版本",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-10-31T08:24:19Z"
+  "update_time": "2025-11-01T14:09:20Z"
 }
