@@ -7,5 +7,5 @@
   "important_notice": "注意:本次更新升级了火山引擎(豆包语音识别模型)到了2.0版本,请到控制台开通对应模型(https://console.volcengine.com/speech/service),或者可以暂时使用文件识别极速版进行使用(关闭流式识别,不开启文件识别标准版即可)",
   "notice_level": "info",
   "min_supported_version": "2.6.5",
-  "update_time": "2025-12-06T06:45:21Z"
+  "update_time": "2025-12-08T23:40:53Z"
 }
